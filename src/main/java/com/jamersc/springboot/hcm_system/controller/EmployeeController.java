@@ -1,34 +1,43 @@
 package com.jamersc.springboot.hcm_system.controller;
 
 import com.jamersc.springboot.hcm_system.model.Employee;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.jamersc.springboot.hcm_system.service.EmployeeService;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/employees")
 public class EmployeeController {
 
-    @GetMapping("/employees")
+    private final EmployeeService employeeService;
+
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
+    }
+
+
+    @GetMapping("/")
     public List<Employee> getEmployees() {
 
-        List<Employee> employees;
-
-        employees = Arrays.asList(
-                        new Employee(1L, "John", "Doe", "john@mail.com", "Assistant Admin", "Admin Department", LocalDate.of(2024,1, 1), 30000.00),
-                        new Employee(2L, "Mary", "Public", "mary@mail.com", "Assistant Admin", "Admin Department", LocalDate.of(2024,6, 1), 30000.00),
-                        new Employee(3L, "Susan", "Roses", "susan@mail.com", "Assistant Admin", "Admin Department", LocalDate.of(2025,1, 1), 30000.00)
-                        );
-
-        return employees;
+        return employeeService.getEmployees();
     }
 
-    @GetMapping("/hello")
-    public String sayHello() {
-        return "Hello, World!";
+    @PostMapping("/")
+    public Employee createEmployee(@RequestBody Employee employee){
+        return employeeService.save(employee);
     }
+
+    @GetMapping("/{id}")
+    public Employee getEmployeeById(@PathVariable long id) {
+        Employee theEmployee = employeeService.findById(id);
+        if (theEmployee == null) {
+            throw new RuntimeException("Employee id not found - " + id);
+        }
+        return theEmployee;
+    }
+
+
 }
