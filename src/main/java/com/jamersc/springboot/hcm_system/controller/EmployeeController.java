@@ -32,12 +32,14 @@ public class EmployeeController {
 
     @GetMapping("/{id}")
     public Employee getEmployeeById(@PathVariable long id) {
-        Employee theEmployee = employeeService.findById(id);
-        if (theEmployee == null) {
-            throw new RuntimeException("Employee id not found - " + id);
-        }
-        return theEmployee;
+        //Employee theEmployee = employeeService.findById(id);
+        return employeeService.findById(id);
     }
 
-
+    @DeleteMapping("/{id}")
+    public String deleteEmployee(@PathVariable Long id) {
+        Employee tempEmployee = employeeService.findById(id);
+        employeeService.deleteEmployeeByID(id);
+        return "Deleted employee id - " + id;
+    }
 }
