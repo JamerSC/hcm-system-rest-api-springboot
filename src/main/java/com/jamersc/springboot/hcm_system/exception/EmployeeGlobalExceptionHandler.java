@@ -42,4 +42,17 @@ public class EmployeeGlobalExceptionHandler {
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
+
+
+    // exception handler catch all bad request
+    @ExceptionHandler
+    public ResponseEntity<EmployeeErrorResponse> handleExceptionCatchAll(Exception exc) {
+
+        EmployeeErrorResponse error = new EmployeeErrorResponse();
+        error.setStatus(HttpStatus.BAD_REQUEST.value()); // 400
+        error.setMessage(exc.getMessage());
+        error.setTimestamp(System.currentTimeMillis());
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST); // 400
+    }
 }
