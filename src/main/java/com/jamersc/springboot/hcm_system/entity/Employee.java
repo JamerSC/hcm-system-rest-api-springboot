@@ -1,4 +1,4 @@
-package com.jamersc.springboot.hcm_system.model;
+package com.jamersc.springboot.hcm_system.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

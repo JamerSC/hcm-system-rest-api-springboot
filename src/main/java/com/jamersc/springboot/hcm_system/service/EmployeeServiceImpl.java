@@ -1,8 +1,10 @@
 package com.jamersc.springboot.hcm_system.service;
 
+import com.jamersc.springboot.hcm_system.dto.EmployeeDTO;
 import com.jamersc.springboot.hcm_system.exception.EmployeeIDNotAllowedException;
 import com.jamersc.springboot.hcm_system.exception.EmployeeNotFoundException;
-import com.jamersc.springboot.hcm_system.model.Employee;
+import com.jamersc.springboot.hcm_system.entity.Employee;
+import com.jamersc.springboot.hcm_system.mapper.EmployeeMapper;
 import com.jamersc.springboot.hcm_system.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,15 +14,17 @@ import java.util.List;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final EmployeeMapper employeeMapper;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper) {
         this.employeeRepository = employeeRepository;
+        this.employeeMapper = employeeMapper;
     }
 
 
     @Override
-    public List<Employee> getEmployees() {
-        return employeeRepository.findAll();
+    public List<EmployeeDTO> getEmployees() {
+        return employeeMapper.entitiesToDtos(employeeRepository.findAll());
     }
 
     @Override

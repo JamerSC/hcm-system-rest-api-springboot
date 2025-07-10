@@ -1,11 +1,10 @@
 package com.jamersc.springboot.hcm_system.controller;
 
-import com.jamersc.springboot.hcm_system.model.Employee;
+import com.jamersc.springboot.hcm_system.dto.EmployeeDTO;
+import com.jamersc.springboot.hcm_system.entity.Employee;
 import com.jamersc.springboot.hcm_system.service.EmployeeService;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -20,8 +19,7 @@ public class EmployeeController {
 
 
     @GetMapping("/")
-    public List<Employee> getEmployees() {
-
+    public List<EmployeeDTO> getEmployees() {
         return employeeService.getEmployees();
     }
 
