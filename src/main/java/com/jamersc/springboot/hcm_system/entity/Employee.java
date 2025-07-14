@@ -2,6 +2,7 @@ package com.jamersc.springboot.hcm_system.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -28,6 +29,7 @@ public class Employee {
     @Column(name = "department")
     private String department;
     @Column(name = "hired_date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate hiredDate;
     @Column(name = "salary")
     private Double salary;

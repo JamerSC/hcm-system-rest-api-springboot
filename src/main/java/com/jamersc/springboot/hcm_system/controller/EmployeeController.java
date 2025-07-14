@@ -1,8 +1,12 @@
 package com.jamersc.springboot.hcm_system.controller;
 
+import com.jamersc.springboot.hcm_system.dto.EmployeeCreateDTO;
 import com.jamersc.springboot.hcm_system.dto.EmployeeDTO;
 import com.jamersc.springboot.hcm_system.entity.Employee;
 import com.jamersc.springboot.hcm_system.service.EmployeeService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,8 +28,9 @@ public class EmployeeController {
     }
 
     @PostMapping("/")
-    public Employee createEmployee(@RequestBody Employee employee){
-        return employeeService.save(employee);
+    public ResponseEntity<Employee> createEmployee(@Valid @RequestBody EmployeeDTO employeeDTO){
+        Employee employee = employeeService.save(employeeDTO);
+        return new ResponseEntity<>(employee, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
