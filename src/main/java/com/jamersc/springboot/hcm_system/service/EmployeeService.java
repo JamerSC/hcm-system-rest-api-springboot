@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface EmployeeService {
     List<EmployeeDTO> getEmployees();
-    Employee findById(Long id);
+    EmployeeDTO findById(Long id);
     Employee save(EmployeeDTO employeeDTO);
     void deleteEmployeeByID(Long id);
 }

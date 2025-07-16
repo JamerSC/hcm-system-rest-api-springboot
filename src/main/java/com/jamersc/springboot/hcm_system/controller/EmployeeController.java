@@ -34,14 +34,15 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public Employee getEmployeeById(@PathVariable long id) {
-        //Employee theEmployee = employeeService.findById(id);
-        return employeeService.findById(id);
+    public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable long id) {
+        // Employee theEmployee = employeeService.findById(id);
+        // return employeeService.findById(id);
+        return new ResponseEntity<>(employeeService.findById(id), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public String deleteEmployee(@PathVariable Long id) {
-        Employee tempEmployee = employeeService.findById(id);
+        EmployeeDTO tempEmployee = employeeService.findById(id);
         employeeService.deleteEmployeeByID(id);
         return "Deleted employee id - " + id;
     }

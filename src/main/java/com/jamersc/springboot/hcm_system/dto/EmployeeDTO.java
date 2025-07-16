@@ -34,4 +34,8 @@ public class EmployeeDTO {
     @NotNull(message = "Salary is required")
     @Min(value = 0, message = "Salary must be a non-negative value")
     private Double salary;
+
+    public String getSalary() {
+        return String.format("%.2f", salary);
+    }
 }

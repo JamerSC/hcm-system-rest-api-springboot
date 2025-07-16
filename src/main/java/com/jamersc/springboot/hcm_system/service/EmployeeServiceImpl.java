@@ -29,12 +29,15 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee findById(Long id) {
-        Employee employee = employeeRepository.findById(id).orElse(null);
-        if(employee != null) {
-            return employee;
-        }
-        throw new EmployeeIDNotAllowedException("Employee id not found. - " + id);
+    public EmployeeDTO findById(Long id) {
+//        Employee employee = employeeRepository.findById(id).orElse(null);
+//        if(employee != null) {
+//            return employee;
+//        }
+//        throw new EmployeeIDNotAllowedException("Employee id not found. - " + id);
+        return employeeRepository.findById(id)
+                .map(employeeMapper::entityToDto)
+                .orElseThrow(() -> new EmployeeIDNotAllowedException("Employee id not found. - " + id));
     }
 
     @Override
