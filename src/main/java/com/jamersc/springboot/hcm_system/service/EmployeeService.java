@@ -5,10 +5,12 @@ import com.jamersc.springboot.hcm_system.dto.EmployeeDTO;
 import com.jamersc.springboot.hcm_system.entity.Employee;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EmployeeService {
     List<EmployeeDTO> getEmployees();
-    EmployeeDTO findById(Long id);
+    //EmployeeDTO findById(Long id);
+    Optional<EmployeeDTO> findById(Long id);
     Employee save(EmployeeDTO employeeDTO);
     void deleteEmployeeByID(Long id);
 }

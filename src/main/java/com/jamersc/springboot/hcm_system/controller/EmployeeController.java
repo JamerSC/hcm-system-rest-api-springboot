@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/employees")
@@ -23,8 +24,14 @@ public class EmployeeController {
 
 
     @GetMapping("/")
-    public List<EmployeeDTO> getEmployees() {
-        return employeeService.getEmployees();
+    public ResponseEntity<List<EmployeeDTO>> getEmployees() {
+        List<EmployeeDTO> employee = employeeService.getEmployees();
+
+        if (employee.isEmpty()) {
+            return ResponseEntity.noContent().build(); // HTTP 204
+        }
+        //return ResponseEntity.ok(employee); // HTTP 200 List of Employees
+        return new ResponseEntity<>(employee, HttpStatus.OK);
     }
 
     @PostMapping("/")
@@ -33,17 +40,39 @@ public class EmployeeController {
         return new ResponseEntity<>(employee, HttpStatus.CREATED);
     }
 
+
     @GetMapping("/{id}")
     public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable long id) {
-        // Employee theEmployee = employeeService.findById(id);
-        // return employeeService.findById(id);
-        return new ResponseEntity<>(employeeService.findById(id), HttpStatus.OK);
+        Optional<EmployeeDTO> employee = employeeService.findById(id);
+
+        return employee.map(ResponseEntity::ok) // HTTP 200 + body
+                .orElseGet(()-> ResponseEntity.notFound().build()); // HTTP 404
     }
 
+//    @GetMapping("/{id}")
+//    public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable long id) {
+//        // Employee theEmployee = employeeService.findById(id);
+//        // return employeeService.findById(id);
+//        return new ResponseEntity<>(employeeService.findById(id), HttpStatus.OK);
+//    }
+
+
     @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteEmployee(@PathVariable Long id) {
+        Optional<EmployeeDTO> tempEmployee = employeeService.findById(id);
+
+        if (tempEmployee.isEmpty()) {
+            return ResponseEntity.notFound().build(); // HTTP 404
+        }
+
+        employeeService.deleteEmployeeByID(id);
+        return ResponseEntity.noContent().build(); // HTTP 204
+    }
+
+/*    @DeleteMapping("/{id}")
     public String deleteEmployee(@PathVariable Long id) {
         EmployeeDTO tempEmployee = employeeService.findById(id);
         employeeService.deleteEmployeeByID(id);
         return "Deleted employee id - " + id;
-    }
+    }*/
 }

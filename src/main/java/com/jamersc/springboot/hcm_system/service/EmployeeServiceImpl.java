@@ -10,6 +10,7 @@ import com.jamersc.springboot.hcm_system.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -28,17 +29,23 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeMapper.entitiesToDtos(employeeRepository.findAll());
     }
 
+
     @Override
-    public EmployeeDTO findById(Long id) {
-//        Employee employee = employeeRepository.findById(id).orElse(null);
-//        if(employee != null) {
-//            return employee;
-//        }
-//        throw new EmployeeIDNotAllowedException("Employee id not found. - " + id);
+    public Optional<EmployeeDTO> findById(Long id) {
         return employeeRepository.findById(id)
-                .map(employeeMapper::entityToDto)
-                .orElseThrow(() -> new EmployeeIDNotAllowedException("Employee id not found. - " + id));
+                .map(employeeMapper::entityToDto);
     }
+//    @Override
+//    public EmployeeDTO findById(Long id) {
+////        Employee employee = employeeRepository.findById(id).orElse(null);
+////        if(employee != null) {
+////            return employee;
+////        }
+////        throw new EmployeeIDNotAllowedException("Employee id not found. - " + id);
+//        return employeeRepository.findById(id)
+//                .map(employeeMapper::entityToDto)
+//                .orElseThrow(() -> new EmployeeIDNotAllowedException("Employee id not found. - " + id));
+//    }
 
     @Override
     public Employee save(EmployeeDTO employeeDTO) {
