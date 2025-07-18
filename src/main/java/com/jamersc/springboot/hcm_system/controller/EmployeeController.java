@@ -7,9 +7,12 @@ import com.jamersc.springboot.hcm_system.service.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -30,15 +33,29 @@ public class EmployeeController {
         if (employee.isEmpty()) {
             return ResponseEntity.noContent().build(); // HTTP 204
         }
-        //return ResponseEntity.ok(employee); // HTTP 200 List of Employees
-        return new ResponseEntity<>(employee, HttpStatus.OK);
+        //return ResponseEntity.ok(employee);
+        return new ResponseEntity<>(employee, HttpStatus.OK); // HTTP 200 List of Employees
     }
 
+    // Error validation handling
     @PostMapping("/")
-    public ResponseEntity<Employee> createEmployee(@Valid @RequestBody EmployeeDTO employeeDTO){
+    public ResponseEntity<?> createEmployee(@Valid @RequestBody EmployeeDTO employeeDTO,
+                                            BindingResult result) {
+        if (result.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            result.getFieldErrors().forEach(
+                    error -> errors.put(error.getField(), error.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(errors);
+        }
         Employee employee = employeeService.save(employeeDTO);
-        return new ResponseEntity<>(employee, HttpStatus.CREATED);
+        return new ResponseEntity<>(employee, HttpStatus.CREATED); // Created 201
     }
+
+//    @PostMapping("/")
+//    public ResponseEntity<Employee> createEmployee(@Valid @RequestBody EmployeeDTO employeeDTO){
+//        Employee employee = employeeService.save(employeeDTO);
+//        return new ResponseEntity<>(employee, HttpStatus.CREATED); // Created 201
+//    }
 
 
     @GetMapping("/{id}")
