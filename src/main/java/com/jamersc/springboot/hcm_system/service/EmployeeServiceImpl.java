@@ -2,6 +2,7 @@ package com.jamersc.springboot.hcm_system.service;
 
 import com.jamersc.springboot.hcm_system.dto.EmployeeCreateDTO;
 import com.jamersc.springboot.hcm_system.dto.EmployeeDTO;
+import com.jamersc.springboot.hcm_system.dto.EmployeeUpdateDTO;
 import com.jamersc.springboot.hcm_system.exception.EmployeeIDNotAllowedException;
 import com.jamersc.springboot.hcm_system.exception.EmployeeNotFoundException;
 import com.jamersc.springboot.hcm_system.entity.Employee;
@@ -54,11 +55,19 @@ public class EmployeeServiceImpl implements EmployeeService {
 //    }
 
     @Override
-    public Employee save(EmployeeDTO employeeDTO) {
+    public Employee save(EmployeeCreateDTO employeeDTO) {
         // 1. Convert DTO to Entity
-        Employee employeeEntity = employeeMapper.dtoToEntity(employeeDTO);
+        Employee employee = employeeMapper.createDtoToEntity(employeeDTO);
         // 2. Save the Entity using the repository
-        return employeeRepository.save(employeeEntity);
+        return employeeRepository.save(employee);
+    }
+
+    @Override
+    public Employee update(EmployeeUpdateDTO employeeDTO) {
+        // Convert to entity
+        Employee employee = employeeMapper.updateDtoToEntity(employeeDTO);
+        // Update employee
+        return employeeRepository.save(employee);
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.jamersc.springboot.hcm_system.controller;
 
 import com.jamersc.springboot.hcm_system.dto.EmployeeCreateDTO;
 import com.jamersc.springboot.hcm_system.dto.EmployeeDTO;
+import com.jamersc.springboot.hcm_system.dto.EmployeeUpdateDTO;
 import com.jamersc.springboot.hcm_system.entity.Employee;
 import com.jamersc.springboot.hcm_system.service.EmployeeService;
 import jakarta.validation.Valid;
@@ -37,9 +38,24 @@ public class EmployeeController {
         return new ResponseEntity<>(employee, HttpStatus.OK); // HTTP 200 List of Employees
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable long id) {
+        Optional<EmployeeDTO> employee = employeeService.findById(id);
+
+        return employee.map(ResponseEntity::ok) // HTTP 200 + body
+                .orElseGet(()-> ResponseEntity.notFound().build()); // HTTP 404
+    }
+
+//    @GetMapping("/{id}")
+//    public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable long id) {
+//        // Employee theEmployee = employeeService.findById(id);
+//        // return employeeService.findById(id);
+//        return new ResponseEntity<>(employeeService.findById(id), HttpStatus.OK);
+//    }
+
     // Error validation handling
     @PostMapping("/")
-    public ResponseEntity<?> createEmployee(@Valid @RequestBody EmployeeDTO employeeDTO,
+    public ResponseEntity<?> createEmployee(@Valid @RequestBody EmployeeCreateDTO employeeDTO,
                                             BindingResult result) {
         if (result.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
@@ -57,22 +73,19 @@ public class EmployeeController {
 //        return new ResponseEntity<>(employee, HttpStatus.CREATED); // Created 201
 //    }
 
+    @PutMapping("/")
+    public ResponseEntity<?> updateEmployee(@Valid @RequestBody EmployeeUpdateDTO employeeDTO,
+                                            BindingResult result) {
+        if (result.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            result.getFieldErrors().forEach(
+                    error -> errors.put(error.getField(), error.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(errors);
+        }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable long id) {
-        Optional<EmployeeDTO> employee = employeeService.findById(id);
-
-        return employee.map(ResponseEntity::ok) // HTTP 200 + body
-                .orElseGet(()-> ResponseEntity.notFound().build()); // HTTP 404
+        Employee employee = employeeService.update(employeeDTO);
+        return new ResponseEntity<>(employee, HttpStatus.OK);
     }
-
-//    @GetMapping("/{id}")
-//    public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable long id) {
-//        // Employee theEmployee = employeeService.findById(id);
-//        // return employeeService.findById(id);
-//        return new ResponseEntity<>(employeeService.findById(id), HttpStatus.OK);
-//    }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteEmployee(@PathVariable Long id) {

@@ -27,7 +27,7 @@ public class EmployeeCreateDTO {
     //@NotBlank(message = "Department is required")
     private String department;
     @NotNull(message = "Hired date is required")
-    private LocalDate hireDate;
+    private LocalDate hiredDate;
     @NotNull(message = "Salary is required")
     @Min(value = 0, message = "Salary must be a non-negative value")
     private Double salary;
