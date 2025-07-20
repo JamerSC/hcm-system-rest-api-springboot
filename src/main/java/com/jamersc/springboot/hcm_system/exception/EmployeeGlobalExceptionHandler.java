@@ -55,4 +55,16 @@ public class EmployeeGlobalExceptionHandler {
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST); // 400
     }
+
+    @ExceptionHandler
+    public ResponseEntity<EmployeeErrorResponse> handleException(EmployeeIDNotAllowedInRequestBodyException exc) {
+
+        // create employee id not found response
+        EmployeeErrorResponse error = new EmployeeErrorResponse();
+        error.setStatus(HttpStatus.BAD_REQUEST.value()); // 400
+        error.setMessage(exc.getMessage()); // e.g., "Cannot change primary key to a value that already exists."
+        error.setTimestamp(System.currentTimeMillis()); // current time in ms
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
 }
