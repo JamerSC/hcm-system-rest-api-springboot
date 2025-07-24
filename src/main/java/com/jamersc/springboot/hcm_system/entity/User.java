@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Entity
+@Table(name = "users") // Good practice to use 'users' as table name for user accounts
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -23,9 +25,12 @@ public class User {
     private String password; // Stored as hashed password
     @Column(unique = true, nullable = false)
     private String email;
-    //@ManyToOne
-    //@JoinColumn(name = "role_id", nullable = false)
-    private String role; // change to Role class  // Assuming you have a Role entity for 'APPLICANT', 'MANAGER', 'ADMIN' etc.
+    // Example of roles associated with the user
+    @ManyToOne // Or ManyToMany if a user can have multiple roles
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;  // Assuming you have a Role entity for 'APPLICANT', 'MANAGER', 'ADMIN' etc.
+    @Column(nullable = false)
     private String firstName;
+    @Column(nullable = false)
     private String lastName;
 }
