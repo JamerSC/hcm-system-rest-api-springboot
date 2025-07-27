@@ -8,11 +8,11 @@ import lombok.*;
 
 import java.time.LocalDate;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class EmployeePatchDTO {
     private Long id;
     @NotBlank(message = "First name is required")

@@ -8,11 +8,10 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "employees")
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
-@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
