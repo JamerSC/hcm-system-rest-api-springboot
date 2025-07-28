@@ -9,3 +9,7 @@ values
 (1, "John", "Doe", "john@mail.com", "Assistant Admin", "Admin Department", "2024-1-1", 30000.00),
 (2, "Mary", "Public", "mary@mail.com", "Assistant Admin", "Admin Department", "2024-6-1", 30000.00),
 (3, "Susan", "Roses", "susan@mail.com", "Assistant Admin", "Admin Department", "2025-1-1", 30000.00);
+
+insert into `roles`(`role_name`) values
+('ROLE_SUPER'), ('ROLE_ADMIN'), ('ROLE_MANAGER'), ('ROLE_EMPLOYEE'), ('ROLE_APPLICANT');
+
