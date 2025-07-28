@@ -1,10 +1,13 @@
 package com.jamersc.springboot.hcm_system.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users") // Good practice to use 'users' as table name for user accounts
@@ -22,12 +25,16 @@ public class User {
     private String password; // Stored as hashed password
     @Column(unique = true, nullable = false)
     private String email;
-    // Example of roles associated with the user
-    @ManyToOne // Or ManyToMany if a user can have multiple roles
-    @JoinColumn(name = "role_id", nullable = false)
-    private Role role;  // Assuming you have a Role entity for 'APPLICANT', 'MANAGER', 'ADMIN' etc.
     @Column(nullable = false)
     private String firstName;
     @Column(nullable = false)
     private String lastName;
+    // Example of roles associated with the user
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}) // Or ManyToMany if a user can have multiple roles
+    @JoinTable(
+            name = "user_roles", // Name of the join table
+            joinColumns = @JoinColumn(name = "user_id"), // Column in user_roles that refers to user_id
+            inverseJoinColumns = @JoinColumn(name = "role_id") // Column in user_roles that refers to role_id
+    )
+    private Set<Role> roles = new HashSet<>(); // Initialize to avoid NullPointerException
 }

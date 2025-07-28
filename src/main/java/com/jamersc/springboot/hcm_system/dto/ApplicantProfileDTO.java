@@ -28,8 +28,7 @@ public class ApplicantProfileDTO {
     @NotBlank(message = "Last name is required for profile")
     private String lastName;
 
-    // Add other profile-specific fields here
-    // private String phoneNumber;
-    // private String address;
-    // private String educationLevel;
+    private String phoneNumber;
+    private String address;
+    private String educationLevel;
 }
