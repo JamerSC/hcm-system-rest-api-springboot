@@ -1,33 +1,37 @@
 package com.jamersc.springboot.hcm_system.service;
 
 import com.jamersc.springboot.hcm_system.dto.RegistrationRequestDTO;
+import com.jamersc.springboot.hcm_system.entity.Applicant;
 import com.jamersc.springboot.hcm_system.entity.Role;
 import com.jamersc.springboot.hcm_system.entity.User;
+import com.jamersc.springboot.hcm_system.repository.ApplicantRepository;
 import com.jamersc.springboot.hcm_system.repository.RoleRepository;
 import com.jamersc.springboot.hcm_system.repository.UserRepository;
-import com.jamersc.springboot.hcm_system.security.AuthService;
 import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class AuthServiceImpl implements AuthService  {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private  final PasswordEncoder passwordEncoder;
+    private final ApplicantRepository applicantRepository;
 
-    public AuthServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    public AuthServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, ApplicantRepository applicantRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.applicantRepository = applicantRepository;
     }
 
     @Override
     @Transactional
-    public User registerNewUser(RegistrationRequestDTO request) {
-        if (userRepository.findUsername(request.getUsername()).isPresent()) {
+    public User registerNewUserAndApplicant(RegistrationRequestDTO request) {
+        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
             throw new IllegalArgumentException("Username already exists!");
         }
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
@@ -40,10 +44,21 @@ public class AuthServiceImpl implements AuthService  {
         newUser.setPassword(passwordEncoder.encode(request.getPassword())); // <-- HASH THE PASSWORD HERE
 
         // Assign default role, e.g., "ROLE_APPLICANT"
-        Role applicantRole = roleRepository.findByName("ROLE_APPLICANT") // Make sure this matches your DB role name
+        Role applicantRole = roleRepository.findByRoleName("ROLE_APPLICANT") // Make sure this matches your DB role name
                 .orElseThrow(() -> new RuntimeException("ROLE_APPLICANT not found in database!"));
-        newUser.setRoles(Collections.singleton(applicantRole)); // Assign the single role to the Set
+        Set<Role> roles = new HashSet<>();
+        roles.add(applicantRole);
+        newUser.setRoles(roles);
 
-        return userRepository.save(newUser);
+        User savedUser = userRepository.save(newUser);
+
+        // Create initial applicant profile linked to the new user
+        Applicant newApplicant = new Applicant();
+        newApplicant.setFirstName(request.getFirstName());
+        newApplicant.setLastName(request.getLastName());
+        newApplicant.setUser(savedUser);
+        applicantRepository.save(newApplicant);
+
+        return savedUser;
     }
 }

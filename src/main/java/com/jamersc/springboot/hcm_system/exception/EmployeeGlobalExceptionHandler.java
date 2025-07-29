@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -66,5 +67,11 @@ public class EmployeeGlobalExceptionHandler {
         error.setTimestamp(System.currentTimeMillis()); // current time in ms
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<String> handleAuthenticationException(AuthenticationException ex) {
+        // Log the exception details internally (ex.getMessage()) for debugging, but don't expose too much.
+        return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
     }
 }

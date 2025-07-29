@@ -10,6 +10,11 @@ values
 (2, "Mary", "Public", "mary@mail.com", "Assistant Admin", "Admin Department", "2024-6-1", 30000.00),
 (3, "Susan", "Roses", "susan@mail.com", "Assistant Admin", "Admin Department", "2025-1-1", 30000.00);
 
-insert into `roles`(`role_name`) values
-('ROLE_SUPER'), ('ROLE_ADMIN'), ('ROLE_MANAGER'), ('ROLE_EMPLOYEE'), ('ROLE_APPLICANT');
 
+insert into users (email, first_name, last_name, password, username)
+values ('admin@mail.com', 'Super', 'Admin', '$2a$10$2csjgL7IFGGhH3fTRfPVpOmkZS/qcbUKsaW.kwFyflA97zeyzpa2O', 'admin@123');
+
+insert into user_roles (user_id, role_id) values (
+(select id from users where username = 'admin@123'),
+(select id from roles where role_name = 'ROLE_ADMIN')
+);

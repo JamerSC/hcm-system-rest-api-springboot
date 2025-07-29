@@ -1,8 +1,8 @@
 package com.jamersc.springboot.hcm_system.service;
 
-import org.springframework.stereotype.Service;
+import com.jamersc.springboot.hcm_system.dto.RegistrationRequestDTO;
+import com.jamersc.springboot.hcm_system.entity.User;
 
-@Service
-public class AuthService {
-    //
+public interface AuthService {
+    User registerNewUserAndApplicant(RegistrationRequestDTO request);
 }

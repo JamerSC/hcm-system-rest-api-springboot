@@ -3,20 +3,22 @@ package com.jamersc.springboot.hcm_system.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
 //    @Bean
@@ -65,6 +67,13 @@ public class SecurityConfig {
         return authProvider;
     }
 
+    // Expose AuthenticationManager as a Bean
+    @Bean
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -74,7 +83,8 @@ public class SecurityConfig {
                         // public access
                         .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
                         // Spring Security's default login form endpoint (if you use it), or just allow basic auth
-                        .requestMatchers(HttpMethod.POST, "/login").permitAll() // Default login endpoint if you configure formLogin()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll() // Default login endpoint if you configure formLogin()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll() // Your registration endpoint
                         // Note: Always check the end point for each HTTP method
                         .requestMatchers(HttpMethod.GET, "/api/employees").hasRole("EMPLOYEE")
                         .requestMatchers(HttpMethod.GET, "/api/employees/**").hasRole("EMPLOYEE")
@@ -89,6 +99,9 @@ public class SecurityConfig {
                         // All other requests require authentication
                         .anyRequest().authenticated()
         );
+
+        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
         // Configure HTTP Basic Authentication
         http.httpBasic(Customizer.withDefaults());
 
