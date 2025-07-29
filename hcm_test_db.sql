@@ -18,3 +18,13 @@ insert into user_roles (user_id, role_id) values (
 (select id from users where username = 'admin@123'),
 (select id from roles where role_name = 'ROLE_ADMIN')
 );
+
+insert into user_roles (user_id, role_id) values (
+(select id from users where username = 'admin@123'),
+(select id from roles where role_name = 'ROLE_MANAGER')
+);
+
+insert into user_roles (user_id, role_id) values (
+(select id from users where username = 'admin@123'),
+(select id from roles where role_name = 'ROLE_EMPLOYEE')
+);
