@@ -1,11 +1,10 @@
-package com.jamersc.springboot.hcm_system.dto;
+package com.jamersc.springboot.hcm_system.dto.employee;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -13,7 +12,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmployeeDTO {
+public class EmployeeUpdateDTO {
     private Long id;
     @NotBlank(message = "First name is required")
     private String firstName;
@@ -27,14 +26,8 @@ public class EmployeeDTO {
     //@NotBlank(message = "Department is required")
     private String department;
     @NotNull(message = "Hired date is required")
-    //@JsonFormat(pattern = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate hiredDate;
     @NotNull(message = "Salary is required")
     @Min(value = 0, message = "Salary must be a non-negative value")
     private Double salary;
-
-    public String getSalary() {
-        return String.format("%.2f", salary);
-    }
 }

@@ -1,4 +1,4 @@
-package com.jamersc.springboot.hcm_system.service;
+package com.jamersc.springboot.hcm_system.service.user;
 
 public class RoleServiceImpl implements RoleService{
 }

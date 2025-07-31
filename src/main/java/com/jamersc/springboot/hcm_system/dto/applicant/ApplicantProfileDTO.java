@@ -1,4 +1,4 @@
-package com.jamersc.springboot.hcm_system.dto;
+package com.jamersc.springboot.hcm_system.dto.applicant;
 
 import com.jamersc.springboot.hcm_system.entity.User;
 import jakarta.persistence.*;

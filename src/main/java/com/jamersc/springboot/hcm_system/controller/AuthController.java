@@ -1,8 +1,11 @@
 package com.jamersc.springboot.hcm_system.controller;
 
-import com.jamersc.springboot.hcm_system.dto.LoginRequestDTO;
-import com.jamersc.springboot.hcm_system.dto.LoginResponseDTO;
-import com.jamersc.springboot.hcm_system.service.AuthService;
+import com.jamersc.springboot.hcm_system.dto.login.LoginRequestDTO;
+import com.jamersc.springboot.hcm_system.dto.login.LoginResponseDTO;
+import com.jamersc.springboot.hcm_system.dto.registration.RegistrationRequestDTO;
+import com.jamersc.springboot.hcm_system.entity.User;
+import com.jamersc.springboot.hcm_system.security.JwtTokenProvider;
+import com.jamersc.springboot.hcm_system.service.authentication.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,26 +26,36 @@ public class AuthController {
 
     private final AuthService authService;
     private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider tokenProvider;
 
-    public AuthController(AuthService authService, AuthenticationManager authenticationManager) {
+    public AuthController(AuthService authService, AuthenticationManager authenticationManager, JwtTokenProvider tokenProvider) {
         this.authService = authService;
         this.authenticationManager = authenticationManager;
+        this.tokenProvider = tokenProvider;
     }
 
     @PostMapping("/register")
-    public String registerAccount() {
-        return null;
+    public ResponseEntity<?> registerAccount(@Valid @RequestBody RegistrationRequestDTO requestDTO) {
+        User user = authService.registerNewUserAndApplicant(requestDTO);
+        return ResponseEntity.ok("Registered User: " + user);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequestDTO loginRequest){
+    public ResponseEntity<LoginResponseDTO> authenticateUser(@Valid @RequestBody LoginRequestDTO loginRequest){
         // authenticate the user
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getUsername(), loginRequest.getPassword()
+                )
         );
 
-        // Set authentication in SecurityContext (important for session-based login and subsequent checks)
+        // Unlike session-based, we don't need to set the context here for later requests.
+        // We only need it for the token generation below.
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // *** THIS IS THE KEY CHANGE ***
+        // Generate JWT token
+        String jwt = tokenProvider.generateToken(authentication);
 
         // Build the response dto
         LoginResponseDTO response = new LoginResponseDTO(
@@ -50,7 +63,9 @@ public class AuthController {
                 loginRequest.getUsername(),
                 authentication.getAuthorities().stream()
                         .map(GrantedAuthority::getAuthority)// Get the role string (e.g., "ROLE_ADMIN")
-                        .collect(Collectors.toSet())
+                        .collect(Collectors.toSet()),
+                jwt,
+                "Bearer"
         );
 
         // If you were using JWT, you'd generate and return the JWT token here

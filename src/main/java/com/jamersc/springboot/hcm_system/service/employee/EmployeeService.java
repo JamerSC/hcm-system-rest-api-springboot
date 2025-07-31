@@ -1,8 +1,8 @@
-package com.jamersc.springboot.hcm_system.service;
+package com.jamersc.springboot.hcm_system.service.employee;
 
-import com.jamersc.springboot.hcm_system.dto.EmployeeCreateDTO;
-import com.jamersc.springboot.hcm_system.dto.EmployeeDTO;
-import com.jamersc.springboot.hcm_system.dto.EmployeeUpdateDTO;
+import com.jamersc.springboot.hcm_system.dto.employee.EmployeeCreateDTO;
+import com.jamersc.springboot.hcm_system.dto.employee.EmployeeDTO;
+import com.jamersc.springboot.hcm_system.dto.employee.EmployeeUpdateDTO;
 import com.jamersc.springboot.hcm_system.entity.Employee;
 
 import java.util.List;

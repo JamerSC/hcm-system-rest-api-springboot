@@ -1,8 +1,7 @@
-package com.jamersc.springboot.hcm_system.service;
+package com.jamersc.springboot.hcm_system.service.applicant;
 
-import com.jamersc.springboot.hcm_system.dto.ApplicantDto;
-import com.jamersc.springboot.hcm_system.dto.ApplicantProfileDTO;
-import org.springframework.web.multipart.MultipartFile;
+import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantDto;
+import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantProfileDTO;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.jamersc.springboot.hcm_system.service;
+package com.jamersc.springboot.hcm_system.service.user;
 
 import com.jamersc.springboot.hcm_system.entity.Role;
 import com.jamersc.springboot.hcm_system.entity.User;

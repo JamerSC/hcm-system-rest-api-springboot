@@ -1,4 +1,4 @@
-package com.jamersc.springboot.hcm_system.dto;
+package com.jamersc.springboot.hcm_system.dto.employee;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
@@ -10,9 +10,10 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmployeeUpdateDTO {
+public class EmployeePatchDTO {
     private Long id;
     @NotBlank(message = "First name is required")
     private String firstName;

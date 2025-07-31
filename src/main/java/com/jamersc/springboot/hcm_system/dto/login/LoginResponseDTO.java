@@ -1,4 +1,4 @@
-package com.jamersc.springboot.hcm_system.dto;
+package com.jamersc.springboot.hcm_system.dto.login;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,5 +16,6 @@ public class LoginResponseDTO {
     private String username;
     private Set<String> roles; // Send back the roles for client-side authorization
     // If using JWT, this would include the token: private String accessToken;
-    // private String tokenType = "Bearer"; // For JWT
+    private String accessToken;
+    private String tokenType = "Bearer"; // A standard header for clarity
 }

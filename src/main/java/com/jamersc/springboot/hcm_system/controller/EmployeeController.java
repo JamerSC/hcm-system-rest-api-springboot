@@ -2,19 +2,18 @@ package com.jamersc.springboot.hcm_system.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.jamersc.springboot.hcm_system.dto.EmployeeCreateDTO;
-import com.jamersc.springboot.hcm_system.dto.EmployeeDTO;
-import com.jamersc.springboot.hcm_system.dto.EmployeeUpdateDTO;
+import com.jamersc.springboot.hcm_system.dto.employee.EmployeeCreateDTO;
+import com.jamersc.springboot.hcm_system.dto.employee.EmployeeDTO;
+import com.jamersc.springboot.hcm_system.dto.employee.EmployeeUpdateDTO;
 import com.jamersc.springboot.hcm_system.entity.Employee;
 import com.jamersc.springboot.hcm_system.exception.EmployeeIDNotAllowedInRequestBodyException;
 import com.jamersc.springboot.hcm_system.exception.EmployeeNotFoundException;
-import com.jamersc.springboot.hcm_system.service.EmployeeService;
+import com.jamersc.springboot.hcm_system.service.employee.EmployeeService;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Valid;
 import jakarta.validation.Validator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 

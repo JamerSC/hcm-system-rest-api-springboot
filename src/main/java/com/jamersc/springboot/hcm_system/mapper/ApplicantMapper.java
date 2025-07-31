@@ -1,7 +1,7 @@
 package com.jamersc.springboot.hcm_system.mapper;
 
-import com.jamersc.springboot.hcm_system.dto.ApplicantDto;
-import com.jamersc.springboot.hcm_system.dto.ApplicantProfileDTO;
+import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantDto;
+import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantProfileDTO;
 import com.jamersc.springboot.hcm_system.entity.Applicant;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

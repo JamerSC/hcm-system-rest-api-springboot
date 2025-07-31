@@ -30,6 +30,7 @@
 		<java.version>17</java.version>
 		<org.mapstruct.version>1.5.5.Final</org.mapstruct.version> 		<!-- 1. Mapstruct version -->
 		<org.lombok.mapstruct.version>0.2.0</org.lombok.mapstruct.version> <!-- 2. Mapstruct-lombok binding version -->
+		<org.jwt.version>0.11.5</org.jwt.version>
 	</properties>
 	<dependencies>
 		<!-- 3. Mapstruct Dependencies -->
@@ -94,6 +95,22 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<!-- JWT dependencies -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>${org.jwt.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>${org.jwt.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>${org.jwt.version}</version>
 		</dependency>
 	</dependencies>
 

@@ -1,8 +1,7 @@
 package com.jamersc.springboot.hcm_system.controller;
 
-import com.jamersc.springboot.hcm_system.dto.ApplicantProfileDTO;
-import com.jamersc.springboot.hcm_system.service.ApplicantService;
-import com.jamersc.springboot.hcm_system.service.ApplicantServiceImpl;
+import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantProfileDTO;
+import com.jamersc.springboot.hcm_system.service.applicant.ApplicantService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

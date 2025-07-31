@@ -3,6 +3,7 @@ create database if not exists hcm_test_db;
 use hcm_test_db;
 
 select * from employees;
+select * from users;
 
 insert into `employees`(`id`, `first_name`, `last_name`, `email`, `job_position`, `department`, `hired_date`, `salary`)
 values
@@ -14,17 +15,3 @@ values
 insert into users (email, first_name, last_name, password, username)
 values ('admin@mail.com', 'Super', 'Admin', '$2a$10$2csjgL7IFGGhH3fTRfPVpOmkZS/qcbUKsaW.kwFyflA97zeyzpa2O', 'admin@123');
 
-insert into user_roles (user_id, role_id) values (
-(select id from users where username = 'admin@123'),
-(select id from roles where role_name = 'ROLE_ADMIN')
-);
-
-insert into user_roles (user_id, role_id) values (
-(select id from users where username = 'admin@123'),
-(select id from roles where role_name = 'ROLE_MANAGER')
-);
-
-insert into user_roles (user_id, role_id) values (
-(select id from users where username = 'admin@123'),
-(select id from roles where role_name = 'ROLE_EMPLOYEE')
-);

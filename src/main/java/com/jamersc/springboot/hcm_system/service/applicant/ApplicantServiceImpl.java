@@ -1,15 +1,12 @@
-package com.jamersc.springboot.hcm_system.service;
+package com.jamersc.springboot.hcm_system.service.applicant;
 
-import com.jamersc.springboot.hcm_system.dto.ApplicantDto;
-import com.jamersc.springboot.hcm_system.dto.ApplicantProfileDTO;
-import com.jamersc.springboot.hcm_system.entity.Applicant;
-import com.jamersc.springboot.hcm_system.entity.User;
+import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantDto;
+import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantProfileDTO;
 import com.jamersc.springboot.hcm_system.mapper.ApplicantMapper;
 import com.jamersc.springboot.hcm_system.repository.ApplicantRepository;
 import com.jamersc.springboot.hcm_system.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.jamersc.springboot.hcm_system.dto;
+package com.jamersc.springboot.hcm_system.dto.registration;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

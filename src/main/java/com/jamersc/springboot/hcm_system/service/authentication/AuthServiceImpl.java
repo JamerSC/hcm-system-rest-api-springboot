@@ -1,12 +1,13 @@
-package com.jamersc.springboot.hcm_system.service;
+package com.jamersc.springboot.hcm_system.service.authentication;
 
-import com.jamersc.springboot.hcm_system.dto.RegistrationRequestDTO;
+import com.jamersc.springboot.hcm_system.dto.registration.RegistrationRequestDTO;
 import com.jamersc.springboot.hcm_system.entity.Applicant;
 import com.jamersc.springboot.hcm_system.entity.Role;
 import com.jamersc.springboot.hcm_system.entity.User;
 import com.jamersc.springboot.hcm_system.repository.ApplicantRepository;
 import com.jamersc.springboot.hcm_system.repository.RoleRepository;
 import com.jamersc.springboot.hcm_system.repository.UserRepository;
+import com.jamersc.springboot.hcm_system.service.authentication.AuthService;
 import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service
-public class AuthServiceImpl implements AuthService  {
+public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private  final PasswordEncoder passwordEncoder;

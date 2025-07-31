@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -45,11 +46,14 @@ public class SecurityConfig {
 //    }
 
     // Inject your custom UserDetailsService
-    final private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
 
     // Constructor injection for UserDetailsService
-    public SecurityConfig(UserDetailsService userDetailsService) {
+    public SecurityConfig(UserDetailsService userDetailsService, JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.userDetailsService = userDetailsService;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
     // 1. Password Encoder Bean (Crucial for Hashing Passwords)
     @Bean
@@ -78,7 +82,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.authorizeHttpRequests(configurer ->
+        http
+                // 1. Disable CSRF (Stateless APIs don't need it)
+                .csrf(AbstractHttpConfigurer::disable)
+                // 2. Configure endpoint access rules
+                .authorizeHttpRequests(configurer ->
                 configurer
                         // public access
                         .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
@@ -99,14 +107,15 @@ public class SecurityConfig {
                         // All other requests require authentication
                         .anyRequest().authenticated()
         );
-
+        // 3. Configure session management to be STATELESS
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-        // Configure HTTP Basic Authentication
-        http.httpBasic(Customizer.withDefaults());
+        // 4. Remove default HTTP Basic auth (no longer needed)
+        http.httpBasic(Customizer.withDefaults())
+        // 5. Add our custom JWT filter BEFORE the default Spring Security filters
+        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         // Disable CSRF for stateless REST APIs (as you already have)
-        http.csrf(AbstractHttpConfigurer::disable);
+        // http.csrf(AbstractHttpConfigurer::disable);
 
         return http.build();
     }
