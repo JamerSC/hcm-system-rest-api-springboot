@@ -75,4 +75,13 @@ public class AuthController {
         return ResponseEntity.ok(response); // Return 200 OK with success message and roles/token
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<String> logoutUser() {
+        // Clear the security context for the current request.
+        // This is important in a stateless environment to ensure no
+        // subsequent code within the same request lifecycle is treated
+        // as authenticated.
+        SecurityContextHolder.clearContext();
+        return ResponseEntity.ok("User logged out successfully!");
+    }
 }
