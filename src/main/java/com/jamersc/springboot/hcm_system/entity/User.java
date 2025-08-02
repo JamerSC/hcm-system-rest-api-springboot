@@ -42,4 +42,8 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id") // Column in user_roles that refers to role_id
     )
     private Set<Role> roles = new HashSet<>(); // Initialize to avoid NullPointerException
+
+    // Add this One-to-One relationship to the Employee entity
+    @OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private Employee employee;
 }

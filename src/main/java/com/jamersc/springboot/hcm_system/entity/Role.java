@@ -23,6 +23,6 @@ public class Role {
     private String roleName;
 
     // A Role can be assigned to multiple Users
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY) // mappedBy refers to the 'roles' field in the User entit
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY) // mappedBy refers to the 'roles' field in the User Entity
     private Set<User> users = new HashSet<>();
 }

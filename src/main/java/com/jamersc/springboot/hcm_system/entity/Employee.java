@@ -32,4 +32,9 @@ public class Employee {
     private LocalDate hiredDate;
     @Column(name = "salary")
     private Double salary;
+
+    // Add this One-to-One relationship to the User entity
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 }
