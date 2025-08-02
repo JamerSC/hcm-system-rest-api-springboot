@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.jamersc.springboot.hcm_system.dto.employee.EmployeeCreateDTO;
 import com.jamersc.springboot.hcm_system.dto.employee.EmployeeDTO;
+import com.jamersc.springboot.hcm_system.dto.employee.EmployeeProfileDTO;
 import com.jamersc.springboot.hcm_system.dto.employee.EmployeeUpdateDTO;
 import com.jamersc.springboot.hcm_system.entity.Employee;
 import com.jamersc.springboot.hcm_system.exception.EmployeeIDNotAllowedInRequestBodyException;
@@ -45,6 +46,12 @@ public class EmployeeController {
         }
         //return ResponseEntity.ok(employee);
         return new ResponseEntity<>(employee, HttpStatus.OK); // HTTP 200 List of Employees
+    }
+
+    @GetMapping("/{id}/profile")
+    public ResponseEntity<Optional<EmployeeProfileDTO>> getEmployeeProfile(@PathVariable Long id) {
+        Optional<EmployeeProfileDTO> profile = employeeService.findEmployeeProfileById(id);
+        return ResponseEntity.ok(profile);
     }
 
     @GetMapping("/{id}")

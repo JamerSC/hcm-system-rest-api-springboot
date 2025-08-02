@@ -2,6 +2,7 @@ package com.jamersc.springboot.hcm_system.service.employee;
 
 import com.jamersc.springboot.hcm_system.dto.employee.EmployeeCreateDTO;
 import com.jamersc.springboot.hcm_system.dto.employee.EmployeeDTO;
+import com.jamersc.springboot.hcm_system.dto.employee.EmployeeProfileDTO;
 import com.jamersc.springboot.hcm_system.dto.employee.EmployeeUpdateDTO;
 import com.jamersc.springboot.hcm_system.exception.EmployeeNotFoundException;
 import com.jamersc.springboot.hcm_system.entity.Employee;
@@ -27,6 +28,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<EmployeeDTO> getEmployees() {
         return employeeMapper.entitiesToDtos(employeeRepository.findAll());
+    }
+
+    @Override
+    public Optional<EmployeeProfileDTO> findEmployeeProfileById(Long id) {
+       return Optional.ofNullable(employeeRepository.findEmployeeWithUserAndRolesById(id)
+                .map(employeeMapper::entityToProfileDto).orElseThrow(
+                        ()-> new EmployeeNotFoundException("Employee id not found - " + id))
+       );
     }
 
     public Optional<EmployeeDTO> findById(Long id) {
