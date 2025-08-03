@@ -34,14 +34,22 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Optional<EmployeeProfileDTO> findEmployeeProfileById(Long id) {
        return Optional.ofNullable(employeeRepository.findEmployeeWithUserAndRolesById(id)
                 .map(employeeMapper::entityToProfileDto).orElseThrow(
-                        ()-> new EmployeeNotFoundException("Employee id not found - " + id))
+                        () -> new EmployeeNotFoundException("Employee id not found - " + id))
        );
     }
 
     public Optional<EmployeeDTO> findById(Long id) {
         return Optional.ofNullable(employeeRepository.findById(id)
-                .map(employeeMapper::entityToDto)
-                .orElseThrow(() -> new EmployeeNotFoundException("Employee id not found - " + id)));
+                .map(employeeMapper::entityToDto).orElseThrow(
+                        () -> new EmployeeNotFoundException("Employee id not found - " + id))
+        );
+    }
+
+    @Override
+    public EmployeeProfileDTO getEmployeeProfileByUsername(String username) {
+        return employeeMapper.entityToProfileDto(
+                employeeRepository.findEmployeeByUsername(username)
+        );
     }
 
 //    @Override

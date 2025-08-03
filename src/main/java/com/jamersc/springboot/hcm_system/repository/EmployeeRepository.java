@@ -10,4 +10,7 @@ import java.util.Optional;
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @Query("SELECT e FROM Employee e JOIN FETCH e.user u JOIN FETCH u.roles WHERE e.id =:id")
     Optional<Employee> findEmployeeWithUserAndRolesById(@Param("id") Long id);
+
+    @Query("SELECT e FROM Employee e JOIN FETCH e.user u JOIN FETCH u.roles WHERE u.username = :username")
+    Employee findEmployeeByUsername(@Param("username") String username);
 }

@@ -14,6 +14,7 @@ public interface EmployeeService {
     //EmployeeDTO findById(Long id);
     Optional<EmployeeProfileDTO> findEmployeeProfileById(Long id);
     Optional<EmployeeDTO> findById(Long id);
+    EmployeeProfileDTO getEmployeeProfileByUsername(String username);
     Employee save(EmployeeCreateDTO employeeDTO);
     Employee update(EmployeeUpdateDTO employeeDTO);
     Employee patch(EmployeeDTO employeeDTO);

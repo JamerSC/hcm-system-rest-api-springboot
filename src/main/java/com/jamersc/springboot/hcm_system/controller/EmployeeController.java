@@ -15,6 +15,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.Validator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,9 +27,7 @@ import java.util.*;
 public class EmployeeController {
 
     private final EmployeeService employeeService;
-
     private final ObjectMapper objectMapper;
-
     private final Validator validator;
 
     public EmployeeController(EmployeeService employeeService, ObjectMapper objectMapper, Validator validator) {
@@ -37,8 +37,9 @@ public class EmployeeController {
     }
 
 
+    // Get all employees
     @GetMapping("/")
-    public ResponseEntity<List<EmployeeDTO>> getEmployees() {
+    public ResponseEntity<List<EmployeeDTO>> getAllEmployees() {
         List<EmployeeDTO> employee = employeeService.getEmployees();
 
         if (employee.isEmpty()) {
@@ -48,12 +49,14 @@ public class EmployeeController {
         return new ResponseEntity<>(employee, HttpStatus.OK); // HTTP 200 List of Employees
     }
 
+    // Get employee profile with username & role
     @GetMapping("/{id}/profile")
     public ResponseEntity<Optional<EmployeeProfileDTO>> getEmployeeProfile(@PathVariable Long id) {
         Optional<EmployeeProfileDTO> profile = employeeService.findEmployeeProfileById(id);
         return ResponseEntity.ok(profile);
     }
 
+    // Get employee by id
     @GetMapping("/{id}")
     public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable long id) {
         Optional<EmployeeDTO> employee = employeeService.findById(id);
@@ -69,7 +72,14 @@ public class EmployeeController {
 //        return new ResponseEntity<>(employeeService.findById(id), HttpStatus.OK);
 //    }
 
-    // Error validation handling
+    @GetMapping("/me/profile")
+    private ResponseEntity<EmployeeProfileDTO> getMyProfile(@AuthenticationPrincipal UserDetails userDetails) {
+        String username = userDetails.getUsername();
+        EmployeeProfileDTO profile = employeeService.getEmployeeProfileByUsername(username);
+        return ResponseEntity.ok(profile);
+    }
+
+    // Create Employee
     @PostMapping("/")
     public ResponseEntity<?> createEmployee(@Valid @RequestBody EmployeeCreateDTO employeeDTO,
                                             BindingResult result) {
