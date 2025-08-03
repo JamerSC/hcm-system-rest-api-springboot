@@ -101,9 +101,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PATCH, "/api/employees/**").hasRole("MANAGER")
                         .requestMatchers(HttpMethod.DELETE, "/api/employees/**").hasRole("ADMIN")
                         // Add specific rules for applicant-related endpoints if they are different from employees
-                        .requestMatchers(HttpMethod.POST, "/api/applicants/**").hasRole("APPLICANT")
-                        .requestMatchers(HttpMethod.PUT, "/api/applicants/**").hasRole("APPLICANT")
-                        .requestMatchers(HttpMethod.GET, "/api/applicants/**").hasRole("APPLICANT") // Example: Applicant viewing own profile
+                        .requestMatchers(HttpMethod.GET, "/api/recruitments/**").hasRole("MANAGER") // get applicant profile
+                        .requestMatchers(HttpMethod.GET, "/api/applicants/**").hasRole("APPLICANT") // get applicant profile
+                        .requestMatchers(HttpMethod.POST, "/api/applicants/**").hasRole("APPLICANT") // applicants resume
+                        .requestMatchers(HttpMethod.PUT, "/api/applicants/**").hasRole("APPLICANT") // applicant profile update
                         // All other requests require authentication
                         .anyRequest().authenticated()
         );

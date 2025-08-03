@@ -22,6 +22,16 @@ public interface ApplicantMapper {
      * Fields in the entity not present in the DTO (like id, user, cvFilePath, currentStatus)
      * will simply be ignored, which is the desired behavior for a profile DTO.
      */
+    @Mapping(target = "username", source = "user.username")
+    @Mapping(target = "email", source = "user.email")
+    ApplicantDto entityToApplicantDto(Applicant applicant);
+
+    @Mapping(target = "user", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    Applicant applicantDtoToEntity(ApplicantDto dto);
+
+    @Mapping(target = "email", source = "user.email")
+    @Mapping(target = "username", source = "user.username")
     ApplicantProfileDTO entityToProfileDto(Applicant applicant);
 
     // Maps an ApplicantDTO to an Applicant entity .

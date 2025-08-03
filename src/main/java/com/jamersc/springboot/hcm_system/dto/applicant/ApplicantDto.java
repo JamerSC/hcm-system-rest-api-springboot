@@ -18,12 +18,14 @@ public class ApplicantDto {
     //@JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     //private User user; // Link to the User account
 
-    private String cvFilePath; // Path or URL to stored CV/Resume
-    private String currentStatus; // e.g., "Registered", "CV Submitted", "Interviewed"
     private String firstName;
     private String lastName;
     private String phoneNumber;
     private String address;
     private String educationLevel;
+    private String currentStatus; // e.g., "Registered", "CV Submitted", "Interviewed"
+    private String cvFilePath; // Path or URL to stored CV/Resume
+    private String username;
+    private String email;
 
 }
