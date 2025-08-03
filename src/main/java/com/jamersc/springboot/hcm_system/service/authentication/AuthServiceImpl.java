@@ -40,8 +40,10 @@ public class AuthServiceImpl implements AuthService {
         }
 
         User newUser = new User();
-        newUser.setUsername(request.getUsername());
+        newUser.setFirstName(request.getFirstName());
+        newUser.setLastName(request.getLastName());
         newUser.setEmail(request.getEmail());
+        newUser.setUsername(request.getUsername());
         newUser.setPassword(passwordEncoder.encode(request.getPassword())); // <-- HASH THE PASSWORD HERE
 
         // Assign default role, e.g., "ROLE_APPLICANT"
@@ -58,8 +60,10 @@ public class AuthServiceImpl implements AuthService {
         newApplicant.setFirstName(request.getFirstName());
         newApplicant.setLastName(request.getLastName());
         newApplicant.setUser(savedUser);
+        // Save applicant profile
         applicantRepository.save(newApplicant);
 
+        // Save new user
         return savedUser;
     }
 }

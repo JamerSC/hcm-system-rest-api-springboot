@@ -1,11 +1,9 @@
-package com.jamersc.springboot.hcm_system.dto.employee;
+package com.jamersc.springboot.hcm_system.dto.profile;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -14,7 +12,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmployeeProfileDTO {
+public class EmployeePatchProfileDTO {
     // Fields from Employee entity
     private Long id;
     private String firstName;

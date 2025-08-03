@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.jamersc.springboot.hcm_system.dto.employee.EmployeeCreateDTO;
 import com.jamersc.springboot.hcm_system.dto.employee.EmployeeDTO;
-import com.jamersc.springboot.hcm_system.dto.employee.EmployeeProfileDTO;
+import com.jamersc.springboot.hcm_system.dto.profile.EmployeeProfileDTO;
 import com.jamersc.springboot.hcm_system.dto.employee.EmployeeUpdateDTO;
 import com.jamersc.springboot.hcm_system.entity.Employee;
 import com.jamersc.springboot.hcm_system.exception.EmployeeIDNotAllowedInRequestBodyException;
@@ -72,12 +72,21 @@ public class EmployeeController {
 //        return new ResponseEntity<>(employeeService.findById(id), HttpStatus.OK);
 //    }
 
+    // get your employee profile
     @GetMapping("/me/profile")
-    private ResponseEntity<EmployeeProfileDTO> getMyProfile(@AuthenticationPrincipal UserDetails userDetails) {
+    private ResponseEntity<EmployeeProfileDTO> getMyEmployeeProfile(@AuthenticationPrincipal UserDetails userDetails) {
         String username = userDetails.getUsername();
         EmployeeProfileDTO profile = employeeService.getEmployeeProfileByUsername(username);
         return ResponseEntity.ok(profile);
     }
+
+    @PatchMapping("/{id}/profile")
+    private ResponseEntity<?> updateMyEmployeeProfile(@Valid @PathVariable Long id,
+                                              @RequestBody Map<String, Object> patchPayload) {
+//      // Optional
+        return null;
+    }
+
 
     // Create Employee
     @PostMapping("/")

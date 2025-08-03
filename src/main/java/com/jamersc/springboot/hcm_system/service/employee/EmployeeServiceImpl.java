@@ -2,7 +2,7 @@ package com.jamersc.springboot.hcm_system.service.employee;
 
 import com.jamersc.springboot.hcm_system.dto.employee.EmployeeCreateDTO;
 import com.jamersc.springboot.hcm_system.dto.employee.EmployeeDTO;
-import com.jamersc.springboot.hcm_system.dto.employee.EmployeeProfileDTO;
+import com.jamersc.springboot.hcm_system.dto.profile.EmployeeProfileDTO;
 import com.jamersc.springboot.hcm_system.dto.employee.EmployeeUpdateDTO;
 import com.jamersc.springboot.hcm_system.exception.EmployeeNotFoundException;
 import com.jamersc.springboot.hcm_system.entity.Employee;
