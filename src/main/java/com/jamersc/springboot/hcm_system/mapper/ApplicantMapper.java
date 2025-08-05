@@ -8,6 +8,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
+import java.util.List;
+
 @Mapper(
         componentModel = "spring",
         // This is useful if you want to explicitly define how nulls are handled.
@@ -64,4 +66,5 @@ public interface ApplicantMapper {
     // If you ever need to map the User entity itself to a DTO (e.g., UserIdDTO),
     // you would add a method here, but it's not directly related to ApplicantProfileDTO's purpose.
     // Example: UserIdDTO userToUserIdDto(User user);
+    List<ApplicantDto> entityToApplicantDtoList(List<Applicant> applicants);
 }

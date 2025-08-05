@@ -40,13 +40,13 @@ public class EmployeeController {
     // Get all employees
     @GetMapping("/")
     public ResponseEntity<List<EmployeeDTO>> getAllEmployees() {
-        List<EmployeeDTO> employee = employeeService.getEmployees();
+        List<EmployeeDTO> employees = employeeService.getEmployees();
 
-        if (employee.isEmpty()) {
+        if (employees.isEmpty()) {
             return ResponseEntity.noContent().build(); // HTTP 204
         }
         //return ResponseEntity.ok(employee);
-        return new ResponseEntity<>(employee, HttpStatus.OK); // HTTP 200 List of Employees
+        return new ResponseEntity<>(employees, HttpStatus.OK); // HTTP 200 List of Employees
     }
 
     // Get employee profile with username & role

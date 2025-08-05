@@ -2,12 +2,15 @@ package com.jamersc.springboot.hcm_system.controller;
 
 import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantDto;
 import com.jamersc.springboot.hcm_system.service.applicant.ApplicantService;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -19,8 +22,18 @@ public class RecruitmentController {
         this.applicantService = applicantService;
     }
 
-    @GetMapping("/{id}/profile")
-    private ResponseEntity<Optional<ApplicantDto>> getApplicantProfileById(
+    @GetMapping("/applicants")
+    private ResponseEntity<List<ApplicantDto>> getAllApplicants() {
+        List<ApplicantDto> listOfApplicants = applicantService.getAllApplicant();
+
+        if (listOfApplicants.isEmpty()) {
+            return ResponseEntity.noContent().build(); // No Content - HTTP 204
+        }
+        return new ResponseEntity<>(listOfApplicants, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/applicant")
+    private ResponseEntity<Optional<ApplicantDto>> getApplicantById(
             @PathVariable Long id) {
         Optional<ApplicantDto> profile = applicantService.getApplicantById(id);
         return ResponseEntity.ok(profile);

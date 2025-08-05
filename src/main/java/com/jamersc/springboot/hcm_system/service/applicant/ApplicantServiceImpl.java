@@ -30,7 +30,7 @@ public class ApplicantServiceImpl implements ApplicantService {
 
     @Override
     public List<ApplicantDto> getAllApplicant() {
-        return null;
+        return applicantMapper.entityToApplicantDtoList(applicantRepository.findAll());
     }
 
     @Override
