@@ -33,6 +33,9 @@ public class Employee {
     @Column(name = "salary")
     private Double salary;
 
+//    @OneToMany(mappedBy = "createdBy")
+//    private Department department2;
+
     // Add this One-to-One relationship to the User entity
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "user_id", referencedColumnName = "id")
