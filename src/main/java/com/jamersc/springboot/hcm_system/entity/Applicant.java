@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "applicants")
 @Getter
@@ -26,4 +28,30 @@ public class Applicant {
     @OneToOne // One user account maps to one applicant profile
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user; // Link to the User account
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by_user_id", referencedColumnName = "id")
+    private User createdBy;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "updated_by_user_id", referencedColumnName = "id")
+    private User updatedBy;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = new Date();
+        updatedAt = new Date();
+    }
+
+    // Add JPA annotations for createdDate and modifiedDate
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = new Date();
+    }
 }

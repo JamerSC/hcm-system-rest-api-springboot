@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table(name = "jobs")
@@ -29,7 +30,7 @@ public class Job {
     private String requirements;
 
     @Enumerated(EnumType.STRING)
-    private JobStatus status = JobStatus.OPEN; // Default
+    private JobStatus status = JobStatus.CREATED; // Default
 
     private String location;
 
@@ -40,9 +41,35 @@ public class Job {
     @JoinColumn(name = "department_id", referencedColumnName = "id")
     private Department department;
 
-    // An employee (e.g., a manager or admin) posts a job.
+    // An user (e.g., a manager or admin) posts a job.
     // This establishes a Many-to-One relationship.
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "posted_by_employee_id", referencedColumnName = "id")
-    private Employee postedBy;
+    @JoinColumn(name = "posted_by_user_id", referencedColumnName = "id")
+    private User postedBy;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by_user_id", referencedColumnName = "id")
+    private User createdBy;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "updated_by_user_id", referencedColumnName = "id")
+    private User updatedBy;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = new Date();
+        updatedAt = new Date();
+    }
+
+    // Add JPA annotations for createdDate and modifiedDate
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = new Date();
+    }
 }

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -25,7 +26,29 @@ public class Department {
     @OneToMany(mappedBy = "department", fetch = FetchType.LAZY)
     private Set<Job> jobs;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "created_by_employee_id", referencedColumnName = "id")
-//    private Employee createdBy;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by_user_id", referencedColumnName = "id")
+    private User createdBy;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "updated_by_user_id", referencedColumnName = "id")
+    private User updatedBy;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = new Date();
+        updatedAt = new Date();
+    }
+
+    // Add JPA annotations for createdDate and modifiedDate
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = new Date();
+    }
 }

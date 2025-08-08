@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table(name = "employees")
@@ -33,11 +34,34 @@ public class Employee {
     @Column(name = "salary")
     private Double salary;
 
-//    @OneToMany(mappedBy = "createdBy")
-//    private Department department2;
-
     // Add this One-to-One relationship to the User entity
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by_user_id", referencedColumnName = "id")
+    private User createdBy;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "updated_by_user_id", referencedColumnName = "id")
+    private User updatedBy;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = new Date();
+        updatedAt = new Date();
+    }
+
+    // Add JPA annotations for createdDate and modifiedDate
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = new Date();
+    }
 }
