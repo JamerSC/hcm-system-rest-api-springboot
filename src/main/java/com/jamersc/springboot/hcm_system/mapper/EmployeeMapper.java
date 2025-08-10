@@ -38,12 +38,22 @@ public interface EmployeeMapper {
 
     // employee create
     EmployeeCreateDTO createEntityToDto(Employee employee);
+
+    @Mapping(target = "updatedBy", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "id", ignore = true)
     Employee createDtoToEntity(EmployeeCreateDTO dto);
 
     // employee update
     EmployeeUpdateDTO updateEntityToDto(Employee employee);
+
+    @Mapping(target = "updatedBy", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "user", ignore = true)
     Employee updateDtoToEntity(EmployeeUpdateDTO dto);
 
