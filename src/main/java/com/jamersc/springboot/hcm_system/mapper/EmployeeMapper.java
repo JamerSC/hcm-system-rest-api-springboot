@@ -2,6 +2,7 @@ package com.jamersc.springboot.hcm_system.mapper;
 
 import com.jamersc.springboot.hcm_system.dto.employee.EmployeeCreateDTO;
 import com.jamersc.springboot.hcm_system.dto.employee.EmployeeDTO;
+import com.jamersc.springboot.hcm_system.dto.employee.EmployeeResponseDTO;
 import com.jamersc.springboot.hcm_system.dto.profile.EmployeeProfileDTO;
 import com.jamersc.springboot.hcm_system.dto.employee.EmployeeUpdateDTO;
 import com.jamersc.springboot.hcm_system.entity.Employee;
@@ -20,6 +21,11 @@ public interface EmployeeMapper {
 
     // employee
     EmployeeDTO entityToDto(Employee employee);
+
+    @Mapping(target = "updatedBy", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "user", ignore = true)
     Employee dtoToEntity(EmployeeDTO dto);
 
@@ -36,7 +42,7 @@ public interface EmployeeMapper {
                 .map(Role::getRoleName).collect(Collectors.toSet());
     }
 
-    // employee create
+    // create employee mapper
     EmployeeCreateDTO createEntityToDto(Employee employee);
 
     @Mapping(target = "updatedBy", ignore = true)
@@ -46,6 +52,10 @@ public interface EmployeeMapper {
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "id", ignore = true)
     Employee createDtoToEntity(EmployeeCreateDTO dto);
+
+    @Mapping(target = "updatedByUsername", source = "updatedBy.username")
+    @Mapping(target = "createdByUsername", source = "createdBy.username")
+    EmployeeResponseDTO entityToEmployeeResponseDTO(Employee employee);
 
     // employee update
     EmployeeUpdateDTO updateEntityToDto(Employee employee);

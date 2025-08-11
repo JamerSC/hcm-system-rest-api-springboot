@@ -2,6 +2,7 @@ package com.jamersc.springboot.hcm_system.mapper;
 
 import com.jamersc.springboot.hcm_system.dto.department.DepartmentCreateDTO;
 import com.jamersc.springboot.hcm_system.dto.department.DepartmentDTO;
+import com.jamersc.springboot.hcm_system.dto.department.DepartmentResponseDTO;
 import com.jamersc.springboot.hcm_system.entity.Department;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -23,8 +24,8 @@ public interface DepartmentMapper {
     @Mapping(target = "createdAt", ignore = true)
     Department deptDtoToEntity(DepartmentDTO dto);
 
+    // create department mapper
     DepartmentCreateDTO entityToCreateDto(Department dept);
-
 
     @Mapping(target = "updatedBy", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
@@ -33,6 +34,12 @@ public interface DepartmentMapper {
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     Department createDtoToEntity(DepartmentCreateDTO dto);
+
+    // response department mapper
+    // convert department entity to the response dto
+    @Mapping(target = "updatedByUsername", source = "updatedBy.username")
+    @Mapping(target = "createdByUsername", source = "createdBy.username")
+    DepartmentResponseDTO entityToDepartmentResponseDto(Department dept);
 
     List<DepartmentDTO> entitiesToDeptDtos(List<Department> departments);
 

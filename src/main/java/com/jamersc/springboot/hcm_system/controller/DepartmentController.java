@@ -2,6 +2,7 @@ package com.jamersc.springboot.hcm_system.controller;
 
 import com.jamersc.springboot.hcm_system.dto.department.DepartmentCreateDTO;
 import com.jamersc.springboot.hcm_system.dto.department.DepartmentDTO;
+import com.jamersc.springboot.hcm_system.dto.department.DepartmentResponseDTO;
 import com.jamersc.springboot.hcm_system.entity.Department;
 import com.jamersc.springboot.hcm_system.service.department.DepartmentService;
 import jakarta.validation.Valid;
@@ -36,11 +37,11 @@ public class DepartmentController {
     }
 
     @PostMapping("/")
-    private ResponseEntity<Department> createDepartment(
+    private ResponseEntity<DepartmentResponseDTO> createDepartment(
             @Valid @RequestBody DepartmentCreateDTO createDTO,
             Authentication authentication) {  // <-- Inject the Authentication object
-        Department department = departmentService.save(createDTO, authentication);
-        return ResponseEntity.ok(department);
+        DepartmentResponseDTO department = departmentService.save(createDTO, authentication);
+        return new ResponseEntity<>(department, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

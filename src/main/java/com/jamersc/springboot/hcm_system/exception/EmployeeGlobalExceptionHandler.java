@@ -69,9 +69,10 @@ public class EmployeeGlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<String> handleAuthenticationException(AuthenticationException ex) {
-        // Log the exception details internally (ex.getMessage()) for debugging, but don't expose too much.
-        return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
-    }
+//    Moved to GlobalExceptionHandler class
+//    @ExceptionHandler(AuthenticationException.class)
+//    public ResponseEntity<String> handleAuthenticationException(AuthenticationException ex) {
+//        // Log the exception details internally (ex.getMessage()) for debugging, but don't expose too much.
+//        return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
+//    }
 }

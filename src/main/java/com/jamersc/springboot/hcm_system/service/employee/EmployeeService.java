@@ -2,9 +2,11 @@ package com.jamersc.springboot.hcm_system.service.employee;
 
 import com.jamersc.springboot.hcm_system.dto.employee.EmployeeCreateDTO;
 import com.jamersc.springboot.hcm_system.dto.employee.EmployeeDTO;
+import com.jamersc.springboot.hcm_system.dto.employee.EmployeeResponseDTO;
 import com.jamersc.springboot.hcm_system.dto.profile.EmployeeProfileDTO;
 import com.jamersc.springboot.hcm_system.dto.employee.EmployeeUpdateDTO;
 import com.jamersc.springboot.hcm_system.entity.Employee;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,8 +17,8 @@ public interface EmployeeService {
     Optional<EmployeeProfileDTO> findEmployeeProfileById(Long id);
     Optional<EmployeeDTO> findById(Long id);
     EmployeeProfileDTO getEmployeeProfileByUsername(String username);
-    Employee save(EmployeeCreateDTO employeeDTO);
-    Employee update(EmployeeUpdateDTO employeeDTO);
-    Employee patch(EmployeeDTO employeeDTO);
+    EmployeeResponseDTO save(EmployeeCreateDTO employeeDTO, Authentication authentication);
+    Employee update(EmployeeUpdateDTO employeeDTO, Authentication authentication);
+    Employee patch(EmployeeDTO employeeDTO, Authentication authentication);
     void deleteEmployeeByID(Long id);
 }

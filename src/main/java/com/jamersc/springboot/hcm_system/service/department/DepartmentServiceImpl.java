@@ -2,6 +2,7 @@ package com.jamersc.springboot.hcm_system.service.department;
 
 import com.jamersc.springboot.hcm_system.dto.department.DepartmentCreateDTO;
 import com.jamersc.springboot.hcm_system.dto.department.DepartmentDTO;
+import com.jamersc.springboot.hcm_system.dto.department.DepartmentResponseDTO;
 import com.jamersc.springboot.hcm_system.entity.Department;
 import com.jamersc.springboot.hcm_system.entity.User;
 import com.jamersc.springboot.hcm_system.mapper.DepartmentMapper;
@@ -44,13 +45,13 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public Department save(DepartmentCreateDTO dto, Authentication authentication) {
-        // Get the current user from authentication object
+    public DepartmentResponseDTO save(DepartmentCreateDTO dto, Authentication authentication) {
+        // get the current user from authentication object
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User currentUser = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("Authenticated user not found in the database"));
 
-        // Map the dto to entity
+        // map the dto to entity
         Department department = departmentMapper.createDtoToEntity(dto);
 
         // Set created/updated by with the current
@@ -58,7 +59,10 @@ public class DepartmentServiceImpl implements DepartmentService {
         department.setUpdatedBy(currentUser);
 
         // save
-        return departmentRepository.save(department);
+        Department saveDepartment = departmentRepository.save(department);
+
+
+        return departmentMapper.entityToDepartmentResponseDto(saveDepartment);
     }
 
     @Override

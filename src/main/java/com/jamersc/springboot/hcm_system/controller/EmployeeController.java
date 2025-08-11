@@ -4,17 +4,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.jamersc.springboot.hcm_system.dto.employee.EmployeeCreateDTO;
 import com.jamersc.springboot.hcm_system.dto.employee.EmployeeDTO;
+import com.jamersc.springboot.hcm_system.dto.employee.EmployeeResponseDTO;
 import com.jamersc.springboot.hcm_system.dto.profile.EmployeeProfileDTO;
 import com.jamersc.springboot.hcm_system.dto.employee.EmployeeUpdateDTO;
 import com.jamersc.springboot.hcm_system.entity.Employee;
 import com.jamersc.springboot.hcm_system.exception.EmployeeIDNotAllowedInRequestBodyException;
 import com.jamersc.springboot.hcm_system.exception.EmployeeNotFoundException;
+import com.jamersc.springboot.hcm_system.exception.GlobalExceptionHandler;
 import com.jamersc.springboot.hcm_system.service.employee.EmployeeService;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Valid;
 import jakarta.validation.Validator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
@@ -90,15 +93,19 @@ public class EmployeeController {
 
     // Create Employee
     @PostMapping("/")
-    public ResponseEntity<?> createEmployee(@Valid @RequestBody EmployeeCreateDTO employeeDTO,
-                                            BindingResult result) {
-        if (result.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            result.getFieldErrors().forEach(
-                    error -> errors.put(error.getField(), error.getDefaultMessage()));
-            return ResponseEntity.badRequest().body(errors);
-        }
-        Employee employee = employeeService.save(employeeDTO);
+    public ResponseEntity<EmployeeResponseDTO> createEmployee(
+            @Valid @RequestBody EmployeeCreateDTO employeeDTO,
+            Authentication authentication) {
+
+//        Moved to GlobalExceptionHandler class
+//        if (result.hasErrors()) {
+//            Map<String, String> errors = new HashMap<>();
+//            result.getFieldErrors().forEach(
+//                    error -> errors.put(error.getField(), error.getDefaultMessage()));
+//            return ResponseEntity.badRequest().body(errors);
+//        }
+        EmployeeResponseDTO employee = employeeService.save(employeeDTO, authentication);
+
         return new ResponseEntity<>(employee, HttpStatus.CREATED); // Created 201
     }
 
@@ -109,8 +116,10 @@ public class EmployeeController {
 //    }
 
     @PutMapping("/")
-    public ResponseEntity<?> updateEmployee(@Valid @RequestBody EmployeeUpdateDTO employeeDTO,
-                                            BindingResult result) {
+    public ResponseEntity<?> updateEmployee(
+            @Valid @RequestBody EmployeeUpdateDTO employeeDTO,
+            BindingResult result, Authentication authentication) {
+
         if (result.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             result.getFieldErrors().forEach(
@@ -118,13 +127,14 @@ public class EmployeeController {
             return ResponseEntity.badRequest().body(errors);
         }
 
-        Employee employee = employeeService.update(employeeDTO);
+        Employee employee = employeeService.update(employeeDTO, authentication);
         return new ResponseEntity<>(employee, HttpStatus.OK);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> patchEmployee(@Valid @PathVariable Long id,
-                                  @RequestBody Map<String, Object> patchPayload) {
+    public ResponseEntity<?> patchEmployee(
+            @Valid @PathVariable Long id, @RequestBody Map<String, Object> patchPayload,
+            Authentication authentication) {
 
         // find the employee in the db
         Optional<EmployeeDTO> tempEmployee = employeeService.findById(id);
@@ -154,7 +164,7 @@ public class EmployeeController {
             return ResponseEntity.badRequest().body(errors);
         }
 
-        Employee employee = employeeService.patch(patchEmployee);
+        Employee employee = employeeService.patch(patchEmployee, authentication);
 
         return new ResponseEntity<>(employee, HttpStatus.OK);
     }

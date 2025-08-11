@@ -2,26 +2,35 @@ package com.jamersc.springboot.hcm_system.service.employee;
 
 import com.jamersc.springboot.hcm_system.dto.employee.EmployeeCreateDTO;
 import com.jamersc.springboot.hcm_system.dto.employee.EmployeeDTO;
+import com.jamersc.springboot.hcm_system.dto.employee.EmployeeResponseDTO;
 import com.jamersc.springboot.hcm_system.dto.profile.EmployeeProfileDTO;
 import com.jamersc.springboot.hcm_system.dto.employee.EmployeeUpdateDTO;
+import com.jamersc.springboot.hcm_system.entity.User;
 import com.jamersc.springboot.hcm_system.exception.EmployeeNotFoundException;
 import com.jamersc.springboot.hcm_system.entity.Employee;
 import com.jamersc.springboot.hcm_system.mapper.EmployeeMapper;
 import com.jamersc.springboot.hcm_system.repository.EmployeeRepository;
+import com.jamersc.springboot.hcm_system.repository.UserRepository;
+import jakarta.transaction.Transactional;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
+    private final UserRepository userRepository;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper, UserRepository userRepository) {
         this.employeeRepository = employeeRepository;
         this.employeeMapper = employeeMapper;
+        this.userRepository = userRepository;
     }
 
 
@@ -71,25 +80,59 @@ public class EmployeeServiceImpl implements EmployeeService {
 //    }
 
     @Override
-    public Employee save(EmployeeCreateDTO employeeDTO) {
-        // 1. Convert DTO to Entity
+    public EmployeeResponseDTO save(EmployeeCreateDTO employeeDTO, Authentication authentication) {
+        // get current user
+        User currentUser = getUser(authentication);
+
+        // map dto to entity
         Employee employee = employeeMapper.createDtoToEntity(employeeDTO);
-        // 2. Save the Entity using the repository
-        return employeeRepository.save(employee);
+
+        // set created & updated by with current user
+        employee.setCreatedBy(currentUser);
+        employee.setUpdatedBy(currentUser);
+
+        // save the entity using the repository
+        Employee saveEmployee = employeeRepository.save(employee);
+
+        // map employee entity to response emp dto
+        return employeeMapper.entityToEmployeeResponseDTO(saveEmployee);
     }
 
     @Override
-    public Employee update(EmployeeUpdateDTO employeeDTO) {
+    public Employee update(EmployeeUpdateDTO employeeDTO, Authentication authentication) {
+        // get current user
+        User currentUser = getUser(authentication);
+
         // Convert to entity
         Employee employee = employeeMapper.updateDtoToEntity(employeeDTO);
+
+        // set updated by current user
+        employee.setUpdatedBy(currentUser);
+
         // Update employee
         return employeeRepository.save(employee);
     }
 
     @Override
-    public Employee patch(EmployeeDTO employeeDTO) {
+    public Employee patch(EmployeeDTO employeeDTO, Authentication authentication) {
+        // get current user from authentication
+        User currentUser = getUser(authentication);
+
+        // map dto to entity
         Employee employee = employeeMapper.dtoToEntity(employeeDTO);
+
+        // set updated by current user
+        employee.setUpdatedBy(currentUser);
+
+        // save/patch employee
         return employeeRepository.save(employee);
+    }
+
+    // method for getting the current user - reusability
+    private User getUser(Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        return userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Authenticated user is not found!"));
     }
 
     @Override
