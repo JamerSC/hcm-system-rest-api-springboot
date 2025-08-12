@@ -1,8 +1,16 @@
 package com.jamersc.springboot.hcm_system.service.job;
 
+import com.jamersc.springboot.hcm_system.dto.job.JobCreateDTO;
+import com.jamersc.springboot.hcm_system.dto.job.JobDTO;
+import com.jamersc.springboot.hcm_system.dto.job.JobResponseDTO;
 import com.jamersc.springboot.hcm_system.entity.Job;
+import com.jamersc.springboot.hcm_system.entity.User;
+import com.jamersc.springboot.hcm_system.mapper.JobMapper;
 import com.jamersc.springboot.hcm_system.repository.JobRepository;
+import com.jamersc.springboot.hcm_system.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,25 +20,44 @@ import java.util.Optional;
 @Transactional
 public class JobServiceImpl implements JobService {
 
-    private JobRepository jobRepository;
-    @Override
-    public List<Job> getAllJob() {
-        return jobRepository.findAll();
+    private final JobRepository jobRepository;
+    private final UserRepository userRepository;
+    private final JobMapper jobMapper;
+
+    public JobServiceImpl(JobRepository jobRepository, UserRepository userRepository, JobMapper jobMapper) {
+        this.jobRepository = jobRepository;
+        this.userRepository = userRepository;
+        this.jobMapper = jobMapper;
     }
 
     @Override
-    public Optional<Job> getJobById(Long id) {
-        return Optional.of(jobRepository.findById(id))
+    public List<JobDTO> getAllJob() {
+        return jobMapper.entitiesToJobDtos(jobRepository.findAll());
+    }
+
+    @Override
+    public Optional<JobDTO> getJobById(Long id) {
+        return Optional.of(jobRepository.findById(id)
+                        .map(jobMapper::entityToJobDto))
                 .orElseThrow(() -> new RuntimeException("Job Id not found"));
     }
 
     @Override
-    public Job save(Job job) {
-        return jobRepository.save(job);
+    public JobResponseDTO save(JobCreateDTO dto, Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User currentUser = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Authenticated user not found"));
+
+        Job job = jobMapper.jobCreateDtoToEntity(dto);
+        job.setCreatedBy(currentUser);
+        job.setUpdatedBy(currentUser);
+
+        return null;
     }
+
 
     @Override
     public void deleteById(Long id) {
-
+        jobRepository.deleteById(id);
     }
 }
