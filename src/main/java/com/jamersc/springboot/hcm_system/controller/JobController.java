@@ -3,6 +3,7 @@ package com.jamersc.springboot.hcm_system.controller;
 import com.jamersc.springboot.hcm_system.dto.job.JobCreateDTO;
 import com.jamersc.springboot.hcm_system.dto.job.JobDTO;
 import com.jamersc.springboot.hcm_system.dto.job.JobResponseDTO;
+import com.jamersc.springboot.hcm_system.repository.DepartmentRepository;
 import com.jamersc.springboot.hcm_system.service.job.JobService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

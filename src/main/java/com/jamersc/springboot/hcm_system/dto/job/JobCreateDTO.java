@@ -3,6 +3,7 @@ package com.jamersc.springboot.hcm_system.dto.job;
 import com.jamersc.springboot.hcm_system.entity.JobStatus;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,12 +16,14 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class JobCreateDTO {
+    @NotBlank(message = "Job title is required")
     private String title;
+    @NotBlank(message = "Description is required")
     private String description;
+    @NotBlank(message = "Requirements; is required")
     private String requirements;
-    @Enumerated(EnumType.STRING)
-    private JobStatus status;
+    @NotBlank(message = "Location is required")
     private String location;
     private LocalDate postedDate;
-    private String department;
+    private Long departmentId;
 }

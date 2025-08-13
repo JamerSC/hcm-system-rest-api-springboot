@@ -14,49 +14,43 @@ import java.util.List;
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface JobMapper {
 
+
+    @Mapping(target = "departmentId", source = "department.id")
     JobDTO entityToJobDto(Job job);
 
-    @Mapping(target = "updatedBy", source = "")
-    @Mapping(target = "updatedAt", source = "")
-    @Mapping(target = "title", source = "")
-    @Mapping(target = "status", source = "")
-    @Mapping(target = "requirements", source = "")
-    @Mapping(target = "postedDate", source = "")
-    @Mapping(target = "postedBy", source = "")
-    @Mapping(target = "location", source = "")
-    @Mapping(target = "id", source = "")
-    @Mapping(target = "description", source = "")
-    @Mapping(target = "department", source = "")
-    @Mapping(target = "createdBy", source = "")
-    @Mapping(target = "createdAt", source = "")
+    @Mapping(target = "department", ignore = true)
+    @Mapping(target = "updatedBy", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "postedBy", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
     Job jobDtoToEntity(JobDTO dto);
 
     // create job entity
+    @Mapping(target = "departmentId", source = "department.id")
     JobCreateDTO entityToJobCreateDto(Job job);
 
-    @Mapping(target = "updatedBy", source = "")
-    @Mapping(target = "updatedAt", source = "")
-    @Mapping(target = "title", source = "")
-    @Mapping(target = "status", source = "")
-    @Mapping(target = "requirements", source = "")
-    @Mapping(target = "postedDate", source = "")
-    @Mapping(target = "postedBy", source = "")
-    @Mapping(target = "location", source = "")
-    @Mapping(target = "id", source = "")
-    @Mapping(target = "description", source = "")
-    @Mapping(target = "department", source = "")
-    @Mapping(target = "createdBy", source = "")
-    @Mapping(target = "createdAt", source = "")
+    @Mapping(target = "status", ignore = true)
+    @Mapping(target = "department", ignore = true)
+    @Mapping(target = "updatedBy", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "postedBy", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
     Job jobCreateDtoToEntity(JobCreateDTO dto);
 
+    @Mapping(target = "departmentId", source = "department.id")
     @Mapping(target = "updatedByUsername", source = "updatedBy.username")
     @Mapping(target = "createdByUsername", source = "createdBy.username")
     JobResponseDTO entityToJobResponseDto(Job job);
 
-    @Mapping(target = "updatedBy", source = "")
-    @Mapping(target = "postedBy", source = "")
-    @Mapping(target = "id", source = "")
-    @Mapping(target = "createdBy", source = "")
+    @Mapping(target = "department", ignore = true)
+    @Mapping(target = "updatedBy", ignore = true)
+    @Mapping(target = "postedBy", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
     Job jobResponseDtoToEntity(JobResponseDTO dto);
 
     List<JobDTO> entitiesToJobDtos(List<Job> jobs);
