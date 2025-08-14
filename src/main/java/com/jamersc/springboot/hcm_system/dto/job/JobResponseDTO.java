@@ -25,7 +25,7 @@ public class JobResponseDTO {
     private JobStatus status;
     private String location;
     private LocalDate postedDate;
-    private Long departmentId;
+    private String department;
     private String createdByUsername;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Manila")
     private Date createdAt;

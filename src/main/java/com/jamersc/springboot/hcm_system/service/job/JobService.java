@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface JobService {
 
     List<JobDTO> getAllJob();
-    Optional<JobDTO> getJobById(Long id);
+    Optional<JobResponseDTO> getJobById(Long id);
     JobResponseDTO save(JobCreateDTO dto, Authentication authentication);
     void deleteById(Long id);
 }

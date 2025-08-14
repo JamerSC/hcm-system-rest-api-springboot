@@ -23,5 +23,5 @@ public class JobDTO {
     private JobStatus status;
     private String location;
     private LocalDate postedDate;
-    private Long departmentId;
+    private String department;
 }

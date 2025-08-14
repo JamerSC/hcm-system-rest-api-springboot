@@ -40,9 +40,9 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public Optional<JobDTO> getJobById(Long id) {
+    public Optional<JobResponseDTO> getJobById(Long id) {
         return Optional.of(jobRepository.findById(id)
-                        .map(jobMapper::entityToJobDto))
+                        .map(jobMapper::entityToJobResponseDto))
                 .orElseThrow(() -> new RuntimeException("Job Id not found"));
     }
 

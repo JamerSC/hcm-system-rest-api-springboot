@@ -15,7 +15,7 @@ import java.util.List;
 public interface JobMapper {
 
 
-    @Mapping(target = "departmentId", source = "department.id")
+    @Mapping(target = "department", source = "department.department")
     JobDTO entityToJobDto(Job job);
 
     @Mapping(target = "department", ignore = true)
@@ -41,7 +41,7 @@ public interface JobMapper {
     @Mapping(target = "createdAt", ignore = true)
     Job jobCreateDtoToEntity(JobCreateDTO dto);
 
-    @Mapping(target = "departmentId", source = "department.id")
+    @Mapping(target = "department", source = "department.department")
     @Mapping(target = "updatedByUsername", source = "updatedBy.username")
     @Mapping(target = "createdByUsername", source = "createdBy.username")
     JobResponseDTO entityToJobResponseDto(Job job);
