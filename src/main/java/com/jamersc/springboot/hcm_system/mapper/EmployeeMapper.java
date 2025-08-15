@@ -20,8 +20,10 @@ nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE) // T
 public interface EmployeeMapper {
 
     // employee
+    @Mapping(target = "jobId", source = "job.id")
     EmployeeDTO entityToDto(Employee employee);
 
+    @Mapping(target = "job", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
@@ -30,6 +32,7 @@ public interface EmployeeMapper {
     Employee dtoToEntity(EmployeeDTO dto);
 
     // employee profile
+    @Mapping(target = "jobPosition", source = "job.title")
     @Mapping(target = "username", source = "user.username")
     @Mapping(target = "roles", expression = "java(mapRoles(employee.getUser().getRoles()))")
     EmployeeProfileDTO entityToProfileDto(Employee employee);
@@ -43,8 +46,10 @@ public interface EmployeeMapper {
     }
 
     // create employee mapper
+    @Mapping(target = "jobId", source = "job.id")
     EmployeeCreateDTO createEntityToDto(Employee employee);
 
+    @Mapping(target = "job", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
@@ -53,13 +58,18 @@ public interface EmployeeMapper {
     @Mapping(target = "id", ignore = true)
     Employee createDtoToEntity(EmployeeCreateDTO dto);
 
+    @Mapping(target = "department", source = "job.department.department")
+    @Mapping(target = "jobPosition", source = "job.title")
+    @Mapping(target = "jobId", source = "job.id")
     @Mapping(target = "updatedByUsername", source = "updatedBy.username")
     @Mapping(target = "createdByUsername", source = "createdBy.username")
     EmployeeResponseDTO entityToEmployeeResponseDTO(Employee employee);
 
     // employee update
+    @Mapping(target = "jobId", source = "job.id")
     EmployeeUpdateDTO updateEntityToDto(Employee employee);
 
+    @Mapping(target = "job", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
@@ -69,6 +79,9 @@ public interface EmployeeMapper {
 
     // List collection of employee
     List<EmployeeDTO> entitiesToDtos(List<Employee> employees);
+
+    List<EmployeeResponseDTO> entitiesToResponseDtos(List<Employee> employees);
+
     List<Employee> dtosToEntities(List<EmployeeDTO> dtos);
 
 }

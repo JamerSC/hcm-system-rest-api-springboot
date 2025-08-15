@@ -21,11 +21,9 @@ public class EmployeeProfileDTO {
     private String lastName;
     private String email;
     private String jobPosition;
-    private String department;
     private LocalDate hiredDate;
     private Double salary;
-
     // Fields from User entity
     private String username;
-    private Set<String> roles; // Assuming you'll also want to show the user's roles
+    private Set<String> roles;
 }

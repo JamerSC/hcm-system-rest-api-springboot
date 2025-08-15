@@ -22,8 +22,11 @@ public class EmployeeResponseDTO {
     private String firstName;
     private String lastName;
     private String email;
+
+    private Long jobId;
     private String jobPosition;
     private String department;
+
     private LocalDate hiredDate;
     private Double salary;
     private String createdByUsername;

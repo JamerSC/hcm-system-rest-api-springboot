@@ -25,14 +25,14 @@ public class DepartmentController {
     }
 
     @GetMapping("/")
-    private ResponseEntity<List<DepartmentDTO>> getAllDepartments() {
-        List<DepartmentDTO> departments = departmentService.getAllDepartment();
+    private ResponseEntity<List<DepartmentResponseDTO>> getAllDepartments() {
+        List<DepartmentResponseDTO> departments = departmentService.getAllDepartment();
         return new ResponseEntity<>(departments, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    private ResponseEntity<Optional<DepartmentDTO>> getDepartmentById(@PathVariable Long id) {
-        Optional<DepartmentDTO> department = departmentService.getDepartmentById(id);
+    private ResponseEntity<Optional<DepartmentResponseDTO>> getDepartmentById(@PathVariable Long id) {
+        Optional<DepartmentResponseDTO> department = departmentService.getDepartmentById(id);
         return new ResponseEntity<>(department, HttpStatus.OK);
     }
 
@@ -46,7 +46,8 @@ public class DepartmentController {
 
     @DeleteMapping("/{id}")
     private ResponseEntity<String> deleteDepartmentById(@PathVariable Long id) {
-        Optional<DepartmentDTO> tempDepartment = departmentService.getDepartmentById(id);
+        Optional<DepartmentResponseDTO> tempDepartment =
+                departmentService.getDepartmentById(id);
 
         if (tempDepartment.isEmpty()) {
             return ResponseEntity.notFound().build(); // 404

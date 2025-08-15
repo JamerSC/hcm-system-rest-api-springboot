@@ -19,7 +19,7 @@ public interface DepartmentMapper {
     @Mapping(target = "updatedBy", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "jobs", ignore = true)
-    @Mapping(target = "id", ignore = true)
+    //q@Mapping(target = "id", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     Department deptDtoToEntity(DepartmentDTO dto);
@@ -42,6 +42,8 @@ public interface DepartmentMapper {
     DepartmentResponseDTO entityToDepartmentResponseDto(Department dept);
 
     List<DepartmentDTO> entitiesToDeptDtos(List<Department> departments);
+
+    List<DepartmentResponseDTO> entitiesToDeptResponseDto(List<Department> departments);
 
     List<Department> deptDtosToEntities(List<DepartmentDTO> deptDtos);
 }

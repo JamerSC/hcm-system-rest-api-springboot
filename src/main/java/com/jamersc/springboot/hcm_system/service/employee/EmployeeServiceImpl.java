@@ -35,8 +35,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
     @Override
-    public List<EmployeeDTO> getEmployees() {
-        return employeeMapper.entitiesToDtos(employeeRepository.findAll());
+    public List<EmployeeResponseDTO> getEmployees() {
+        return employeeMapper.entitiesToResponseDtos(employeeRepository.findAll());
     }
 
     @Override
@@ -45,6 +45,13 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .map(employeeMapper::entityToProfileDto).orElseThrow(
                         () -> new EmployeeNotFoundException("Employee id not found - " + id))
        );
+    }
+
+    public Optional<EmployeeResponseDTO> findEmployeeById(Long id) {
+        return Optional.ofNullable(employeeRepository.findById(id)
+                .map(employeeMapper::entityToEmployeeResponseDTO).orElseThrow(
+                        () -> new EmployeeNotFoundException("Employee id not found - " + id))
+        );
     }
 
     public Optional<EmployeeDTO> findById(Long id) {

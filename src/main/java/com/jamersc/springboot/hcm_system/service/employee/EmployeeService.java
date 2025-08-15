@@ -12,9 +12,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EmployeeService {
-    List<EmployeeDTO> getEmployees();
+    List<EmployeeResponseDTO> getEmployees();
     //EmployeeDTO findById(Long id);
     Optional<EmployeeProfileDTO> findEmployeeProfileById(Long id);
+    Optional<EmployeeResponseDTO> findEmployeeById(Long id);
     Optional<EmployeeDTO> findById(Long id);
     EmployeeProfileDTO getEmployeeProfileByUsername(String username);
     EmployeeResponseDTO save(EmployeeCreateDTO employeeDTO, Authentication authentication);

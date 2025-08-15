@@ -10,7 +10,6 @@ import com.jamersc.springboot.hcm_system.dto.employee.EmployeeUpdateDTO;
 import com.jamersc.springboot.hcm_system.entity.Employee;
 import com.jamersc.springboot.hcm_system.exception.EmployeeIDNotAllowedInRequestBodyException;
 import com.jamersc.springboot.hcm_system.exception.EmployeeNotFoundException;
-import com.jamersc.springboot.hcm_system.exception.GlobalExceptionHandler;
 import com.jamersc.springboot.hcm_system.service.employee.EmployeeService;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Valid;
@@ -42,8 +41,8 @@ public class EmployeeController {
 
     // Get all employees
     @GetMapping("/")
-    public ResponseEntity<List<EmployeeDTO>> getAllEmployees() {
-        List<EmployeeDTO> employees = employeeService.getEmployees();
+    public ResponseEntity<List<EmployeeResponseDTO>> getAllEmployees() {
+        List<EmployeeResponseDTO> employees = employeeService.getEmployees();
 
         if (employees.isEmpty()) {
             return ResponseEntity.noContent().build(); // HTTP 204
@@ -61,8 +60,8 @@ public class EmployeeController {
 
     // Get employee by id
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable long id) {
-        Optional<EmployeeDTO> employee = employeeService.findById(id);
+    public ResponseEntity<EmployeeResponseDTO> getEmployeeById(@PathVariable long id) {
+        Optional<EmployeeResponseDTO> employee = employeeService.findEmployeeById(id);
 
         return employee.map(ResponseEntity::ok) // HTTP 200 + body
                 .orElseGet(()-> ResponseEntity.notFound().build()); // HTTP 404

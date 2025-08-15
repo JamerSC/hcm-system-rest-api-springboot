@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DepartmentService {
-    List<DepartmentDTO> getAllDepartment();
-    Optional<DepartmentDTO> getDepartmentById(Long id);
+    List<DepartmentResponseDTO> getAllDepartment();
+    Optional<DepartmentResponseDTO> getDepartmentById(Long id);
     DepartmentResponseDTO save(DepartmentCreateDTO dto, Authentication authentication);
     void deleteDepartmentById(Long id);
 }

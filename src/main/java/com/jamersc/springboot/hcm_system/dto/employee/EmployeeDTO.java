@@ -22,10 +22,7 @@ public class EmployeeDTO {
     @Email(message = "Email should be valid")
     @NotBlank(message = "Email is required")
     private String email;
-    //@NotBlank(message = "Job Position is required")
-    private String jobPosition;
-    //@NotBlank(message = "Department is required")
-    private String department;
+    private Long jobId;
     @NotNull(message = "Hired date is required")
     //@JsonFormat(pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -33,7 +30,6 @@ public class EmployeeDTO {
     @NotNull(message = "Salary is required")
     @Min(value = 0, message = "Salary must be a non-negative value")
     private Double salary;
-
     public String getSalary() {
         return String.format("%.2f", salary);
     }

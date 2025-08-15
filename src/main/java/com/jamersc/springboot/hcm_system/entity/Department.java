@@ -23,6 +23,9 @@ public class Department {
     @Column(nullable = false, unique = true)
     private String department;
 
+    @Column(nullable = false, unique = true)
+    private String code;
+
     @OneToMany(mappedBy = "department", fetch = FetchType.LAZY)
     private Set<Job> jobs;
 
@@ -46,7 +49,7 @@ public class Department {
         updatedAt = new Date();
     }
 
-    // Add JPA annotations for createdDate and modifiedDate
+    // JPA annotations for createdDate and modifiedDate
     @PreUpdate
     protected void onUpdate() {
         updatedAt = new Date();

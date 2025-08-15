@@ -13,7 +13,6 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmployeePatchProfileDTO {
-    // Fields from Employee entity
     private Long id;
     private String firstName;
     private String lastName;
@@ -22,8 +21,6 @@ public class EmployeePatchProfileDTO {
     private String department;
     private LocalDate hiredDate;
     private Double salary;
-
-    // Fields from User entity
     private String username;
-    private Set<String> roles; // Assuming you'll also want to show the user's roles
+    private Set<String> roles;
 }

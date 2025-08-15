@@ -24,10 +24,20 @@ public class Employee {
     private String lastName;
     @Column(name = "email")
     private String email;
-    @Column(name = "job_position")
-    private String jobPosition;
-    @Column(name = "department")
-    private String department;
+
+//    @Column(name = "job_position")
+//    private String jobPosition;
+
+    // job can be assigned to many employees
+    // employee has one job
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "job_id", referencedColumnName = "id")
+    private Job job;
+
+
+//    @Column(name = "department")
+//    private String department;
+
     @Column(name = "hired_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate hiredDate;

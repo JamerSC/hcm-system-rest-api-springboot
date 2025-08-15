@@ -32,15 +32,16 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 
     @Override
-    public List<DepartmentDTO> getAllDepartment() {
-        return departmentMapper.entitiesToDeptDtos(
-                departmentRepository.findAll());
+    public List<DepartmentResponseDTO> getAllDepartment() {
+        return departmentMapper.entitiesToDeptResponseDto(
+                departmentRepository.findAll()
+        );
     }
 
     @Override
-    public Optional<DepartmentDTO> getDepartmentById(Long id) {
+    public Optional<DepartmentResponseDTO> getDepartmentById(Long id) {
         return Optional.of(departmentRepository.findById(id)
-                        .map(departmentMapper::entityToDeptDto))
+                        .map(departmentMapper::entityToDepartmentResponseDto))
                 .orElseThrow(() -> new RuntimeException("Department id found! " + id));
     }
 

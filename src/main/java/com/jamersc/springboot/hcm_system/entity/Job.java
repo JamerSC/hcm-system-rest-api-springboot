@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "jobs")
@@ -41,7 +42,10 @@ public class Job {
     @JoinColumn(name = "department_id", referencedColumnName = "id")
     private Department department;
 
-    // An user (e.g., a manager or admin) posts a job.
+    @OneToMany(mappedBy = "job", fetch = FetchType.LAZY)
+    private Set<Employee> employees;
+
+    // User (e.g., a manager or admin) posts a job.
     // This establishes a Many-to-One relationship.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "posted_by_user_id", referencedColumnName = "id")

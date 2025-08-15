@@ -22,9 +22,14 @@ public class EmployeePatchDTO {
     @Email(message = "Email should be valid")
     @NotBlank(message = "Email is required")
     private String email;
+
     //@NotBlank(message = "Job Position is required")
-    private String jobPosition;
+    //private String jobPosition;
+
+    private Long jobId;
+
     //@NotBlank(message = "Department is required")
+
     private String department;
     @NotNull(message = "Hired date is required")
     private LocalDate hiredDate;
