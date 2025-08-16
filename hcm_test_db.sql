@@ -15,3 +15,5 @@ values
 insert into users (email, first_name, last_name, password, username)
 values ('admin@mail.com', 'Super', 'Admin', '$2a$10$2csjgL7IFGGhH3fTRfPVpOmkZS/qcbUKsaW.kwFyflA97zeyzpa2O', 'admin@123');
 
+ALTER TABLE hcm_test_db.employees
+DROP COLUMN job_position;

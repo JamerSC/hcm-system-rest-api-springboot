@@ -5,6 +5,7 @@ import com.jamersc.springboot.hcm_system.dto.job.JobDTO;
 import com.jamersc.springboot.hcm_system.dto.job.JobResponseDTO;
 import com.jamersc.springboot.hcm_system.entity.Department;
 import com.jamersc.springboot.hcm_system.entity.Job;
+import com.jamersc.springboot.hcm_system.entity.JobStatus;
 import com.jamersc.springboot.hcm_system.entity.User;
 import com.jamersc.springboot.hcm_system.mapper.JobMapper;
 import com.jamersc.springboot.hcm_system.repository.DepartmentRepository;
@@ -37,6 +38,13 @@ public class JobServiceImpl implements JobService {
     @Override
     public List<JobDTO> getAllJob() {
         return jobMapper.entitiesToJobDtos(jobRepository.findAll());
+    }
+
+    @Override
+    public List<JobDTO> getOpenJobs() {
+        return jobMapper.entitiesToJobDtos(
+                jobRepository.findByStatus(JobStatus.OPEN)
+        );
     }
 
     @Override

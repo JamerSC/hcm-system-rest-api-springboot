@@ -12,6 +12,7 @@ import java.util.Optional;
 public interface JobService {
 
     List<JobDTO> getAllJob();
+    List<JobDTO> getOpenJobs();
     Optional<JobResponseDTO> getJobById(Long id);
     JobResponseDTO save(JobCreateDTO dto, Authentication authentication);
     void deleteById(Long id);
