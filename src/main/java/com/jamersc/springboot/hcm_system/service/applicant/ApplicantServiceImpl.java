@@ -3,10 +3,12 @@ package com.jamersc.springboot.hcm_system.service.applicant;
 import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantDto;
 import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantProfileDTO;
 import com.jamersc.springboot.hcm_system.entity.Applicant;
+import com.jamersc.springboot.hcm_system.entity.Application;
 import com.jamersc.springboot.hcm_system.entity.User;
 import com.jamersc.springboot.hcm_system.exception.EmployeeNotFoundException;
 import com.jamersc.springboot.hcm_system.mapper.ApplicantMapper;
 import com.jamersc.springboot.hcm_system.repository.ApplicantRepository;
+import com.jamersc.springboot.hcm_system.repository.ApplicationRepository;
 import com.jamersc.springboot.hcm_system.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -17,12 +19,14 @@ import java.util.Optional;
 @Service
 public class ApplicantServiceImpl implements ApplicantService {
 
-    final private ApplicantRepository applicantRepository; // fetch applicant
-    final private UserRepository userRepository; // fetch user repository
-    final private ApplicantMapper applicantMapper; // mapping of applicant entity and dto
+    private final ApplicantRepository applicantRepository; // fetch applicant
+    private final ApplicationRepository applicationRepository;
+    private final UserRepository userRepository; // fetch user repository
+    private final ApplicantMapper applicantMapper; // mapping of applicant entity and dto
 
-    public ApplicantServiceImpl(ApplicantRepository applicantRepository, UserRepository userRepository, ApplicantMapper applicantMapper) {
+    public ApplicantServiceImpl(ApplicantRepository applicantRepository, ApplicationRepository applicationRepository, UserRepository userRepository, ApplicantMapper applicantMapper) {
         this.applicantRepository = applicantRepository;
+        this.applicationRepository = applicationRepository;
         this.userRepository = userRepository;
         this.applicantMapper = applicantMapper;
     }
@@ -79,6 +83,11 @@ public class ApplicantServiceImpl implements ApplicantService {
 
         applicant.setCvFilePath(file);
         applicantRepository.save(applicant);
+    }
+
+    @Override
+    public Application applyForJob(String username, Long jobId) {
+        return null;
     }
 
 
