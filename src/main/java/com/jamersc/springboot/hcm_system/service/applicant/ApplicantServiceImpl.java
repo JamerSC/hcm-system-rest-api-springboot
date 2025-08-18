@@ -2,11 +2,13 @@ package com.jamersc.springboot.hcm_system.service.applicant;
 
 import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantDto;
 import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantProfileDTO;
+import com.jamersc.springboot.hcm_system.dto.application.ApplicationResponseDTO;
 import com.jamersc.springboot.hcm_system.entity.Applicant;
 import com.jamersc.springboot.hcm_system.entity.Application;
 import com.jamersc.springboot.hcm_system.entity.Job;
 import com.jamersc.springboot.hcm_system.entity.User;
 import com.jamersc.springboot.hcm_system.mapper.ApplicantMapper;
+import com.jamersc.springboot.hcm_system.mapper.ApplicationMapper;
 import com.jamersc.springboot.hcm_system.repository.ApplicantRepository;
 import com.jamersc.springboot.hcm_system.repository.ApplicationRepository;
 import com.jamersc.springboot.hcm_system.repository.JobRepository;
@@ -20,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class ApplicantServiceImpl implements ApplicantService {
 
     private final ApplicantRepository applicantRepository; // fetch applicant
@@ -27,13 +30,15 @@ public class ApplicantServiceImpl implements ApplicantService {
     private final JobRepository jobRepository;
     private final UserRepository userRepository; // fetch user repository
     private final ApplicantMapper applicantMapper; // mapping of applicant entity and dto
+    private final ApplicationMapper applicationMapper;
 
-    public ApplicantServiceImpl(ApplicantRepository applicantRepository, ApplicationRepository applicationRepository, JobRepository jobRepository, UserRepository userRepository, ApplicantMapper applicantMapper) {
+    public ApplicantServiceImpl(ApplicantRepository applicantRepository, ApplicationRepository applicationRepository, JobRepository jobRepository, UserRepository userRepository, ApplicantMapper applicantMapper, ApplicationMapper applicationMapper) {
         this.applicantRepository = applicantRepository;
         this.applicationRepository = applicationRepository;
         this.jobRepository = jobRepository;
         this.userRepository = userRepository;
         this.applicantMapper = applicantMapper;
+        this.applicationMapper = applicationMapper;
     }
 
 
@@ -58,7 +63,7 @@ public class ApplicantServiceImpl implements ApplicantService {
     }
 
     @Override
-    @Transactional // Essential if you're fetching and then saving/updating
+//    @Transactional // Essential if you're fetching and then saving/updating
     public void updateApplicantProfile(String username,
                                        ApplicantProfileDTO profileDTO) {
         User user = userRepository.findByUsername(username)
@@ -97,9 +102,7 @@ public class ApplicantServiceImpl implements ApplicantService {
                 .orElseThrow(() -> new RuntimeException("Job not found"));
 
         // fetch applicant entity using user entity
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User applicantUser = userRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("Authenticated user not found."));
+        User applicantUser = getUser(authentication);
 
         Applicant applicant = applicantRepository.findByApplicantUser(applicantUser)
                 .orElseThrow(() -> new RuntimeException("Applicant profile not found!"));
@@ -118,4 +121,18 @@ public class ApplicantServiceImpl implements ApplicantService {
         applicationRepository.save(newApplication);
     }
 
+    private User getUser(Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        return userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Authenticated user not found."));
+    }
+
+    @Override
+    public List<ApplicationResponseDTO> getApplicantAppliedJobs(Authentication authentication) {
+        User applicantUser = getUser(authentication);
+        Applicant applicant = applicantRepository.findByApplicantUser(applicantUser)
+                .orElseThrow(() -> new RuntimeException("Applicant profile not found."));
+
+        return applicationMapper.entitiesToResponseDtos(applicationRepository.findApplicantApplicationsById(applicant.getId()));
+    }
 }

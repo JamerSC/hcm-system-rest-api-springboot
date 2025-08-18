@@ -28,6 +28,10 @@ public interface ApplicantMapper {
     @Mapping(target = "email", source = "user.email")
     ApplicantDto entityToApplicantDto(Applicant applicant);
 
+    @Mapping(target = "updatedBy", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "id", ignore = true)
     Applicant applicantDtoToEntity(ApplicantDto dto);
@@ -37,11 +41,19 @@ public interface ApplicantMapper {
     ApplicantProfileDTO entityToProfileDto(Applicant applicant);
 
     // Maps an ApplicantDTO to an Applicant entity .
+    @Mapping(target = "updatedBy", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "user", ignore = true) //  source = ""
     @Mapping(target = "id", ignore = true)
     Applicant profileDtoToEntity(ApplicantDto dto);
 
 
+    @Mapping(target = "updatedBy", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "user", ignore = true) // 'id' should not be updated from the DTO
     @Mapping(target = "id", ignore = true) // 'user' should not be updated from the DTO
     @Mapping(target = "cvFilePath", ignore = true)  // 'cvFilePath' typically updated separately
@@ -57,6 +69,10 @@ public interface ApplicantMapper {
      * @param dto The DTO containing initial profile information.
      * @return A new Applicant entity.
      */
+    @Mapping(target = "updatedBy", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "cvFilePath", ignore = true)

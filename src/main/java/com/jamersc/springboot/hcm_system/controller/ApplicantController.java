@@ -1,16 +1,14 @@
 package com.jamersc.springboot.hcm_system.controller;
 
-import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantDto;
 import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantProfileDTO;
+import com.jamersc.springboot.hcm_system.dto.application.ApplicationResponseDTO;
 import com.jamersc.springboot.hcm_system.dto.job.JobDTO;
-import com.jamersc.springboot.hcm_system.dto.job.JobResponseDTO;
 import com.jamersc.springboot.hcm_system.entity.Application;
 import com.jamersc.springboot.hcm_system.service.applicant.ApplicantService;
 import com.jamersc.springboot.hcm_system.service.job.JobService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/applicants")
@@ -43,6 +40,12 @@ public class ApplicantController {
                                                    Authentication authentication) {
         applicantService.applyForJob(id, authentication);
         return new ResponseEntity<>("Successfully applied for the job.", HttpStatus.CREATED);
+    }
+
+    @GetMapping("/jobs/applied")
+    public ResponseEntity<List<ApplicationResponseDTO>> getApplicantAppliedJob(Authentication authentication) {
+        List<ApplicationResponseDTO> appliedJobs = applicantService.getApplicantAppliedJobs(authentication);
+        return new ResponseEntity<>(appliedJobs, HttpStatus.OK);
     }
 
     @GetMapping("/me/profile")
