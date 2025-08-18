@@ -4,12 +4,14 @@ import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantDto;
 import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantProfileDTO;
 import com.jamersc.springboot.hcm_system.dto.job.JobDTO;
 import com.jamersc.springboot.hcm_system.dto.job.JobResponseDTO;
+import com.jamersc.springboot.hcm_system.entity.Application;
 import com.jamersc.springboot.hcm_system.service.applicant.ApplicantService;
 import com.jamersc.springboot.hcm_system.service.job.JobService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +38,12 @@ public class ApplicantController {
         return new ResponseEntity<>(listOfOpenJobs, HttpStatus.OK);
     }
 
+    @PostMapping("/jobs/{id}/apply")
+    public ResponseEntity<String> applyForJob(@PathVariable Long id,
+                                                   Authentication authentication) {
+        applicantService.applyForJob(id, authentication);
+        return new ResponseEntity<>("Successfully applied for the job.", HttpStatus.CREATED);
+    }
 
     @GetMapping("/me/profile")
     private ResponseEntity<ApplicantProfileDTO> getMyApplicantProfile(

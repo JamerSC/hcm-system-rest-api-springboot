@@ -4,13 +4,16 @@ import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantDto;
 import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantProfileDTO;
 import com.jamersc.springboot.hcm_system.entity.Applicant;
 import com.jamersc.springboot.hcm_system.entity.Application;
+import com.jamersc.springboot.hcm_system.entity.Job;
 import com.jamersc.springboot.hcm_system.entity.User;
-import com.jamersc.springboot.hcm_system.exception.EmployeeNotFoundException;
 import com.jamersc.springboot.hcm_system.mapper.ApplicantMapper;
 import com.jamersc.springboot.hcm_system.repository.ApplicantRepository;
 import com.jamersc.springboot.hcm_system.repository.ApplicationRepository;
+import com.jamersc.springboot.hcm_system.repository.JobRepository;
 import com.jamersc.springboot.hcm_system.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,12 +24,14 @@ public class ApplicantServiceImpl implements ApplicantService {
 
     private final ApplicantRepository applicantRepository; // fetch applicant
     private final ApplicationRepository applicationRepository;
+    private final JobRepository jobRepository;
     private final UserRepository userRepository; // fetch user repository
     private final ApplicantMapper applicantMapper; // mapping of applicant entity and dto
 
-    public ApplicantServiceImpl(ApplicantRepository applicantRepository, ApplicationRepository applicationRepository, UserRepository userRepository, ApplicantMapper applicantMapper) {
+    public ApplicantServiceImpl(ApplicantRepository applicantRepository, ApplicationRepository applicationRepository, JobRepository jobRepository, UserRepository userRepository, ApplicantMapper applicantMapper) {
         this.applicantRepository = applicantRepository;
         this.applicationRepository = applicationRepository;
+        this.jobRepository = jobRepository;
         this.userRepository = userRepository;
         this.applicantMapper = applicantMapper;
     }
@@ -86,9 +91,31 @@ public class ApplicantServiceImpl implements ApplicantService {
     }
 
     @Override
-    public Application applyForJob(String username, Long jobId) {
-        return null;
-    }
+    public void applyForJob(Long id, Authentication authentication) {
+        // find the job
+        Job job = jobRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Job not found"));
 
+        // fetch applicant entity using user entity
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User applicantUser = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Authenticated user not found."));
+
+        Applicant applicant = applicantRepository.findByApplicantUser(applicantUser)
+                .orElseThrow(() -> new RuntimeException("Applicant profile not found!"));
+
+        // check applicant if applied
+        if (applicationRepository.findByApplicantAndJob(applicant, job).isPresent()) {
+            throw new RuntimeException("You have already applied for this job.");
+        }
+
+        // create and save new application
+        Application newApplication = new Application();
+        newApplication.setApplicant(applicant);
+        newApplication.setJob(job);
+        newApplication.setUpdatedBy(applicantUser);
+
+        applicationRepository.save(newApplication);
+    }
 
 }

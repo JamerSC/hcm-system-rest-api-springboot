@@ -60,7 +60,7 @@ public class EmployeeController {
 
     // Get employee by id
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeResponseDTO> getEmployeeById(@PathVariable long id) {
+    public ResponseEntity<EmployeeResponseDTO> getEmployeeById(@PathVariable Long id) {
         Optional<EmployeeResponseDTO> employee = employeeService.findEmployeeById(id);
 
         return employee.map(ResponseEntity::ok) // HTTP 200 + body

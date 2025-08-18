@@ -2,8 +2,7 @@ package com.jamersc.springboot.hcm_system.service.applicant;
 
 import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantDto;
 import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantProfileDTO;
-import com.jamersc.springboot.hcm_system.entity.Applicant;
-import com.jamersc.springboot.hcm_system.entity.Application;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,5 +14,5 @@ public interface ApplicantService {
     ApplicantProfileDTO getApplicantProfile(String username);
     void updateApplicantProfile(String username, ApplicantProfileDTO profileDTO);
     void saveResume(String username, String file);
-    Application applyForJob(String username, Long jobId);
+    void applyForJob(Long id, Authentication authentication);
 }

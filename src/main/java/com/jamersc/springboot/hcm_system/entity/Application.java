@@ -39,5 +39,17 @@ public class Application {
     private User updatedBy;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date updateAt;
+    private Date updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        appliedAt = new Date();
+        updatedAt = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = new Date();
+    }
+
 }
