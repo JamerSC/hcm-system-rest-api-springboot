@@ -14,18 +14,12 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ApplicationResponseDTO {
-
     private Long id;
-
     private String applicantName;
-
     private String jobPosition;
-
+    private String jobDescription;
     private ApplicantStatus status = ApplicantStatus.SUBMITTED;
-
     private Date appliedAt;
-
     private String updatedByUsername;
-
     private Date updatedAt;
 }

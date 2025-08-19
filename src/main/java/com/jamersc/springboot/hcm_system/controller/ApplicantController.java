@@ -3,7 +3,6 @@ package com.jamersc.springboot.hcm_system.controller;
 import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantProfileDTO;
 import com.jamersc.springboot.hcm_system.dto.application.ApplicationResponseDTO;
 import com.jamersc.springboot.hcm_system.dto.job.JobDTO;
-import com.jamersc.springboot.hcm_system.entity.Application;
 import com.jamersc.springboot.hcm_system.service.applicant.ApplicantService;
 import com.jamersc.springboot.hcm_system.service.job.JobService;
 import jakarta.validation.Valid;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/applicants")
@@ -36,16 +36,23 @@ public class ApplicantController {
     }
 
     @PostMapping("/jobs/{id}/apply")
-    public ResponseEntity<String> applyForJob(@PathVariable Long id,
-                                                   Authentication authentication) {
+    public ResponseEntity<String> applyForJob(
+            @PathVariable Long id, Authentication authentication) {
         applicantService.applyForJob(id, authentication);
         return new ResponseEntity<>("Successfully applied for the job.", HttpStatus.CREATED);
     }
 
     @GetMapping("/jobs/applied")
-    public ResponseEntity<List<ApplicationResponseDTO>> getApplicantAppliedJob(Authentication authentication) {
-        List<ApplicationResponseDTO> appliedJobs = applicantService.getApplicantAppliedJobs(authentication);
+    public ResponseEntity<List<ApplicationResponseDTO>> getAllApplicantJobsApplied(Authentication authentication) {
+        List<ApplicationResponseDTO> appliedJobs = applicantService.getAllApplicantJobsApplied(authentication);
         return new ResponseEntity<>(appliedJobs, HttpStatus.OK);
+    }
+
+    @GetMapping("/jobs/{id}/view")
+    public ResponseEntity<Optional<ApplicationResponseDTO>> getAppliedJobs(
+            @PathVariable Long id, Authentication authentication) {
+        Optional<ApplicationResponseDTO> application = applicantService.getApplicantJobsAppliedById(id, authentication);
+        return new ResponseEntity<>(application, HttpStatus.OK);
     }
 
     @GetMapping("/me/profile")

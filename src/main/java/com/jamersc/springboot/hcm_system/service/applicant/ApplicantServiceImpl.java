@@ -128,11 +128,28 @@ public class ApplicantServiceImpl implements ApplicantService {
     }
 
     @Override
-    public List<ApplicationResponseDTO> getApplicantAppliedJobs(Authentication authentication) {
+    public List<ApplicationResponseDTO> getAllApplicantJobsApplied(Authentication authentication) {
         User applicantUser = getUser(authentication);
         Applicant applicant = applicantRepository.findByApplicantUser(applicantUser)
                 .orElseThrow(() -> new RuntimeException("Applicant profile not found."));
 
         return applicationMapper.entitiesToResponseDtos(applicationRepository.findApplicantApplicationsById(applicant.getId()));
+    }
+
+    @Override
+    public Optional<ApplicationResponseDTO> getApplicantJobsAppliedById(Long id, Authentication authentication) {
+        // find the application
+        Application application = applicationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Application not found"));
+
+        // fetch applicant entity using user
+        User applicantUser = getUser(authentication);
+        Applicant applicant = applicantRepository.findByApplicantUser(applicantUser)
+                .orElseThrow(()-> new RuntimeException("Applicant profile not found."));
+
+        return Optional.ofNullable(
+                applicationRepository.findById(application.getId())
+                        .map(applicationMapper::entityToApplicationResponseDto)
+                        .orElseThrow(()-> new RuntimeException("Application id not found")));
     }
 }
