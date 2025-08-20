@@ -31,13 +31,13 @@ public class DepartmentController {
     }
 
     @GetMapping("/{id}")
-    private ResponseEntity<Optional<DepartmentResponseDTO>> getDepartmentById(@PathVariable Long id) {
+    public ResponseEntity<Optional<DepartmentResponseDTO>> getDepartmentById(@PathVariable Long id) {
         Optional<DepartmentResponseDTO> department = departmentService.getDepartmentById(id);
         return new ResponseEntity<>(department, HttpStatus.OK);
     }
 
     @PostMapping("/")
-    private ResponseEntity<DepartmentResponseDTO> createDepartment(
+    public ResponseEntity<DepartmentResponseDTO> createDepartment(
             @Valid @RequestBody DepartmentCreateDTO createDTO,
             Authentication authentication) {  // <-- Inject the Authentication object
         DepartmentResponseDTO department = departmentService.save(createDTO, authentication);
@@ -45,7 +45,7 @@ public class DepartmentController {
     }
 
     @DeleteMapping("/{id}")
-    private ResponseEntity<String> deleteDepartmentById(@PathVariable Long id) {
+    public ResponseEntity<String> deleteDepartmentById(@PathVariable Long id) {
         Optional<DepartmentResponseDTO> tempDepartment =
                 departmentService.getDepartmentById(id);
 

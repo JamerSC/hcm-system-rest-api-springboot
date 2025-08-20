@@ -24,19 +24,19 @@ public class JobController {
     }
 
     @GetMapping("/")
-    private ResponseEntity<List<JobDTO>> getAllJobs() {
+    public ResponseEntity<List<JobDTO>> getAllJobs() {
         List<JobDTO> jobs = jobService.getAllJob();
         return new ResponseEntity<>(jobs, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    private ResponseEntity<Optional<JobResponseDTO>> getJobById(@PathVariable Long id) {
+    public ResponseEntity<Optional<JobResponseDTO>> getJobById(@PathVariable Long id) {
         Optional<JobResponseDTO> jobResponse = jobService.getJobById(id);
         return ResponseEntity.ok(jobResponse);
     }
 
     @PostMapping("/")
-    private ResponseEntity<JobResponseDTO> createJob(
+    public ResponseEntity<JobResponseDTO> createJob(
             @Valid @RequestBody JobCreateDTO createDTO,
             Authentication authentication) {
         JobResponseDTO jobResponseDTO = jobService.save(createDTO, authentication);
@@ -44,7 +44,7 @@ public class JobController {
     }
 
     @DeleteMapping("/{id}")
-    private ResponseEntity<String> deleteJobById(@PathVariable Long id) {
+    public ResponseEntity<String> deleteJobById(@PathVariable Long id) {
         Optional<JobResponseDTO> jobDTO = jobService.getJobById(id);
         jobService.deleteById(id);
         return ResponseEntity.noContent().build();

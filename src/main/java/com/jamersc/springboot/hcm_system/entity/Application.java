@@ -29,7 +29,7 @@ public class Application {
     private Job job;
 
     @Enumerated(EnumType.STRING)
-    private ApplicantStatus status = ApplicantStatus.SUBMITTED;
+    private ApplicationStatus status = ApplicationStatus.SUBMITTED;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date appliedAt;

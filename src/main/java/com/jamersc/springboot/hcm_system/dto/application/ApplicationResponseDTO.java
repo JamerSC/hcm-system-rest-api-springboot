@@ -1,7 +1,7 @@
 package com.jamersc.springboot.hcm_system.dto.application;
 
 
-import com.jamersc.springboot.hcm_system.entity.ApplicantStatus;
+import com.jamersc.springboot.hcm_system.entity.ApplicationStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +18,7 @@ public class ApplicationResponseDTO {
     private String applicantName;
     private String jobPosition;
     private String jobDescription;
-    private ApplicantStatus status = ApplicantStatus.SUBMITTED;
+    private ApplicationStatus status = ApplicationStatus.SUBMITTED;
     private Date appliedAt;
     private String updatedByUsername;
     private Date updatedAt;

@@ -23,7 +23,7 @@ public class RecruitmentController {
     }
 
     @GetMapping("/applicants")
-    private ResponseEntity<List<ApplicantDto>> getAllApplicants() {
+    public ResponseEntity<List<ApplicantDto>> getAllApplicants() {
         List<ApplicantDto> listOfApplicants = applicantService.getAllApplicant();
 
         if (listOfApplicants.isEmpty()) {
@@ -33,7 +33,7 @@ public class RecruitmentController {
     }
 
     @GetMapping("/{id}/applicant")
-    private ResponseEntity<Optional<ApplicantDto>> getApplicantById(
+    public ResponseEntity<Optional<ApplicantDto>> getApplicantById(
             @PathVariable Long id) {
         Optional<ApplicantDto> profile = applicantService.getApplicantById(id);
         return ResponseEntity.ok(profile);

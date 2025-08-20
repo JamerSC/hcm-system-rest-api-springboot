@@ -3,10 +3,7 @@ package com.jamersc.springboot.hcm_system.service.applicant;
 import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantDto;
 import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantProfileDTO;
 import com.jamersc.springboot.hcm_system.dto.application.ApplicationResponseDTO;
-import com.jamersc.springboot.hcm_system.entity.Applicant;
-import com.jamersc.springboot.hcm_system.entity.Application;
-import com.jamersc.springboot.hcm_system.entity.Job;
-import com.jamersc.springboot.hcm_system.entity.User;
+import com.jamersc.springboot.hcm_system.entity.*;
 import com.jamersc.springboot.hcm_system.mapper.ApplicantMapper;
 import com.jamersc.springboot.hcm_system.mapper.ApplicationMapper;
 import com.jamersc.springboot.hcm_system.repository.ApplicantRepository;
@@ -151,5 +148,19 @@ public class ApplicantServiceImpl implements ApplicantService {
                 applicationRepository.findById(application.getId())
                         .map(applicationMapper::entityToApplicationResponseDto)
                         .orElseThrow(()-> new RuntimeException("Application id not found")));
+    }
+
+    @Override
+    public void cancelApplication(Long id, Authentication authentication) {
+        // find application by id
+        Application application = applicationRepository
+                .findById(id).orElseThrow(()-> new RuntimeException("Application id not found!"));
+
+        // fetch applicant
+        User applicantUser = getUser(authentication);
+
+        application.setStatus(ApplicationStatus.WITHDRAWN);
+        application.setUpdatedBy(applicantUser);
+        applicationRepository.save(application);
     }
 }

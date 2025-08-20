@@ -76,14 +76,14 @@ public class EmployeeController {
 
     // get your employee profile
     @GetMapping("/me/profile")
-    private ResponseEntity<EmployeeProfileDTO> getMyEmployeeProfile(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<EmployeeProfileDTO> getMyEmployeeProfile(@AuthenticationPrincipal UserDetails userDetails) {
         String username = userDetails.getUsername();
         EmployeeProfileDTO profile = employeeService.getEmployeeProfileByUsername(username);
         return ResponseEntity.ok(profile);
     }
 
     @PatchMapping("/{id}/profile")
-    private ResponseEntity<?> updateMyEmployeeProfile(@Valid @PathVariable Long id,
+    public ResponseEntity<?> updateMyEmployeeProfile(@Valid @PathVariable Long id,
                                               @RequestBody Map<String, Object> patchPayload) {
 //      // Optional
         return null;

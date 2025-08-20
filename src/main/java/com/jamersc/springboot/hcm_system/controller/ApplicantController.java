@@ -49,14 +49,21 @@ public class ApplicantController {
     }
 
     @GetMapping("/jobs/{id}/view")
-    public ResponseEntity<Optional<ApplicationResponseDTO>> getAppliedJobs(
+    public ResponseEntity<Optional<ApplicationResponseDTO>> getAppliedJob(
             @PathVariable Long id, Authentication authentication) {
         Optional<ApplicationResponseDTO> application = applicantService.getApplicantJobsAppliedById(id, authentication);
         return new ResponseEntity<>(application, HttpStatus.OK);
     }
 
+    @PatchMapping("/applications/{id}/cancel")
+    public ResponseEntity<String> cancelApplication(
+            @PathVariable Long id, Authentication authentication) {
+        applicantService.cancelApplication(id, authentication);
+        return ResponseEntity.ok("Application has been successfully withdrawn.");
+    }
+
     @GetMapping("/me/profile")
-    private ResponseEntity<ApplicantProfileDTO> getMyApplicantProfile(
+    public ResponseEntity<ApplicantProfileDTO> getMyApplicantProfile(
             @AuthenticationPrincipal UserDetails userDetails) {
         String username = userDetails.getUsername();
         ApplicantProfileDTO profile = applicantService.getApplicantProfile(username);
