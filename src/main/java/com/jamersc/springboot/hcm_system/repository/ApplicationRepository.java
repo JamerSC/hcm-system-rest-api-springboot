@@ -18,4 +18,6 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
 
     @Query("SELECT a FROM Application a JOIN FETCH a.applicant b WHERE b.id = :id")
     List<Application> findApplicantApplicationsById(@Param("id") Long id);
+
+    List<Application> findByApplicant(Applicant applicant);
 }

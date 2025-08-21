@@ -163,4 +163,25 @@ public class ApplicantServiceImpl implements ApplicantService {
         application.setUpdatedBy(applicantUser);
         applicationRepository.save(application);
     }
+
+    @Override
+    public void deleteApplicantAccount(Authentication authentication) {
+//      1. Get the authenticated user's details
+        User userDetails = getUser(authentication);
+
+//      2. Find the User entity to be deleted
+        User userToDelete = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(()-> new RuntimeException("Authenticated user not found."));
+
+//      3. Find the Applicant profile
+        Applicant applicantProfile = applicantRepository.findByApplicantUser(userToDelete)
+                .orElseThrow(()-> new RuntimeException("Applicant profile not found"));
+
+//      4. Handle child entities (e.g., Applications) before deleting the parent
+//      A user's Applications must be deleted first to prevent foreign key constraint issues.
+        List<Application> applications = applicationRepository.findByApplicant(applicantProfile);
+        applicationRepository.deleteAll(applications);
+
+        userRepository.delete(userToDelete);
+    }
 }

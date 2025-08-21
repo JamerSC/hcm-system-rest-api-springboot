@@ -93,4 +93,11 @@ public class ApplicantController {
         applicantService.saveResume(userDetails.getUsername(), String.valueOf(file));
         return new ResponseEntity<>("Resume uploaded successfully", HttpStatus.OK);
     }
+
+    @DeleteMapping("/me")
+    public ResponseEntity<String> deleteMyAccount(Authentication authentication) {
+        applicantService.deleteApplicantAccount(authentication);
+        return new ResponseEntity<>(
+                "User account and profile deleted successfully.", HttpStatus.NO_CONTENT);
+    }
 }

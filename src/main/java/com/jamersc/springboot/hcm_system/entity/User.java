@@ -45,6 +45,9 @@ public class User {
     )
     private Set<Role> roles = new HashSet<>(); // Initialize to avoid NullPointerException
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Applicant applicant;
+
     // Add this One-to-One relationship to the Employee entity
     @OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private Employee employee;

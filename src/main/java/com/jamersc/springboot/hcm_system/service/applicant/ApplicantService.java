@@ -19,4 +19,5 @@ public interface ApplicantService {
     List<ApplicationResponseDTO> getAllApplicantJobsApplied(Authentication authentication);
     Optional<ApplicationResponseDTO> getApplicantJobsAppliedById(Long id, Authentication authentication);
     void cancelApplication(Long id, Authentication authentication);
+    void deleteApplicantAccount(Authentication authentication);
 }
