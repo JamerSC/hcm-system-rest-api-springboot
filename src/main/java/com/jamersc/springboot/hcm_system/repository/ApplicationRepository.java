@@ -20,4 +20,6 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     List<Application> findApplicantApplicationsById(@Param("id") Long id);
 
     List<Application> findByApplicant(Applicant applicant);
+
+    Optional<Application> findByApplicantAndId(Applicant applicant, Long id);
 }

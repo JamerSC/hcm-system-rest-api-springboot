@@ -145,7 +145,7 @@ public class ApplicantServiceImpl implements ApplicantService {
                 .orElseThrow(()-> new RuntimeException("Applicant profile not found."));
 
         return Optional.ofNullable(
-                applicationRepository.findById(application.getId())
+                applicationRepository.findByApplicantAndId(applicant, application.getId())
                         .map(applicationMapper::entityToApplicationResponseDto)
                         .orElseThrow(()-> new RuntimeException("Application id not found")));
     }
