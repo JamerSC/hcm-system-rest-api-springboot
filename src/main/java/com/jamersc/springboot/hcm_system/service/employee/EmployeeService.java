@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EmployeeService {
-    List<EmployeeResponseDTO> getEmployees();
+    List<EmployeeResponseDTO> getAllEmployee();
     //EmployeeDTO findById(Long id);
     Optional<EmployeeProfileDTO> findEmployeeProfileById(Long id);
     Optional<EmployeeResponseDTO> findEmployeeById(Long id);

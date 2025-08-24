@@ -1,0 +1,123 @@
+package com.jamersc.springboot.hcm_system.service.application;
+
+import com.jamersc.springboot.hcm_system.dto.application.ApplicationResponseDTO;
+import com.jamersc.springboot.hcm_system.entity.Application;
+import com.jamersc.springboot.hcm_system.entity.ApplicationStatus;
+import com.jamersc.springboot.hcm_system.entity.User;
+import com.jamersc.springboot.hcm_system.mapper.ApplicationMapper;
+import com.jamersc.springboot.hcm_system.repository.ApplicationRepository;
+import com.jamersc.springboot.hcm_system.repository.UserRepository;
+import jakarta.transaction.Transactional;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@Transactional
+public class ApplicationServiceImpl implements ApplicationService {
+    private final ApplicationRepository applicationRepository;
+    private final ApplicationMapper applicationMapper;
+    private final UserRepository userRepository;
+
+    public ApplicationServiceImpl(ApplicationRepository applicationRepository, ApplicationMapper applicationMapper, UserRepository userRepository) {
+        this.applicationRepository = applicationRepository;
+        this.applicationMapper = applicationMapper;
+        this.userRepository = userRepository;
+    }
+
+    @Override
+    public List<ApplicationResponseDTO> getAllApplication() {
+        return applicationMapper.entitiesToResponseDtos(
+                applicationRepository.findAll()
+        );
+    }
+
+    @Override
+    public Optional<ApplicationResponseDTO> getApplicationById(Long id) {
+        return Optional.ofNullable(applicationRepository.findById(id)
+                .map(applicationMapper::entityToApplicationResponseDto)
+                .orElseThrow(()-> new RuntimeException("Application not found")));
+    }
+
+    @Override
+    public ApplicationResponseDTO reviewApplication(Long id, Authentication authentication) {
+        // find application id
+        Application application = applicationRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Application not found"));
+
+        // authenticate user & find by username
+        User currentUser = getUser(authentication);
+
+        // set the application status & updated by
+        application.setStatus(ApplicationStatus.IN_REVIEW);
+        application.setUpdatedBy(currentUser);
+
+        // update application status
+        Application applicationInReview = applicationRepository.save(application);
+        return applicationMapper.entityToApplicationResponseDto(applicationInReview);
+    }
+
+    @Override
+    public ApplicationResponseDTO scheduleInterview(Long id, Authentication authentication) {
+        // find application id
+        Application application = applicationRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Application not found"));
+
+        // authenticate user & find by username
+        User currentUser = getUser(authentication);
+
+        // set the application status & updated by
+        application.setStatus(ApplicationStatus.INTERVIEW_SCHEDULED);
+        application.setUpdatedBy(currentUser);
+
+        // update application status
+        Application scheduleInterview = applicationRepository.save(application);
+        return applicationMapper.entityToApplicationResponseDto(scheduleInterview);
+    }
+
+    @Override
+    public ApplicationResponseDTO rejectApplication(Long id, Authentication authentication) {
+        // find application id
+        Application application = applicationRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Application not found"));
+
+        // authenticate user & find by username
+        User currentUser = getUser(authentication);
+
+        // set the application status & updated by
+        application.setStatus(ApplicationStatus.REJECTED);
+        application.setUpdatedBy(currentUser);
+
+        // update application status
+        Application rejectApplication = applicationRepository.save(application);
+        return applicationMapper.entityToApplicationResponseDto(rejectApplication);
+    }
+
+    @Override
+    public ApplicationResponseDTO hireApplication(Long id, Authentication authentication) {
+        // find application id
+        Application application = applicationRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Application not found"));
+
+        // authenticate user & find by username
+        User currentUser = getUser(authentication);
+
+        // set the application status & updated by
+        application.setStatus(ApplicationStatus.HIRED);
+        application.setUpdatedBy(currentUser);
+
+        // update application status
+        Application hireApplicant = applicationRepository.save(application);
+        return applicationMapper.entityToApplicationResponseDto(hireApplicant);
+    }
+
+    // Authenticate the user - extracted method
+    private User getUser(Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        return userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Authenticated user not found in the database!"));
+    }
+}

@@ -35,7 +35,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
     @Override
-    public List<EmployeeResponseDTO> getEmployees() {
+    public List<EmployeeResponseDTO> getAllEmployee() {
         return employeeMapper.entitiesToResponseDtos(employeeRepository.findAll());
     }
 

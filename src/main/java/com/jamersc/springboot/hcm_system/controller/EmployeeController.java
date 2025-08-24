@@ -42,7 +42,7 @@ public class EmployeeController {
     // Get all employees
     @GetMapping("/")
     public ResponseEntity<List<EmployeeResponseDTO>> getAllEmployees() {
-        List<EmployeeResponseDTO> employees = employeeService.getEmployees();
+        List<EmployeeResponseDTO> employees = employeeService.getAllEmployee();
 
         if (employees.isEmpty()) {
             return ResponseEntity.noContent().build(); // HTTP 204
