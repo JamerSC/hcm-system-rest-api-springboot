@@ -24,6 +24,7 @@ public class JobResponseDTO {
     @Enumerated(EnumType.STRING)
     private JobStatus status;
     private String location;
+    private String postedByUsername;
     private LocalDate postedDate;
     private String department;
     private String createdByUsername;

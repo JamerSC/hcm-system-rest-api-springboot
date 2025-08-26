@@ -56,12 +56,10 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public JobResponseDTO save(JobCreateDTO dto, Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User currentUser = userRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("Authenticated user not found"));
-
         Department department = departmentRepository.findById(dto.getDepartmentId())
                 .orElseThrow(() -> new RuntimeException("Department id not found!"));
+        
+        User currentUser = getUser(authentication);
 
         Job job = jobMapper.jobCreateDtoToEntity(dto);
         job.setDepartment(department);
@@ -73,9 +71,63 @@ public class JobServiceImpl implements JobService {
         return jobMapper.entityToJobResponseDto(saveJob);
     }
 
+    @Override
+    public JobResponseDTO postJob(Long id, Authentication authentication) {
+        Job job = jobRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Job not found"));
+
+        User currentUser = getUser(authentication);
+
+        job.setStatus(JobStatus.OPEN);
+        job.setPostedBy(currentUser);
+        job.setUpdatedBy(currentUser);
+
+        Job openJob = jobRepository.save(job);
+
+        return jobMapper.entityToJobResponseDto(openJob);
+    }
+
+    @Override
+    public JobResponseDTO filledJob(Long id, Authentication authentication) {
+        Job job = jobRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Job not found"));
+
+        User currentUser = getUser(authentication);
+
+        job.setStatus(JobStatus.FILLED);
+        job.setPostedBy(null);
+        job.setUpdatedBy(currentUser);
+
+        Job openJob = jobRepository.save(job);
+
+        return jobMapper.entityToJobResponseDto(openJob);
+    }
+
+    @Override
+    public JobResponseDTO closeJob(Long id, Authentication authentication) {
+        Job job = jobRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Job not found"));
+
+        User currentUser = getUser(authentication);
+
+        job.setStatus(JobStatus.CLOSED);
+        job.setPostedBy(null);
+        job.setUpdatedBy(currentUser);
+
+        Job openJob = jobRepository.save(job);
+
+        return jobMapper.entityToJobResponseDto(openJob);
+    }
+
 
     @Override
     public void deleteById(Long id) {
         jobRepository.deleteById(id);
+    }
+
+    private User getUser(Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        return userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(()-> new RuntimeException("Authenticated user not found."));
     }
 }

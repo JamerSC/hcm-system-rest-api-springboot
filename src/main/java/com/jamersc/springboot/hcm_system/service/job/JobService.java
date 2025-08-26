@@ -15,5 +15,8 @@ public interface JobService {
     List<JobDTO> getOpenJobs();
     Optional<JobResponseDTO> getJobById(Long id);
     JobResponseDTO save(JobCreateDTO dto, Authentication authentication);
+    JobResponseDTO postJob(Long id, Authentication authentication);
+    JobResponseDTO filledJob(Long id, Authentication authentication);
+    JobResponseDTO closeJob(Long id, Authentication authentication);
     void deleteById(Long id);
 }

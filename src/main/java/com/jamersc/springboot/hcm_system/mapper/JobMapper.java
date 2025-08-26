@@ -43,6 +43,7 @@ public interface JobMapper {
     @Mapping(target = "createdAt", ignore = true)
     Job jobCreateDtoToEntity(JobCreateDTO dto);
 
+    @Mapping(target = "postedByUsername", source = "postedBy.username")
     @Mapping(target = "department", source = "department.department")
     @Mapping(target = "updatedByUsername", source = "updatedBy.username")
     @Mapping(target = "createdByUsername", source = "createdBy.username")

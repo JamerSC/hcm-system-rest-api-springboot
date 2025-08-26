@@ -43,6 +43,27 @@ public class JobController {
         return new ResponseEntity<>(jobResponseDTO, HttpStatus.CREATED);
     }
 
+    @PatchMapping("/{id}/open")
+    public ResponseEntity<JobResponseDTO> postJob(
+            @PathVariable Long id, Authentication authentication) {
+        JobResponseDTO postJob = jobService.postJob(id, authentication);
+        return new ResponseEntity<>(postJob, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}/close")
+    public ResponseEntity<JobResponseDTO> closeJob(
+            @PathVariable Long id, Authentication authentication) {
+        JobResponseDTO closeJob = jobService.closeJob(id, authentication);
+        return new ResponseEntity<>(closeJob, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}/filled")
+    public ResponseEntity<JobResponseDTO> filledJob(
+            @PathVariable Long id, Authentication authentication) {
+        JobResponseDTO filledJob = jobService.filledJob(id, authentication);
+        return new ResponseEntity<>(filledJob, HttpStatus.OK);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteJobById(@PathVariable Long id) {
         Optional<JobResponseDTO> jobDTO = jobService.getJobById(id);
