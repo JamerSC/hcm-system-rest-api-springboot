@@ -94,6 +94,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll() // Default login endpoint if you configure formLogin()
                         .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll() // Your registration endpoint
                         // Note: Always check the end point for each HTTP method
+                        .requestMatchers(HttpMethod.GET, "/api/dashboard/").hasAnyRole("MANAGER", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/employees").hasRole("EMPLOYEE")
                         .requestMatchers(HttpMethod.GET, "/api/employees/**").hasRole("EMPLOYEE")
                         .requestMatchers(HttpMethod.POST, "/api/employees/").hasRole("MANAGER")

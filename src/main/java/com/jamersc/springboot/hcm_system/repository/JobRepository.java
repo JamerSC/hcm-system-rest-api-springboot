@@ -11,6 +11,8 @@ public interface JobRepository extends JpaRepository<Job, Long> {
 
     List<Job> findByStatus(JobStatus status);
 
+    Long countByStatus(JobStatus jobStatus);
+
 //    @Query("SELECT j FROM Job j WHERE j.status IN ('OPEN','CLOSED')")
 //    @Query("SELECT j FROM Job j WHERE j.status = 'OPEN'")
 //    List<Job> findJobsWithStatusOpen();
