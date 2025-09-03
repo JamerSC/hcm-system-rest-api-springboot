@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/applicants")
+@RequestMapping("/api/v1/applicants")
 public class ApplicantController {
 
     private final ApplicantService applicantService;
