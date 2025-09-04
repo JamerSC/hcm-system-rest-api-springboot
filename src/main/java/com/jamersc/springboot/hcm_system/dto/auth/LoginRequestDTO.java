@@ -1,4 +1,4 @@
-package com.jamersc.springboot.hcm_system.dto.login;
+package com.jamersc.springboot.hcm_system.dto.auth;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

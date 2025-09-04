@@ -1,14 +1,16 @@
-package com.jamersc.springboot.hcm_system.service.authentication;
+package com.jamersc.springboot.hcm_system.service.auth;
 
-import com.jamersc.springboot.hcm_system.dto.registration.RegistrationRequestDTO;
+import com.jamersc.springboot.hcm_system.dto.auth.ChangePasswordDTO;
+import com.jamersc.springboot.hcm_system.dto.auth.RegistrationRequestDTO;
 import com.jamersc.springboot.hcm_system.entity.Applicant;
 import com.jamersc.springboot.hcm_system.entity.Role;
 import com.jamersc.springboot.hcm_system.entity.User;
 import com.jamersc.springboot.hcm_system.repository.ApplicantRepository;
 import com.jamersc.springboot.hcm_system.repository.RoleRepository;
 import com.jamersc.springboot.hcm_system.repository.UserRepository;
-import com.jamersc.springboot.hcm_system.service.authentication.AuthService;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service
+@Transactional
 public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -65,5 +68,29 @@ public class AuthServiceImpl implements AuthService {
 
         // Save new user
         return savedUser;
+    }
+
+    @Override
+    public void changePassword(ChangePasswordDTO changePasswordDTO, Authentication authentication) {
+        // get authenticated user details
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User currentUser = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(()->new RuntimeException("Authenticated user not found."));
+
+        // verify old password
+        if (!passwordEncoder.matches(changePasswordDTO.getOldPassword(), currentUser.getPassword())) {
+            throw new IllegalArgumentException("Old password does not match");
+        }
+
+        // hash and set the new password
+        String newHashedPassword = passwordEncoder.encode(
+                changePasswordDTO.getNewPassword()
+        );
+        currentUser.setPassword(newHashedPassword);
+        currentUser.setUpdatedBy(currentUser);
+
+        // save updated user entity
+        userRepository.save(currentUser);
+
     }
 }

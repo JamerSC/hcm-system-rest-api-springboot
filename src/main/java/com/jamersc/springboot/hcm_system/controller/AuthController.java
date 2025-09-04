@@ -1,22 +1,21 @@
 package com.jamersc.springboot.hcm_system.controller;
 
-import com.jamersc.springboot.hcm_system.dto.login.LoginRequestDTO;
-import com.jamersc.springboot.hcm_system.dto.login.LoginResponseDTO;
-import com.jamersc.springboot.hcm_system.dto.registration.RegistrationRequestDTO;
+import com.jamersc.springboot.hcm_system.dto.auth.ChangePasswordDTO;
+import com.jamersc.springboot.hcm_system.dto.auth.LoginRequestDTO;
+import com.jamersc.springboot.hcm_system.dto.auth.LoginResponseDTO;
+import com.jamersc.springboot.hcm_system.dto.auth.RegistrationRequestDTO;
 import com.jamersc.springboot.hcm_system.entity.User;
 import com.jamersc.springboot.hcm_system.security.JwtTokenProvider;
-import com.jamersc.springboot.hcm_system.service.authentication.AuthService;
+import com.jamersc.springboot.hcm_system.service.auth.AuthService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Collectors;
 
@@ -83,5 +82,13 @@ public class AuthController {
         // as authenticated.
         SecurityContextHolder.clearContext();
         return ResponseEntity.ok("User logged out successfully!");
+    }
+
+    @PatchMapping("/me/change-password")
+    public ResponseEntity<String> changePassword(
+            @Valid @RequestBody ChangePasswordDTO changePasswordDTO,
+            Authentication authentication) {
+        authService.changePassword(changePasswordDTO, authentication);
+        return new ResponseEntity<>("Password changed successfully!", HttpStatus.OK);
     }
 }

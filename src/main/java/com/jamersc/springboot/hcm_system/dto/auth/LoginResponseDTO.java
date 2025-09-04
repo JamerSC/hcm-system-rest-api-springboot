@@ -1,4 +1,4 @@
-package com.jamersc.springboot.hcm_system.dto.login;
+package com.jamersc.springboot.hcm_system.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
