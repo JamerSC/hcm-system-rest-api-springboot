@@ -11,6 +11,7 @@ public interface ApplicationService {
     Optional<ApplicationResponseDTO> getApplicationById(Long id);
     ApplicationResponseDTO reviewApplication(Long id, Authentication authentication);
     ApplicationResponseDTO scheduleInterview(Long id, Authentication authentication);
+    ApplicationResponseDTO approveApplication(Long id, Authentication authentication);
     ApplicationResponseDTO rejectApplication(Long id, Authentication authentication);
     ApplicationResponseDTO hireApplication(Long id, Authentication authentication);
 }

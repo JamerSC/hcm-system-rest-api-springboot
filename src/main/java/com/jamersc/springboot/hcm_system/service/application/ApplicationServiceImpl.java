@@ -3,6 +3,7 @@ package com.jamersc.springboot.hcm_system.service.application;
 import com.jamersc.springboot.hcm_system.dto.application.ApplicationResponseDTO;
 import com.jamersc.springboot.hcm_system.entity.Application;
 import com.jamersc.springboot.hcm_system.entity.ApplicationStatus;
+import com.jamersc.springboot.hcm_system.entity.JobStatus;
 import com.jamersc.springboot.hcm_system.entity.User;
 import com.jamersc.springboot.hcm_system.mapper.ApplicationMapper;
 import com.jamersc.springboot.hcm_system.repository.ApplicationRepository;
@@ -74,8 +75,26 @@ public class ApplicationServiceImpl implements ApplicationService {
         application.setUpdatedBy(currentUser);
 
         // update application status
-        Application scheduleInterview = applicationRepository.save(application);
-        return applicationMapper.entityToApplicationResponseDto(scheduleInterview);
+        Application scheduledInterview = applicationRepository.save(application);
+        return applicationMapper.entityToApplicationResponseDto(scheduledInterview);
+    }
+
+    @Override
+    public ApplicationResponseDTO approveApplication(Long id, Authentication authentication) {
+        // find application id
+        Application application = applicationRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Application not found"));
+
+        // authenticate user & find by username
+        User currentUser = getUser(authentication);
+
+        // set the application status & updated by
+        application.setStatus(ApplicationStatus.APPROVED);
+        application.setUpdatedBy(currentUser);
+
+        // update application status
+        Application approvedApplication = applicationRepository.save(application);
+        return applicationMapper.entityToApplicationResponseDto(approvedApplication);
     }
 
     @Override
@@ -92,8 +111,8 @@ public class ApplicationServiceImpl implements ApplicationService {
         application.setUpdatedBy(currentUser);
 
         // update application status
-        Application rejectApplication = applicationRepository.save(application);
-        return applicationMapper.entityToApplicationResponseDto(rejectApplication);
+        Application rejectedApplication = applicationRepository.save(application);
+        return applicationMapper.entityToApplicationResponseDto(rejectedApplication);
     }
 
     @Override
@@ -104,6 +123,22 @@ public class ApplicationServiceImpl implements ApplicationService {
 
         // authenticate user & find by username
         User currentUser = getUser(authentication);
+
+        if (application.getStatus() == ApplicationStatus.SUBMITTED) {
+            throw new RuntimeException("Application is newly submitted");
+        }
+
+        if (application.getStatus() == ApplicationStatus.IN_REVIEW) {
+            throw new RuntimeException("Application in review");
+        }
+
+        if (application.getStatus() == ApplicationStatus.INTERVIEW_SCHEDULED) {
+            throw new RuntimeException("Application is interview scheduled");
+        }
+
+        if (application.getStatus() == ApplicationStatus.REJECTED) {
+            throw new RuntimeException("Application is rejected");
+        }
 
         // set the application status & updated by
         application.setStatus(ApplicationStatus.HIRED);

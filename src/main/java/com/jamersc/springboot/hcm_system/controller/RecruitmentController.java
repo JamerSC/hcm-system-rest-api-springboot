@@ -68,6 +68,13 @@ public class RecruitmentController {
         return new ResponseEntity<>(scheduleInterview, HttpStatus.OK);
     }
 
+    @PatchMapping("/{id}/application/approve")
+    public ResponseEntity<ApplicationResponseDTO> approveApplication(
+            @PathVariable Long id, Authentication authentication) {
+        ApplicationResponseDTO application = applicationService.approveApplication(id, authentication);
+        return new ResponseEntity<>(application, HttpStatus.OK);
+    }
+
     @PatchMapping("/{id}/application/reject")
     public ResponseEntity<ApplicationResponseDTO> rejectApplication(
             @PathVariable Long id, Authentication authentication) {
