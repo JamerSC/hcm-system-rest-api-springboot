@@ -18,7 +18,7 @@ public class ApplicationResponseDTO {
     private String applicantName;
     private String jobPosition;
     private String jobDescription;
-    private ApplicationStatus status = ApplicationStatus.SUBMITTED;
+    private ApplicationStatus status = ApplicationStatus.NEW;
     private Date appliedAt;
     private String updatedByUsername;
     private Date updatedAt;

@@ -3,7 +3,6 @@ package com.jamersc.springboot.hcm_system.service.application;
 import com.jamersc.springboot.hcm_system.dto.application.ApplicationResponseDTO;
 import com.jamersc.springboot.hcm_system.entity.Application;
 import com.jamersc.springboot.hcm_system.entity.ApplicationStatus;
-import com.jamersc.springboot.hcm_system.entity.JobStatus;
 import com.jamersc.springboot.hcm_system.entity.User;
 import com.jamersc.springboot.hcm_system.mapper.ApplicationMapper;
 import com.jamersc.springboot.hcm_system.repository.ApplicationRepository;
@@ -44,7 +43,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public ApplicationResponseDTO reviewApplication(Long id, Authentication authentication) {
+    public ApplicationResponseDTO initialQualification(Long id, Authentication authentication) {
         // find application id
         Application application = applicationRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Application not found"));
@@ -53,16 +52,16 @@ public class ApplicationServiceImpl implements ApplicationService {
         User currentUser = getUser(authentication);
 
         // set the application status & updated by
-        application.setStatus(ApplicationStatus.IN_REVIEW);
+        application.setStatus(ApplicationStatus.INITIAL_QUALIFICATION);
         application.setUpdatedBy(currentUser);
 
         // update application status
-        Application applicationInReview = applicationRepository.save(application);
-        return applicationMapper.entityToApplicationResponseDto(applicationInReview);
+        Application initialQualification = applicationRepository.save(application);
+        return applicationMapper.entityToApplicationResponseDto(initialQualification);
     }
 
     @Override
-    public ApplicationResponseDTO scheduleInterview(Long id, Authentication authentication) {
+    public ApplicationResponseDTO firstInterview(Long id, Authentication authentication) {
         // find application id
         Application application = applicationRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Application not found"));
@@ -71,12 +70,66 @@ public class ApplicationServiceImpl implements ApplicationService {
         User currentUser = getUser(authentication);
 
         // set the application status & updated by
-        application.setStatus(ApplicationStatus.INTERVIEW_SCHEDULED);
+        application.setStatus(ApplicationStatus.FIRST_INTERVIEW);
         application.setUpdatedBy(currentUser);
 
         // update application status
-        Application scheduledInterview = applicationRepository.save(application);
-        return applicationMapper.entityToApplicationResponseDto(scheduledInterview);
+        Application firstInterview = applicationRepository.save(application);
+        return applicationMapper.entityToApplicationResponseDto(firstInterview);
+    }
+
+    @Override
+    public ApplicationResponseDTO secondInterview(Long id, Authentication authentication) {
+        // find application id
+        Application application = applicationRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Application not found"));
+
+        // authenticate user & find by username
+        User currentUser = getUser(authentication);
+
+        // set the application status & updated by
+        application.setStatus(ApplicationStatus.SECOND_INTERVIEW);
+        application.setUpdatedBy(currentUser);
+
+        // update application status
+        Application secondInterview = applicationRepository.save(application);
+        return applicationMapper.entityToApplicationResponseDto(secondInterview);
+    }
+
+    @Override
+    public ApplicationResponseDTO contractProposal(Long id, Authentication authentication) {
+        // find application id
+        Application application = applicationRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Application not found"));
+
+        // authenticate user & find by username
+        User currentUser = getUser(authentication);
+
+        // set the application status & updated by
+        application.setStatus(ApplicationStatus.CONTRACT_PROPOSAL);
+        application.setUpdatedBy(currentUser);
+
+        // update application status
+        Application contractProposal = applicationRepository.save(application);
+        return applicationMapper.entityToApplicationResponseDto(contractProposal);
+    }
+
+    @Override
+    public ApplicationResponseDTO contractSigned(Long id, Authentication authentication) {
+        // find application id
+        Application application = applicationRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Application not found"));
+
+        // authenticate user & find by username
+        User currentUser = getUser(authentication);
+
+        // set the application status & updated by
+        application.setStatus(ApplicationStatus.CONTRACT_SIGNED);
+        application.setUpdatedBy(currentUser);
+
+        // update application status
+        Application contractSigned = applicationRepository.save(application);
+        return applicationMapper.entityToApplicationResponseDto(contractSigned);
     }
 
     @Override
@@ -124,16 +177,16 @@ public class ApplicationServiceImpl implements ApplicationService {
         // authenticate user & find by username
         User currentUser = getUser(authentication);
 
-        if (application.getStatus() == ApplicationStatus.SUBMITTED) {
-            throw new RuntimeException("Application is newly submitted");
+        if (application.getStatus() == ApplicationStatus.NEW) {
+            throw new RuntimeException("This is a new application");
         }
 
-        if (application.getStatus() == ApplicationStatus.IN_REVIEW) {
-            throw new RuntimeException("Application in review");
+        if (application.getStatus() == ApplicationStatus.INITIAL_QUALIFICATION) {
+            throw new RuntimeException("Application is initial qualification");
         }
 
-        if (application.getStatus() == ApplicationStatus.INTERVIEW_SCHEDULED) {
-            throw new RuntimeException("Application is interview scheduled");
+        if (application.getStatus() == ApplicationStatus.FIRST_INTERVIEW) {
+            throw new RuntimeException("Application first interview");
         }
 
         if (application.getStatus() == ApplicationStatus.REJECTED) {

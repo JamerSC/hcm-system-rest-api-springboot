@@ -9,8 +9,11 @@ import java.util.Optional;
 public interface ApplicationService {
     List<ApplicationResponseDTO> getAllApplication();
     Optional<ApplicationResponseDTO> getApplicationById(Long id);
-    ApplicationResponseDTO reviewApplication(Long id, Authentication authentication);
-    ApplicationResponseDTO scheduleInterview(Long id, Authentication authentication);
+    ApplicationResponseDTO initialQualification(Long id, Authentication authentication);
+    ApplicationResponseDTO firstInterview(Long id, Authentication authentication);
+    ApplicationResponseDTO secondInterview(Long id, Authentication authentication);
+    ApplicationResponseDTO contractProposal(Long id, Authentication authentication);
+    ApplicationResponseDTO contractSigned(Long id, Authentication authentication);
     ApplicationResponseDTO approveApplication(Long id, Authentication authentication);
     ApplicationResponseDTO rejectApplication(Long id, Authentication authentication);
     ApplicationResponseDTO hireApplication(Long id, Authentication authentication);

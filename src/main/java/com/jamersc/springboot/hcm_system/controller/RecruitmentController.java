@@ -54,18 +54,39 @@ public class RecruitmentController {
         return new ResponseEntity<>(application, HttpStatus.OK);
     }
 
-    @PatchMapping("/{id}/application/review")
-    public ResponseEntity<ApplicationResponseDTO> reviewApplication(
+    @PatchMapping("/{id}/application/initial-qualification")
+    public ResponseEntity<ApplicationResponseDTO> initialQualification(
             @PathVariable Long id, Authentication authentication) {
-        ApplicationResponseDTO reviewApplication = applicationService.reviewApplication(id, authentication);
-        return new ResponseEntity<>(reviewApplication, HttpStatus.OK);
+        ApplicationResponseDTO initialQualification = applicationService.initialQualification(id, authentication);
+        return new ResponseEntity<>(initialQualification, HttpStatus.OK);
     }
 
-    @PatchMapping("/{id}/application/schedule")
-    public ResponseEntity<ApplicationResponseDTO> scheduleApplicant(
+    @PatchMapping("/{id}/application/first-interview")
+    public ResponseEntity<ApplicationResponseDTO> firstInterview(
             @PathVariable Long id, Authentication authentication) {
-        ApplicationResponseDTO scheduleInterview = applicationService.scheduleInterview(id, authentication);
-        return new ResponseEntity<>(scheduleInterview, HttpStatus.OK);
+        ApplicationResponseDTO firstInterview = applicationService.firstInterview(id, authentication);
+        return new ResponseEntity<>(firstInterview, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}/application/second-interview")
+    public ResponseEntity<ApplicationResponseDTO> secondInterview(
+            @PathVariable Long id, Authentication authentication) {
+        ApplicationResponseDTO secondInterview = applicationService.secondInterview(id, authentication);
+        return new ResponseEntity<>(secondInterview, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}/application/contract-proposal")
+    public ResponseEntity<ApplicationResponseDTO> contractProposal(
+            @PathVariable Long id, Authentication authentication) {
+        ApplicationResponseDTO contractProposal = applicationService.contractProposal(id, authentication);
+        return new ResponseEntity<>(contractProposal, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}/application/contract-signed")
+    public ResponseEntity<ApplicationResponseDTO> contractSigned(
+            @PathVariable Long id, Authentication authentication) {
+        ApplicationResponseDTO contractSigned = applicationService.contractSigned(id, authentication);
+        return new ResponseEntity<>(contractSigned, HttpStatus.OK);
     }
 
     @PatchMapping("/{id}/application/approve")
