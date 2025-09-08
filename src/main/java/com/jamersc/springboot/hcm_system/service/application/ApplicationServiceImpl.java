@@ -1,17 +1,18 @@
 package com.jamersc.springboot.hcm_system.service.application;
 
 import com.jamersc.springboot.hcm_system.dto.application.ApplicationResponseDTO;
-import com.jamersc.springboot.hcm_system.entity.Application;
-import com.jamersc.springboot.hcm_system.entity.ApplicationStatus;
-import com.jamersc.springboot.hcm_system.entity.User;
+import com.jamersc.springboot.hcm_system.entity.*;
 import com.jamersc.springboot.hcm_system.mapper.ApplicationMapper;
 import com.jamersc.springboot.hcm_system.repository.ApplicationRepository;
+import com.jamersc.springboot.hcm_system.repository.EmployeeRepository;
 import com.jamersc.springboot.hcm_system.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,11 +22,13 @@ public class ApplicationServiceImpl implements ApplicationService {
     private final ApplicationRepository applicationRepository;
     private final ApplicationMapper applicationMapper;
     private final UserRepository userRepository;
+    private final EmployeeRepository employeeRepository;
 
-    public ApplicationServiceImpl(ApplicationRepository applicationRepository, ApplicationMapper applicationMapper, UserRepository userRepository) {
+    public ApplicationServiceImpl(ApplicationRepository applicationRepository, ApplicationMapper applicationMapper, UserRepository userRepository, EmployeeRepository employeeRepository) {
         this.applicationRepository = applicationRepository;
         this.applicationMapper = applicationMapper;
         this.userRepository = userRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     @Override
@@ -177,25 +180,26 @@ public class ApplicationServiceImpl implements ApplicationService {
         // authenticate user & find by username
         User currentUser = getUser(authentication);
 
-        if (application.getStatus() == ApplicationStatus.NEW) {
-            throw new RuntimeException("This is a new application");
-        }
-
-        if (application.getStatus() == ApplicationStatus.INITIAL_QUALIFICATION) {
-            throw new RuntimeException("Application is initial qualification");
-        }
-
-        if (application.getStatus() == ApplicationStatus.FIRST_INTERVIEW) {
-            throw new RuntimeException("Application first interview");
-        }
-
-        if (application.getStatus() == ApplicationStatus.REJECTED) {
-            throw new RuntimeException("Application is rejected");
+        if (application.getStatus() != ApplicationStatus.CONTRACT_SIGNED) {
+            throw new RuntimeException("Cannot hire applicant. Application status is not 'Contract Signed'.");
         }
 
         // set the application status & updated by
         application.setStatus(ApplicationStatus.HIRED);
         application.setUpdatedBy(currentUser);
+
+        // get the user & applicant entities
+        User user = application.getApplicant().getUser(); // user
+        Applicant applicant = application.getApplicant();  // applicant
+
+        Employee newEmployee = new Employee();
+        newEmployee.setFirstName(applicant.getFirstName());
+        newEmployee.setLastName(applicant.getLastName());
+        newEmployee.setEmail(user.getEmail());
+        //newEmployee.setHiredDate(new Date());
+
+        // save new employee entity
+        employeeRepository.save(newEmployee);
 
         // update application status
         Application hireApplicant = applicationRepository.save(application);
