@@ -33,21 +33,20 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    @Transactional
-    public User registerNewUserAndApplicant(RegistrationRequestDTO request) {
-        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+    public User registerNewUserAndApplicant(RegistrationRequestDTO requestDTO) {
+        if (userRepository.findByUsername(requestDTO.getUsername()).isPresent()) {
             throw new IllegalArgumentException("Username already exists!");
         }
-        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+        if (userRepository.findByEmail(requestDTO.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email already registered!");
         }
 
         User newUser = new User();
-        newUser.setFirstName(request.getFirstName());
-        newUser.setLastName(request.getLastName());
-        newUser.setEmail(request.getEmail());
-        newUser.setUsername(request.getUsername());
-        newUser.setPassword(passwordEncoder.encode(request.getPassword())); // <-- HASH THE PASSWORD HERE
+        newUser.setFirstName(requestDTO.getFirstName());
+        newUser.setLastName(requestDTO.getLastName());
+        newUser.setEmail(requestDTO.getEmail());
+        newUser.setUsername(requestDTO.getUsername());
+        newUser.setPassword(passwordEncoder.encode(requestDTO.getPassword())); // <-- HASH THE PASSWORD HERE
 
         // Assign default role, e.g., "ROLE_APPLICANT"
         Role applicantRole = roleRepository.findByRoleName("ROLE_APPLICANT") // Make sure this matches your DB role name
@@ -60,8 +59,8 @@ public class AuthServiceImpl implements AuthService {
 
         // Create initial applicant profile linked to the new user
         Applicant newApplicant = new Applicant();
-        newApplicant.setFirstName(request.getFirstName());
-        newApplicant.setLastName(request.getLastName());
+        newApplicant.setFirstName(requestDTO.getFirstName());
+        newApplicant.setLastName(requestDTO.getLastName());
         newApplicant.setUser(savedUser);
         // Save applicant profile
         applicantRepository.save(newApplicant);

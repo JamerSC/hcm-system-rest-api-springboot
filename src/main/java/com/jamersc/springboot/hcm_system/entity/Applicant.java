@@ -25,6 +25,7 @@ public class Applicant {
     private String phoneNumber;
     private String address;
     private String educationLevel;
+
     @OneToOne // One user account maps to one applicant profile
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user; // Link to the User account

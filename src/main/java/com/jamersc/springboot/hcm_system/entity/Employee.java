@@ -45,13 +45,16 @@ public class Employee {
     private Double salary;
 
     // One-to-One relationship to the User entity
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+//    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+//    @JoinColumn(name = "user_id", referencedColumnName = "id")
+//    private User user;
+
+    @OneToOne(mappedBy = "employee", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private User user;
 
-    // One-to-One relationship to the Contract entity
-    @OneToOne(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Contract contract;
+//    One-to-One relationship to the Contract entity
+//    @OneToOne(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+//    private Contract contract;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by_user_id", referencedColumnName = "id")

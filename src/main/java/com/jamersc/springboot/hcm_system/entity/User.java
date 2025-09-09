@@ -49,7 +49,11 @@ public class User {
     private Applicant applicant;
 
     // Add this One-to-One relationship to the Employee entity
-    @OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+//    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+//    private Employee employee;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "employee_id", referencedColumnName = "id")
     private Employee employee;
 
     @ManyToOne(fetch = FetchType.LAZY)

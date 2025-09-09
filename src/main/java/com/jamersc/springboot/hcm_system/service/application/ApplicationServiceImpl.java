@@ -3,9 +3,7 @@ package com.jamersc.springboot.hcm_system.service.application;
 import com.jamersc.springboot.hcm_system.dto.application.ApplicationResponseDTO;
 import com.jamersc.springboot.hcm_system.entity.*;
 import com.jamersc.springboot.hcm_system.mapper.ApplicationMapper;
-import com.jamersc.springboot.hcm_system.repository.ApplicationRepository;
-import com.jamersc.springboot.hcm_system.repository.EmployeeRepository;
-import com.jamersc.springboot.hcm_system.repository.UserRepository;
+import com.jamersc.springboot.hcm_system.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,13 +20,17 @@ public class ApplicationServiceImpl implements ApplicationService {
     private final ApplicationRepository applicationRepository;
     private final ApplicationMapper applicationMapper;
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final EmployeeRepository employeeRepository;
+    private final JobRepository jobRepository;
 
-    public ApplicationServiceImpl(ApplicationRepository applicationRepository, ApplicationMapper applicationMapper, UserRepository userRepository, EmployeeRepository employeeRepository) {
+    public ApplicationServiceImpl(ApplicationRepository applicationRepository, ApplicationMapper applicationMapper, UserRepository userRepository, RoleRepository roleRepository, EmployeeRepository employeeRepository, JobRepository jobRepository) {
         this.applicationRepository = applicationRepository;
         this.applicationMapper = applicationMapper;
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         this.employeeRepository = employeeRepository;
+        this.jobRepository = jobRepository;
     }
 
     @Override
@@ -173,7 +175,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     public ApplicationResponseDTO hireApplication(Long id, Authentication authentication) {
-        // find application id
+        // check application
         Application application = applicationRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Application not found"));
 
@@ -184,19 +186,27 @@ public class ApplicationServiceImpl implements ApplicationService {
             throw new RuntimeException("Cannot hire applicant. Application status is not 'Contract Signed'.");
         }
 
-        // set the application status & updated by
+        /** set the application status & updated by */
         application.setStatus(ApplicationStatus.HIRED);
         application.setUpdatedBy(currentUser);
 
-        // get the user & applicant entities
-        User user = application.getApplicant().getUser(); // user
-        Applicant applicant = application.getApplicant();  // applicant
+        /** get the user & applicant entities ***/
+        User user = application.getApplicant().getUser(); // get user email
+        Applicant applicant = application.getApplicant();  // get applicant info
 
         Employee newEmployee = new Employee();
         newEmployee.setFirstName(applicant.getFirstName());
         newEmployee.setLastName(applicant.getLastName());
         newEmployee.setEmail(user.getEmail());
-        //newEmployee.setHiredDate(new Date());
+        newEmployee.setHiredDate(LocalDate.now()); // Local date now temporary
+
+        /** set job */
+        Job job = jobRepository.findById(application.getJob().getId())
+                .orElseThrow(() -> new RuntimeException("Job not found!"));
+        newEmployee.setJob(job);
+
+        newEmployee.setCreatedBy(currentUser);
+        newEmployee.setUpdatedBy(currentUser);
 
         // save new employee entity
         employeeRepository.save(newEmployee);
