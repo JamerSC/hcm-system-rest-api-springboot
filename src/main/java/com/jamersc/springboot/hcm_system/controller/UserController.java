@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -23,25 +24,31 @@ public class UserController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
-        List<UserResponseDTO> userResponseDTO = userService.getAllUsers();
-        return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        List<UserDTO> users = userService.getAllUsers();
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @PostMapping("/{id}/")
-    public ResponseEntity<UserResponseDTO> createUser(
-            @PathVariable Long id, @Valid @RequestBody UserCreateDTO createDTO,
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<UserResponseDTO>> getUserById(@PathVariable Long id) {
+        Optional<UserResponseDTO> user = userService.findUserById(id);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @PostMapping("/{employeeId}/create-user-access")
+    public ResponseEntity<UserResponseDTO> createUserAccessForEmployee(
+            @PathVariable Long employeeId, @Valid @RequestBody UserCreateDTO createDTO,
             Authentication authentication) {
-        UserResponseDTO userResponseDTO = userService.save(createDTO, authentication);
+        UserResponseDTO userResponseDTO = userService.createUser(employeeId, createDTO, authentication);
         return new ResponseEntity<>(userResponseDTO, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}/")
     public ResponseEntity<UserResponseDTO> updateUser(
-            @PathVariable Long id, @Valid @RequestBody UserCreateDTO createDTO,
+            @PathVariable Long id, @Valid @RequestBody UserDTO userDTO,
             Authentication authentication) {
-        UserResponseDTO userResponseDTO = userService.save(createDTO, authentication);
-        return new ResponseEntity<>(userResponseDTO, HttpStatus.CREATED);
+        UserResponseDTO userResponseDTO = userService.update(userDTO, authentication);
+        return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
     }
 
 //    @PatchMapping("/{id}/")

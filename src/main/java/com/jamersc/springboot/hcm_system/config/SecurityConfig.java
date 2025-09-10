@@ -1,5 +1,6 @@
-package com.jamersc.springboot.hcm_system.security;
+package com.jamersc.springboot.hcm_system.config;
 
+import com.jamersc.springboot.hcm_system.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

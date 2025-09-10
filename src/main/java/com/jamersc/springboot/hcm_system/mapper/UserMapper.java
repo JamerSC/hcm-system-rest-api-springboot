@@ -28,6 +28,8 @@ public interface UserMapper {
 
     UserCreateDTO entityToUserCreateDTO(User user);
 
+    @Mapping(target = "lastName", ignore = true)
+    @Mapping(target = "firstName", ignore = true)
     @Mapping(target = "updatedBy", ignore = true) //source = ""
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "roles", ignore = true)

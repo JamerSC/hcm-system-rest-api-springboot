@@ -1,6 +1,5 @@
 package com.jamersc.springboot.hcm_system.service.user;
 
-import com.jamersc.springboot.hcm_system.dto.employee.EmployeeResponseDTO;
 import com.jamersc.springboot.hcm_system.dto.user.UserCreateDTO;
 import com.jamersc.springboot.hcm_system.dto.user.UserDTO;
 import com.jamersc.springboot.hcm_system.dto.user.UserResponseDTO;
@@ -11,8 +10,9 @@ import java.util.Optional;
 
 public interface UserService {
 
-    List<UserResponseDTO> getAllUsers();
+    List<UserDTO> getAllUsers();
     Optional<UserResponseDTO> findUserById(Long id);
-    UserResponseDTO save(UserCreateDTO createDTO, Authentication authentication);
+    UserResponseDTO createUser(Long employeeId, UserCreateDTO createDTO, Authentication authentication);
+    UserResponseDTO update(UserDTO userDTO, Authentication authentication);
     void deleteUserById(Long id);
 }
