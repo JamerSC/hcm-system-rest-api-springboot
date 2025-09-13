@@ -33,6 +33,12 @@
 		<org.jwt.version>0.11.5</org.jwt.version>
 	</properties>
 	<dependencies>
+		<!-- Sending an email -->
+		<!-- https://mailtrap.io/blog/spring-send-email/ -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
 		<!-- springdoc.org an open api 9/12/25 -->
 		<!-- Swagger UI url: http://localhost:8080/swagger-ui/index.html -->
 		<!-- Swagger api docs http://localhost:8080/my-api-docs 	-->

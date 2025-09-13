@@ -8,6 +8,7 @@ import com.jamersc.springboot.hcm_system.entity.User;
 import com.jamersc.springboot.hcm_system.repository.ApplicantRepository;
 import com.jamersc.springboot.hcm_system.repository.RoleRepository;
 import com.jamersc.springboot.hcm_system.repository.UserRepository;
+import com.jamersc.springboot.hcm_system.service.email.EmailService;
 import jakarta.transaction.Transactional;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,12 +25,14 @@ public class AuthServiceImpl implements AuthService {
     private final RoleRepository roleRepository;
     private  final PasswordEncoder passwordEncoder;
     private final ApplicantRepository applicantRepository;
+    private final EmailService emailService;
 
-    public AuthServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, ApplicantRepository applicantRepository) {
+    public AuthServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, ApplicantRepository applicantRepository, EmailService emailService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.applicantRepository = applicantRepository;
+        this.emailService = emailService;
     }
 
     @Override
@@ -64,6 +67,9 @@ public class AuthServiceImpl implements AuthService {
         newApplicant.setUser(savedUser);
         // Save applicant profile
         applicantRepository.save(newApplicant);
+
+        // Send email to applicant using Email Service
+        emailService.sendWelcomeEmail(savedUser.getEmail(), savedUser.getUsername());
 
         // Save new user
         return savedUser;
