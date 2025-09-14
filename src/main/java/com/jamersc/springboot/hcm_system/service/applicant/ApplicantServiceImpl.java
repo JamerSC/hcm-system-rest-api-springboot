@@ -10,6 +10,7 @@ import com.jamersc.springboot.hcm_system.repository.ApplicantRepository;
 import com.jamersc.springboot.hcm_system.repository.ApplicationRepository;
 import com.jamersc.springboot.hcm_system.repository.JobRepository;
 import com.jamersc.springboot.hcm_system.repository.UserRepository;
+import com.jamersc.springboot.hcm_system.service.email.EmailService;
 import jakarta.transaction.Transactional;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,13 +30,16 @@ public class ApplicantServiceImpl implements ApplicantService {
     private final ApplicantMapper applicantMapper; // mapping of applicant entity and dto
     private final ApplicationMapper applicationMapper;
 
-    public ApplicantServiceImpl(ApplicantRepository applicantRepository, ApplicationRepository applicationRepository, JobRepository jobRepository, UserRepository userRepository, ApplicantMapper applicantMapper, ApplicationMapper applicationMapper) {
+    private final EmailService emailService;
+
+    public ApplicantServiceImpl(ApplicantRepository applicantRepository, ApplicationRepository applicationRepository, JobRepository jobRepository, UserRepository userRepository, ApplicantMapper applicantMapper, ApplicationMapper applicationMapper, EmailService emailService) {
         this.applicantRepository = applicantRepository;
         this.applicationRepository = applicationRepository;
         this.jobRepository = jobRepository;
         this.userRepository = userRepository;
         this.applicantMapper = applicantMapper;
         this.applicationMapper = applicationMapper;
+        this.emailService = emailService;
     }
 
 
@@ -114,6 +118,13 @@ public class ApplicantServiceImpl implements ApplicantService {
         newApplication.setApplicant(applicant);
         newApplication.setJob(job);
         newApplication.setUpdatedBy(applicantUser);
+
+        // email notification
+        String email = newApplication.getApplicant().getUser().getEmail();
+        String firstName = newApplication.getApplicant().getFirstName();
+        String lastName = newApplication.getApplicant().getLastName();
+        String fullName = firstName + " " + lastName;
+        emailService.sendSubmittedApplicationEmail(email, fullName, newApplication.getId(), newApplication.getJob().getTitle());
 
         applicationRepository.save(newApplication);
     }
