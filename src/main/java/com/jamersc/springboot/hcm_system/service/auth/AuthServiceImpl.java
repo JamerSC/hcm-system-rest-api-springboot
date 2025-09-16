@@ -69,7 +69,7 @@ public class AuthServiceImpl implements AuthService {
         applicantRepository.save(newApplicant);
 
         // Send email to applicant using Email Service
-        emailService.sendWelcomeEmail(savedUser.getEmail(), savedUser.getUsername());
+        emailService.sendWelcomeEmail(savedUser.getEmail(), savedUser.getUserFullName());
 
         // Save new user
         return savedUser;

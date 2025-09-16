@@ -17,12 +17,12 @@ public class EmailService {
         this.mailSender = mailSender;
     }
 
-    public void sendWelcomeEmail(String toEmail, String username) {
+    public void sendWelcomeEmail(String toEmail, String fullName) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(fromEmail);
         message.setTo(toEmail);
-        message.setSubject("Welcome to our HCM Job Portal, "  + username + "!");
-        message.setText("Dear " + username + ",\n\n"
+        message.setSubject("Welcome to our HCM Job Portal, "  + fullName + "!");
+        message.setText("Dear " + fullName + ",\n\n"
                 + "Thank you for registering for our HCM portal. We're excited to have you!\n\n"
                 + "You can now log in and start applying for jobs.\n\n"
                 + "Best regards,\n"
@@ -38,9 +38,9 @@ public class EmailService {
         message.setTo(toEmail);
         message.setSubject("Submitted Application for " + jobPosition);
         message.setText("Hi " + fullName + ",\n\n"
-                + "Thank you for applying "
-                + "Applicant Details:"
-                + "Name: " + fullName
+                + "Thank you for applying!!!\n"
+                + "Applicant Details: \n"
+                + "Name: " + fullName + "\n"
                 + "Application ID :\n" + applicationId
                 + "JobTitle " + jobPosition
                 + "Email: " + toEmail

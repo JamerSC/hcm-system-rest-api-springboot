@@ -81,4 +81,8 @@ public class User {
     protected void onUpdate() {
         updatedAt = new Date();
     }
+
+    public String getUserFullName() {
+        return this.firstName + " " + this.lastName;
+    }
 }

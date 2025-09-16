@@ -119,14 +119,15 @@ public class ApplicantServiceImpl implements ApplicantService {
         newApplication.setJob(job);
         newApplication.setUpdatedBy(applicantUser);
 
-        // email notification
-        String email = newApplication.getApplicant().getUser().getEmail();
-        String firstName = newApplication.getApplicant().getFirstName();
-        String lastName = newApplication.getApplicant().getLastName();
-        String fullName = firstName + " " + lastName;
-        emailService.sendSubmittedApplicationEmail(email, fullName, newApplication.getId(), newApplication.getJob().getTitle());
+        Application savedApplication = applicationRepository.save(newApplication);
 
-        applicationRepository.save(newApplication);
+        // email notification
+        String email = savedApplication.getApplicant().getUser().getEmail();
+        String fullName = savedApplication.getApplicant().getApplicantFullName();
+        String jobTitle = savedApplication.getJob().getTitle();
+        long applicationId = savedApplication.getId();
+
+        emailService.sendSubmittedApplicationEmail(email, fullName, applicationId, jobTitle);
     }
 
     private User getUser(Authentication authentication) {

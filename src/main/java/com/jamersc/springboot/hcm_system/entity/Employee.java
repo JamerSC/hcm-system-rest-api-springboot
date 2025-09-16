@@ -81,4 +81,17 @@ public class Employee {
     protected void onUpdate() {
         updatedAt = new Date();
     }
+
+    public String getEmployeeFullName() {
+        return this.firstName.concat(" " + this.lastName);
+    }
+
+    public static void main(String[] args) {
+        // create new object
+        Employee employee = new Employee();
+        employee.setFirstName("John");
+        employee.setLastName("Doe");
+
+        System.out.println(employee.getEmployeeFullName());
+    }
 }

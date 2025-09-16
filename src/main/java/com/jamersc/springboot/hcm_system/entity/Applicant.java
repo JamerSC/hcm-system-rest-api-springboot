@@ -55,4 +55,8 @@ public class Applicant {
     protected void onUpdate() {
         updatedAt = new Date();
     }
+
+    public String getApplicantFullName() {
+        return this.firstName + " " + this.lastName;
+    }
 }
