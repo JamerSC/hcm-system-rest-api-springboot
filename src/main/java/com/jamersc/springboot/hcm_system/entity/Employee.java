@@ -6,6 +6,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "employees")
@@ -24,37 +26,25 @@ public class Employee {
     private String lastName;
     @Column(name = "email")
     private String email;
-
-//    @Column(name = "job_position")
-//    private String jobPosition;
-
-    // job can be assigned to many employees
-    // employee has one job
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "job_id", referencedColumnName = "id")
-    private Job job;
-
-
-//    @Column(name = "department")
-//    private String department;
-
     @Column(name = "hired_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate hiredDate;
     @Column(name = "salary")
     private Double salary;
 
-    // One-to-One relationship to the User entity
-//    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-//    @JoinColumn(name = "user_id", referencedColumnName = "id")
-//    private User user;
-
-    @OneToOne(mappedBy = "employee", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "job_id", referencedColumnName = "id")
+    private Job job;
 
 //    One-to-One relationship to the Contract entity
 //    @OneToOne(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 //    private Contract contract;
+
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Attendance> attendanceRecords = new HashSet<>();
+
+    @OneToOne(mappedBy = "employee", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by_user_id", referencedColumnName = "id")
