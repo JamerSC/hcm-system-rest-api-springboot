@@ -107,6 +107,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/applicants/**").hasRole("APPLICANT") // get applicant profile
                         .requestMatchers(HttpMethod.POST, "/api/v1/applicants/**").hasRole("APPLICANT") // applicants resume
                         .requestMatchers(HttpMethod.PUT, "/api/v1/applicants/**").hasRole("APPLICANT") // applicant profile update
+                        // Attendance
+                        .requestMatchers(HttpMethod.POST, "/api/v1/attendances/**").hasRole("EMPLOYEE")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/attendances/**").hasRole("EMPLOYEE")
                         // All other requests require authentication
                         .anyRequest().authenticated()
         );
