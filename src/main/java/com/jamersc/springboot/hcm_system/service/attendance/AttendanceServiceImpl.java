@@ -1,7 +1,9 @@
 package com.jamersc.springboot.hcm_system.service.attendance;
 
+import com.jamersc.springboot.hcm_system.dto.attendance.AttendanceResponseDTO;
 import com.jamersc.springboot.hcm_system.entity.Attendance;
 import com.jamersc.springboot.hcm_system.entity.Employee;
+import com.jamersc.springboot.hcm_system.mapper.AttendanceMapper;
 import com.jamersc.springboot.hcm_system.repository.AttendanceRepository;
 import com.jamersc.springboot.hcm_system.repository.EmployeeRepository;
 import jakarta.transaction.Transactional;
@@ -18,10 +20,12 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     private final AttendanceRepository attendanceRepository;
     private final EmployeeRepository employeeRepository;
+    private final AttendanceMapper attendanceMapper;
 
-    public AttendanceServiceImpl(AttendanceRepository attendanceRepository, EmployeeRepository employeeRepository) {
+    public AttendanceServiceImpl(AttendanceRepository attendanceRepository, EmployeeRepository employeeRepository, AttendanceMapper attendanceMapper) {
         this.attendanceRepository = attendanceRepository;
         this.employeeRepository = employeeRepository;
+        this.attendanceMapper = attendanceMapper;
     }
 
     @Override
@@ -30,7 +34,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public Attendance checkIn(Long employeeId) {
+    public AttendanceResponseDTO checkIn(Long employeeId) {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new RuntimeException("Employee not found"));
 
@@ -45,11 +49,11 @@ public class AttendanceServiceImpl implements AttendanceService {
         newAttendance.setAttendanceDate(LocalDate.now());
         newAttendance.setCheckInTime(LocalDateTime.now());
 
-        return attendanceRepository.save(newAttendance);
+        return attendanceMapper.entityToResponseDto(attendanceRepository.save(newAttendance));
     }
 
     @Override
-    public Attendance checkOut(Long employeeId) {
+    public AttendanceResponseDTO checkOut(Long employeeId) {
         // find employee
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new RuntimeException("Employee not found"));
@@ -65,7 +69,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 
         attendance.setCheckOutTime(LocalDateTime.now());
 
-        return attendanceRepository.save(attendance);
+        return attendanceMapper.entityToResponseDto(attendanceRepository.save(attendance));
     }
 
 

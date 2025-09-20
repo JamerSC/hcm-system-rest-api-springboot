@@ -1,5 +1,6 @@
 package com.jamersc.springboot.hcm_system.controller;
 
+import com.jamersc.springboot.hcm_system.dto.attendance.AttendanceResponseDTO;
 import com.jamersc.springboot.hcm_system.dto.profile.EmployeeProfileDTO;
 import com.jamersc.springboot.hcm_system.entity.Attendance;
 import com.jamersc.springboot.hcm_system.entity.Employee;
@@ -27,21 +28,21 @@ public class AttendanceController {
     }
 
     @PostMapping("/check-in")
-    public ResponseEntity<Attendance> attendanceCheckIn(Authentication authentication) {
+    public ResponseEntity<AttendanceResponseDTO> attendanceCheckIn(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         EmployeeProfileDTO employee = employeeService.getEmployeeProfileByUsername(userDetails.getUsername());
 
-        Attendance attendanceRecord = attendanceService.checkIn(employee.getId());
+        AttendanceResponseDTO attendanceRecord = attendanceService.checkIn(employee.getId());
 
         return new ResponseEntity<>(attendanceRecord, HttpStatus.OK);
     }
 
     @PatchMapping("/check-out")
-    public ResponseEntity<Attendance> attendanceCheckOut(Authentication authentication) {
+    public ResponseEntity<AttendanceResponseDTO> attendanceCheckOut(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         EmployeeProfileDTO employee = employeeService.getEmployeeProfileByUsername(userDetails.getUsername());
 
-        Attendance attendanceRecord = attendanceService.checkOut(employee.getId());
+        AttendanceResponseDTO attendanceRecord = attendanceService.checkOut(employee.getId());
 
         return new ResponseEntity<>(attendanceRecord, HttpStatus.OK);
     }
