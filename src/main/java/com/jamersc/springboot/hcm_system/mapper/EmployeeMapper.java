@@ -23,6 +23,7 @@ public interface EmployeeMapper {
     @Mapping(target = "jobId", source = "job.id")
     EmployeeDTO entityToDto(Employee employee);
 
+    @Mapping(target = "attendanceRecords", ignore = true)
     @Mapping(target = "job", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
@@ -49,6 +50,7 @@ public interface EmployeeMapper {
     @Mapping(target = "jobId", source = "job.id")
     EmployeeCreateDTO createEntityToDto(Employee employee);
 
+    @Mapping(target = "attendanceRecords", ignore = true)
     @Mapping(target = "job", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
@@ -69,6 +71,7 @@ public interface EmployeeMapper {
     @Mapping(target = "jobId", source = "job.id")
     EmployeeUpdateDTO updateEntityToDto(Employee employee);
 
+    @Mapping(target = "attendanceRecords", ignore = true)
     @Mapping(target = "job", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)

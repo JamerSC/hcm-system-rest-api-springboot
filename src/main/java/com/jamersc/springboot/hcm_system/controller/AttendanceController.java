@@ -10,10 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/attendances")
@@ -26,6 +25,13 @@ public class AttendanceController {
         this.attendanceService = attendanceService;
         this.employeeService = employeeService;
     }
+
+    @GetMapping("/")
+    public ResponseEntity<List<AttendanceResponseDTO>> getAllAttendance() {
+        List<AttendanceResponseDTO> attendances = attendanceService.getAllAttendance();
+        return new ResponseEntity<>(attendances, HttpStatus.OK);
+    }
+
 
     @PostMapping("/check-in")
     public ResponseEntity<AttendanceResponseDTO> attendanceCheckIn(Authentication authentication) {

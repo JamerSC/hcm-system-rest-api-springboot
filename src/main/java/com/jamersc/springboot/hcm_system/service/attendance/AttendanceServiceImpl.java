@@ -29,8 +29,8 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public List<Attendance> getAllAttendances() {
-        return attendanceRepository.findAll();
+    public List<AttendanceResponseDTO> getAllAttendance() {
+        return attendanceMapper.entitiesToResponseDtos(attendanceRepository.findAll());
     }
 
     @Override

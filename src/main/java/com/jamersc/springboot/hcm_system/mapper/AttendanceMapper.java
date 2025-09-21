@@ -6,17 +6,21 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring",
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface AttendanceMapper {
 
-    @Mapping(target = "employeeId", ignore = true)
-    @Mapping(target = "employeeFullName", ignore = true)
+    @Mapping(target = "employeeId", source = "employee.id")
+    @Mapping(target = "employeeFullName", source = "employee.employeeFullName")
     AttendanceResponseDTO entityToResponseDto(Attendance attendance);
 
 
     @Mapping(target = "employee", ignore = true)
     @Mapping(target = "attendanceStatus", ignore = true)
     Attendance responseDtoToEntity(AttendanceResponseDTO dto);
+
+    List<AttendanceResponseDTO> entitiesToResponseDtos(List<Attendance> attendances);
 
 }

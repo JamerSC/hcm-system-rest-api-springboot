@@ -1,5 +1,6 @@
 package com.jamersc.springboot.hcm_system.dto.attendance;
 
+import com.jamersc.springboot.hcm_system.entity.AttendanceStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,4 +20,5 @@ public class AttendanceResponseDTO {
     private LocalDate attendanceDate;
     private LocalDateTime checkInTime;
     private LocalDateTime checkOutTime;
+    //private AttendanceStatus attendanceStatus;
 }

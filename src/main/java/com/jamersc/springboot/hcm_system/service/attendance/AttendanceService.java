@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface AttendanceService {
 
-    List<Attendance> getAllAttendances();
+    List<AttendanceResponseDTO> getAllAttendance();
     AttendanceResponseDTO checkIn(Long employeeId);
     AttendanceResponseDTO checkOut(Long employeeId);
 }
