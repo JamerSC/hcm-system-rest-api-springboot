@@ -1,2 +1,4 @@
-package com.jamersc.springboot.hcm_system.dto.leave;public class LeaveDTO {
+package com.jamersc.springboot.hcm_system.dto.leave;
+
+public class LeaveRequestDTO {
 }
