@@ -42,6 +42,7 @@ public interface LeaveMapper {
     @Mapping(target = "approvedBy", ignore = true)
     LeaveRequest createDtoToEntity(LeaveRequestCreateDTO dto);
 
+
     List<LeaveRequestResponseDTO> entitiesToResponseDtos(List<LeaveRequest> leaveRequests);
 
 }
