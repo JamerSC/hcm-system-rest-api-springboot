@@ -61,6 +61,7 @@ public class LeaveServiceImpl implements LeaveService {
         leaveRequest.setLeaveType(dto.getLeaveType());
         leaveRequest.setStartDate(dto.getStartDate());
         leaveRequest.setEndDate(dto.getEndDate());
+        leaveRequest.setReason(dto.getReason());
         leaveRequest.setStatus(LeaveStatus.PENDING);
         leaveRequest.setSubmittedAt(new Date());
         leaveRequest.setCreatedBy(currentUser);
