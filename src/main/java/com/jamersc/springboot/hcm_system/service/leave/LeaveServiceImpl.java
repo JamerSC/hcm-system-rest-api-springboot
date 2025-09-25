@@ -1,16 +1,21 @@
 package com.jamersc.springboot.hcm_system.service.leave;
 
-import com.jamersc.springboot.hcm_system.dto.leave.LeaveRequestCreateDTO;
-import com.jamersc.springboot.hcm_system.dto.leave.LeaveRequestDTO;
-import com.jamersc.springboot.hcm_system.dto.leave.LeaveRequestResponseDTO;
-import com.jamersc.springboot.hcm_system.dto.leave.LeaveRequestUpdateDTO;
+import com.jamersc.springboot.hcm_system.dto.leave.LeaveCreateDTO;
+import com.jamersc.springboot.hcm_system.dto.leave.LeaveResponseDTO;
+import com.jamersc.springboot.hcm_system.dto.leave.LeaveUpdateDTO;
+import com.jamersc.springboot.hcm_system.entity.Leave;
+import com.jamersc.springboot.hcm_system.entity.LeaveStatus;
+import com.jamersc.springboot.hcm_system.entity.User;
 import com.jamersc.springboot.hcm_system.mapper.LeaveMapper;
 import com.jamersc.springboot.hcm_system.repository.EmployeeRepository;
-import com.jamersc.springboot.hcm_system.repository.LeaveRequestRepository;
+import com.jamersc.springboot.hcm_system.repository.LeaveRepository;
+import com.jamersc.springboot.hcm_system.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,48 +23,66 @@ import java.util.Optional;
 @Transactional
 public class LeaveServiceImpl implements LeaveService {
 
-    private final LeaveRequestRepository leaveRequestRepository;
+    private final LeaveRepository leaveRepository;
+    private final UserRepository userRepository;
     private final EmployeeRepository employeeRepository;
     private final LeaveMapper leaveMapper;
 
-    public LeaveServiceImpl(LeaveRequestRepository leaveRequestRepository, EmployeeRepository employeeRepository, LeaveMapper leaveMapper) {
-        this.leaveRequestRepository = leaveRequestRepository;
+    public LeaveServiceImpl(LeaveRepository leaveRepository, UserRepository userRepository, EmployeeRepository employeeRepository, LeaveMapper leaveMapper) {
+        this.leaveRepository = leaveRepository;
+        this.userRepository = userRepository;
         this.employeeRepository = employeeRepository;
         this.leaveMapper = leaveMapper;
     }
 
 
     @Override
-    public List<LeaveRequestResponseDTO> getAllLeaveRequest() {
+    public List<LeaveResponseDTO> getAllLeaveRequest() {
         return leaveMapper.entitiesToResponseDtos(
-                leaveRequestRepository.findAll()
+                leaveRepository.findAll()
         );
     }
 
     @Override
-    public Optional<LeaveRequestResponseDTO> getLeaveRequestById(Long id) {
-        return Optional.of(leaveRequestRepository.findById(id)
+    public Optional<LeaveResponseDTO> getLeaveRequestById(Long id) {
+        return Optional.of(leaveRepository.findById(id)
                 .map(leaveMapper::entityToResponseDto))
                 .orElseThrow(()-> new RuntimeException("Leave request not found"));
     }
 
     @Override
-    public LeaveRequestResponseDTO submitLeaveRequest(LeaveRequestCreateDTO dto, Authentication authentication) {
+    public LeaveResponseDTO submitLeaveRequest(LeaveCreateDTO dto, Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User currentUser = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Leave leaveRequest = new Leave();
+        leaveRequest.setEmployee(currentUser.getEmployee());
+        leaveRequest.setLeaveType(dto.getLeaveType());
+        leaveRequest.setStartDate(dto.getStartDate());
+        leaveRequest.setEndDate(dto.getEndDate());
+        leaveRequest.setStatus(LeaveStatus.PENDING);
+        leaveRequest.setSubmittedAt(new Date());
+        leaveRequest.setCreatedBy(currentUser);
+        leaveRequest.setUpdatedBy(currentUser);
+
+        Leave submitted = leaveRepository.save(leaveRequest);
+
+        return leaveMapper.entityToResponseDto(submitted);
+    }
+
+    @Override
+    public LeaveResponseDTO updateLeaveRequest(LeaveUpdateDTO dto, Authentication authentication) {
         return null;
     }
 
     @Override
-    public LeaveRequestResponseDTO updateLeaveRequest(LeaveRequestUpdateDTO dto, Authentication authentication) {
+    public LeaveResponseDTO approveLeaveRequest(Long id, Authentication authentication) {
         return null;
     }
 
     @Override
-    public LeaveRequestResponseDTO approveLeaveRequest(Long id, Authentication authentication) {
-        return null;
-    }
-
-    @Override
-    public LeaveRequestResponseDTO rejectLeaveRequest(Long id, Authentication authentication) {
+    public LeaveResponseDTO rejectLeaveRequest(Long id, Authentication authentication) {
         return null;
     }
 

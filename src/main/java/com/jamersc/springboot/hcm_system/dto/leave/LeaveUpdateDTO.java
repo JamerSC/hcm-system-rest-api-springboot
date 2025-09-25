@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LeaveRequestUpdateDTO {
+public class LeaveUpdateDTO {
     @NotBlank(message = "Employee is required")
     private Long id;
     @NotBlank(message = "Leave type is required")

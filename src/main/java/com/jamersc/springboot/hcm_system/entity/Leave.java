@@ -10,12 +10,12 @@ import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
-@Table(name = "leave_requests")
+@Table(name = "leaves")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LeaveRequest {
+public class Leave {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -44,7 +44,7 @@ public class LeaveRequest {
     private Date submittedAt = new Date();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "approved_by_user_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "approved_by_user_id", referencedColumnName = "id", nullable = true)
     private User approvedBy;
 
     @ManyToOne(fetch = FetchType.LAZY)

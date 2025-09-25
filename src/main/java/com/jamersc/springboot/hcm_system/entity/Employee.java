@@ -44,7 +44,7 @@ public class Employee {
     private Set<Attendance> attendanceRecords = new HashSet<>();
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<LeaveRequest> leaveRequests = new HashSet<>();
+    private Set<Leave> leaves = new HashSet<>();
 
     @OneToOne(mappedBy = "employee", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private User user;

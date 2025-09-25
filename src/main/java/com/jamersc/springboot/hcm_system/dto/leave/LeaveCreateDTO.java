@@ -1,30 +1,30 @@
 package com.jamersc.springboot.hcm_system.dto.leave;
 
-import com.jamersc.springboot.hcm_system.entity.Employee;
 import com.jamersc.springboot.hcm_system.entity.LeaveStatus;
 import com.jamersc.springboot.hcm_system.entity.LeaveType;
-import com.jamersc.springboot.hcm_system.entity.User;
-import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LeaveRequestResponseDTO {
-    private Long id;
-    private String employeeFullName;
+public class LeaveCreateDTO {
+//    @NotBlank(message = "Employee is required")
+//    private Long id;
+    @NotNull(message = "Leave type is required")
     private LeaveType leaveType;
+    @NotNull(message = "Start date is required")
     private LocalDate startDate;
+    @NotNull(message = "End date is required")
     private LocalDate endDate;
+    @NotBlank(message = "Reason is required")
     private String reason;
-    private LeaveStatus status;
-    private Date submittedAt;
-    private User approvedBy;
+//    private LeaveStatus status = LeaveStatus.PENDING;
 }

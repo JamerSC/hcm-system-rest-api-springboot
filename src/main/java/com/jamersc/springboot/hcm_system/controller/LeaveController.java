@@ -1,8 +1,8 @@
 package com.jamersc.springboot.hcm_system.controller;
 
-import com.jamersc.springboot.hcm_system.dto.leave.LeaveRequestCreateDTO;
-import com.jamersc.springboot.hcm_system.dto.leave.LeaveRequestResponseDTO;
-import com.jamersc.springboot.hcm_system.dto.leave.LeaveRequestUpdateDTO;
+import com.jamersc.springboot.hcm_system.dto.leave.LeaveCreateDTO;
+import com.jamersc.springboot.hcm_system.dto.leave.LeaveResponseDTO;
+import com.jamersc.springboot.hcm_system.dto.leave.LeaveUpdateDTO;
 import com.jamersc.springboot.hcm_system.service.leave.LeaveService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -24,31 +24,31 @@ public class LeaveController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<LeaveRequestResponseDTO>> getAllLeaveRequests() {
-        List<LeaveRequestResponseDTO> leaveRequests = leaveService.getAllLeaveRequest();
+    public ResponseEntity<List<LeaveResponseDTO>> getAllLeaveRequests() {
+        List<LeaveResponseDTO> leaveRequests = leaveService.getAllLeaveRequest();
         return new ResponseEntity<>(leaveRequests, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<LeaveRequestResponseDTO>> getLeaveRequestsById(@PathVariable Long id) {
-        Optional<LeaveRequestResponseDTO> leaveRequest = leaveService.getLeaveRequestById(id);
+    public ResponseEntity<Optional<LeaveResponseDTO>> getLeaveRequestsById(@PathVariable Long id) {
+        Optional<LeaveResponseDTO> leaveRequest = leaveService.getLeaveRequestById(id);
         return new ResponseEntity<>(leaveRequest, HttpStatus.OK);
     }
 
 
     @PostMapping("/")
-    public ResponseEntity<LeaveRequestResponseDTO> submitLeaveRequest(
-            @Valid @RequestBody LeaveRequestCreateDTO createDTO,
+    public ResponseEntity<LeaveResponseDTO> submitLeaveRequest(
+            @Valid @RequestBody LeaveCreateDTO createDTO,
             Authentication authentication) {
-        LeaveRequestResponseDTO leaveRequest =
+        LeaveResponseDTO leaveRequest =
                 leaveService.submitLeaveRequest(createDTO, authentication);
         return new ResponseEntity<>(leaveRequest, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<LeaveRequestResponseDTO> updateLeaveRequest(
-            @Valid @RequestBody LeaveRequestUpdateDTO updateDTO, Authentication authentication) {
-        LeaveRequestResponseDTO updateLeaveRequest = leaveService.updateLeaveRequest(updateDTO, authentication);
+    public ResponseEntity<LeaveResponseDTO> updateLeaveRequest(
+            @Valid @RequestBody LeaveUpdateDTO updateDTO, Authentication authentication) {
+        LeaveResponseDTO updateLeaveRequest = leaveService.updateLeaveRequest(updateDTO, authentication);
         return new ResponseEntity<>(updateLeaveRequest, HttpStatus.OK);
     }
 
@@ -69,7 +69,7 @@ public class LeaveController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteLeaveRequestById(@PathVariable Long id) {
-        Optional<LeaveRequestResponseDTO> tempLeaveRequest = leaveService.getLeaveRequestById(id);
+        Optional<LeaveResponseDTO> tempLeaveRequest = leaveService.getLeaveRequestById(id);
 
         if (tempLeaveRequest.isEmpty()) {
             return ResponseEntity.notFound().build();
