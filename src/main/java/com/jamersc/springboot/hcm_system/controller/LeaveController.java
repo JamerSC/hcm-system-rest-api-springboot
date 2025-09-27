@@ -3,6 +3,7 @@ package com.jamersc.springboot.hcm_system.controller;
 import com.jamersc.springboot.hcm_system.dto.leave.LeaveCreateDTO;
 import com.jamersc.springboot.hcm_system.dto.leave.LeaveResponseDTO;
 import com.jamersc.springboot.hcm_system.dto.leave.LeaveUpdateDTO;
+import com.jamersc.springboot.hcm_system.entity.Leave;
 import com.jamersc.springboot.hcm_system.service.leave.LeaveService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -50,7 +51,7 @@ public class LeaveController {
             @PathVariable Long id,
             @Valid @RequestBody LeaveUpdateDTO updateDTO,
             Authentication authentication) {
-        LeaveResponseDTO updateLeaveRequest = leaveService.updateLeaveRequest(updateDTO, authentication);
+        LeaveResponseDTO updateLeaveRequest = leaveService.updateLeaveRequest(id, updateDTO, authentication);
         return new ResponseEntity<>(updateLeaveRequest, HttpStatus.OK);
     }
 

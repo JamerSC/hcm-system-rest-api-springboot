@@ -12,7 +12,7 @@ public interface LeaveService {
     List<LeaveResponseDTO> getAllLeaveRequest();
     Optional<LeaveResponseDTO> getLeaveRequestById(Long id);
     LeaveResponseDTO submitLeaveRequest(LeaveCreateDTO dto, Authentication authentication);
-    LeaveResponseDTO updateLeaveRequest(LeaveUpdateDTO dto, Authentication authentication);
+    LeaveResponseDTO updateLeaveRequest(Long id, LeaveUpdateDTO dto, Authentication authentication);
     LeaveResponseDTO approveLeaveRequest(Long id, Authentication authentication);
     LeaveResponseDTO rejectLeaveRequest(Long id, Authentication authentication);
     void deleteLeaveRequestById(Long id);

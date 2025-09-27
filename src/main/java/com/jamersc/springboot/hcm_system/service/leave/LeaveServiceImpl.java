@@ -73,20 +73,19 @@ public class LeaveServiceImpl implements LeaveService {
     }
 
     @Override
-    public LeaveResponseDTO updateLeaveRequest(LeaveUpdateDTO dto, Authentication authentication) {
+    public LeaveResponseDTO updateLeaveRequest(Long id, LeaveUpdateDTO dto, Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User currentUser = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-//        // 1. Find existing leave request
-//        Leave leaveRequest = leaveRepository.findById()
-//                .orElseThrow(() -> new RuntimeException("Leave request not found"));
-//
-//        // 2. Ensure the logged-in user owns the leave request (optional security check)
-//        if (!leaveRequest.getEmployee().getId().equals(currentUser.getEmployee().getId())) {
-//            throw new RuntimeException("You are not allowed to update this leave request");
-//        }
-        Leave leaveRequest = new Leave();
+        // 1. Find existing leave request
+        Leave leaveRequest = leaveRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Leave request not found"));
+
+        // 2. Ensure the logged-in user owns the leave request (optional security check)
+        if (!leaveRequest.getEmployee().getId().equals(currentUser.getEmployee().getId())) {
+            throw new RuntimeException("You are not allowed to update this leave request");
+        }
         // 3. Update fields
         leaveRequest.setLeaveType(dto.getLeaveType());
         leaveRequest.setStartDate(dto.getStartDate());
