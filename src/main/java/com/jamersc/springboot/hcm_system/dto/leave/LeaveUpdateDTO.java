@@ -16,9 +16,9 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LeaveUpdateDTO {
-    @NotBlank(message = "Employee is required")
-    private Long id;
-    @NotBlank(message = "Leave type is required")
+//    @NotBlank(message = "Employee is required")
+//    private Long id;
+    @NotNull(message = "Leave type is required")
     private LeaveType leaveType;
     @NotNull(message = "Start date is required")
     private LocalDate startDate;
@@ -26,5 +26,5 @@ public class LeaveUpdateDTO {
     private LocalDate endDate;
     @NotBlank(message = "Reason is required")
     private String reason;
-    private LeaveStatus status = LeaveStatus.PENDING;
+//    private LeaveStatus status = LeaveStatus.PENDING;
 }

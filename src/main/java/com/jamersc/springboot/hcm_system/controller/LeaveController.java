@@ -47,7 +47,9 @@ public class LeaveController {
 
     @PutMapping("/{id}")
     public ResponseEntity<LeaveResponseDTO> updateLeaveRequest(
-            @Valid @RequestBody LeaveUpdateDTO updateDTO, Authentication authentication) {
+            @PathVariable Long id,
+            @Valid @RequestBody LeaveUpdateDTO updateDTO,
+            Authentication authentication) {
         LeaveResponseDTO updateLeaveRequest = leaveService.updateLeaveRequest(updateDTO, authentication);
         return new ResponseEntity<>(updateLeaveRequest, HttpStatus.OK);
     }
