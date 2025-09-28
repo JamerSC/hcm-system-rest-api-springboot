@@ -55,15 +55,19 @@ public class LeaveController {
         return new ResponseEntity<>(updateLeaveRequest, HttpStatus.OK);
     }
 
-//    @PatchMapping("/")
-//    public String approveLeaveRequest() {
-//        return null;
-//    }
-//
-//    @PatchMapping("/")
-//    public String rejectLeaveRequest() {
-//        return null;
-//    }
+    @PatchMapping("/{id}/approve-leave")
+    public ResponseEntity<LeaveResponseDTO> approveLeaveRequest(
+            @PathVariable Long id, Authentication authentication) {
+        LeaveResponseDTO approvedLeaveRequest = leaveService.approveLeaveRequest(id, authentication);
+        return new ResponseEntity<>(approvedLeaveRequest, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}/reject-leave")
+    public ResponseEntity<LeaveResponseDTO> rejectLeaveRequest(
+            @PathVariable Long id, Authentication authentication) {
+        LeaveResponseDTO rejectedLeaveRequest = leaveService.rejectLeaveRequest(id, authentication);
+        return new ResponseEntity<>(rejectedLeaveRequest, HttpStatus.OK);
+    }
 
     @GetMapping("/me")
     public String getMyLeaveRequest() {
@@ -77,6 +81,8 @@ public class LeaveController {
         if (tempLeaveRequest.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
+
+        leaveService.deleteLeaveRequestById(id);
 
         return ResponseEntity.noContent().build();
     }

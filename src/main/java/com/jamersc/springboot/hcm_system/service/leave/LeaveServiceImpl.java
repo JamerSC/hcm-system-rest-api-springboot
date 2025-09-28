@@ -52,9 +52,7 @@ public class LeaveServiceImpl implements LeaveService {
 
     @Override
     public LeaveResponseDTO submitLeaveRequest(LeaveCreateDTO dto, Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User currentUser = userRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User currentUser = getUser(authentication);
 
         Leave leaveRequest = new Leave();
         leaveRequest.setEmployee(currentUser.getEmployee());
@@ -74,9 +72,7 @@ public class LeaveServiceImpl implements LeaveService {
 
     @Override
     public LeaveResponseDTO updateLeaveRequest(Long id, LeaveUpdateDTO dto, Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User currentUser = userRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User currentUser = getUser(authentication);
 
         // 1. Find existing leave request
         Leave leaveRequest = leaveRepository.findById(id)
@@ -102,16 +98,44 @@ public class LeaveServiceImpl implements LeaveService {
 
     @Override
     public LeaveResponseDTO approveLeaveRequest(Long id, Authentication authentication) {
-        return null;
+        User currentUser = getUser(authentication);
+
+        Leave requestedLeave = leaveRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Leave not found"));
+
+        requestedLeave.setStatus(LeaveStatus.APPROVED);
+        requestedLeave.setApprovedBy(currentUser);
+        requestedLeave.setUpdatedBy(currentUser);
+
+        Leave approvedLeave = leaveRepository.save(requestedLeave);
+
+        return leaveMapper.entityToResponseDto(approvedLeave);
     }
 
     @Override
     public LeaveResponseDTO rejectLeaveRequest(Long id, Authentication authentication) {
-        return null;
+        User currentUser = getUser(authentication);
+
+        Leave requestedLeave = leaveRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Leave not found"));
+
+        requestedLeave.setStatus(LeaveStatus.REJECTED);
+        requestedLeave.setApprovedBy(currentUser);
+        requestedLeave.setUpdatedBy(currentUser);
+
+        Leave rejectedLeave = leaveRepository.save(requestedLeave);
+
+        return leaveMapper.entityToResponseDto(rejectedLeave);
     }
 
     @Override
     public void deleteLeaveRequestById(Long id) {
+        leaveRepository.deleteById(id);
+    }
 
+    private User getUser(Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        return userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }

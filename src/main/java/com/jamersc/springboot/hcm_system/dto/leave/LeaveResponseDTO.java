@@ -1,5 +1,7 @@
 package com.jamersc.springboot.hcm_system.dto.leave;
 
+import com.jamersc.springboot.hcm_system.dto.user.UserDTO;
+import com.jamersc.springboot.hcm_system.dto.user.UserResponseDTO;
 import com.jamersc.springboot.hcm_system.entity.LeaveStatus;
 import com.jamersc.springboot.hcm_system.entity.LeaveType;
 import com.jamersc.springboot.hcm_system.entity.User;
@@ -24,5 +26,5 @@ public class LeaveResponseDTO {
     private String reason;
     private LeaveStatus status;
     private Date submittedAt;
-    private User approvedBy;
+    private UserResponseDTO approvedBy;
 }

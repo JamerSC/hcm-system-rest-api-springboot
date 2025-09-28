@@ -21,9 +21,11 @@ public interface LeaveMapper {
     @Mapping(target = "createdAt", ignore = true)
     Leave dtoToEntity(LeaveDTO dto);
 
+    @Mapping(target = "approvedBy", source = "approvedBy")
     @Mapping(target = "employeeFullName", source = "employee.employeeFullName")
     LeaveResponseDTO entityToResponseDto(Leave leave);
 
+    @Mapping(target = "approvedBy", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "employee", ignore = true)
