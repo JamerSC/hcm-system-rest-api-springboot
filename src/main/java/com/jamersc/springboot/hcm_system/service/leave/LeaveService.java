@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface LeaveService {
     List<LeaveResponseDTO> getAllLeaveRequest();
     Optional<LeaveResponseDTO> getLeaveRequestById(Long id);
+    List<LeaveResponseDTO> getMyLeaveRequests(Authentication authentication);
     LeaveResponseDTO submitLeaveRequest(LeaveCreateDTO dto, Authentication authentication);
     LeaveResponseDTO updateLeaveRequest(Long id, LeaveUpdateDTO dto, Authentication authentication);
     LeaveResponseDTO approveLeaveRequest(Long id, Authentication authentication);

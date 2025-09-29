@@ -46,6 +46,12 @@ public class LeaveController {
         return new ResponseEntity<>(leaveRequest, HttpStatus.CREATED);
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<List<LeaveResponseDTO>> getMyLeaveRequests(Authentication authentication) {
+        List<LeaveResponseDTO> requestedLeaves = leaveService.getMyLeaveRequests(authentication);
+        return new ResponseEntity<>(requestedLeaves, HttpStatus.OK);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<LeaveResponseDTO> updateLeaveRequest(
             @PathVariable Long id,
@@ -67,11 +73,6 @@ public class LeaveController {
             @PathVariable Long id, Authentication authentication) {
         LeaveResponseDTO rejectedLeaveRequest = leaveService.rejectLeaveRequest(id, authentication);
         return new ResponseEntity<>(rejectedLeaveRequest, HttpStatus.OK);
-    }
-
-    @GetMapping("/me")
-    public String getMyLeaveRequest() {
-        return null;
     }
 
     @DeleteMapping("/{id}")
