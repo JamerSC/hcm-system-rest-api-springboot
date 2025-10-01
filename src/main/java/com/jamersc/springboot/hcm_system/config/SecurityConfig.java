@@ -110,6 +110,14 @@ public class SecurityConfig {
                         // Attendance
                         .requestMatchers(HttpMethod.POST, "/api/v1/attendances/**").hasRole("EMPLOYEE")
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/attendances/**").hasRole("EMPLOYEE")
+                        // Leaves
+                        .requestMatchers(HttpMethod.GET, "/api/v1/leaves/me").hasRole("EMPLOYEE")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/leaves/{id}").hasRole("EMPLOYEE")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/leaves/").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/leaves/").hasRole("EMPLOYEE")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/leaves/{id}").hasRole("EMPLOYEE")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/leaves/**").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/leaves/**").hasRole("ADMIN")
                         // All other requests require authentication
                         .anyRequest().authenticated()
         );
