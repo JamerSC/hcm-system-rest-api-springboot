@@ -32,6 +32,12 @@ public class AttendanceController {
         return new ResponseEntity<>(attendances, HttpStatus.OK);
     }
 
+    @GetMapping("/me/profile")
+    public ResponseEntity<List<AttendanceResponseDTO>> getMyAttendances(Authentication authentication) {
+        List<AttendanceResponseDTO> myAttendances = attendanceService.getMyAttendances(authentication);
+        return new ResponseEntity<>(myAttendances, HttpStatus.OK);
+    }
+
 
     @PostMapping("/check-in")
     public ResponseEntity<AttendanceResponseDTO> attendanceCheckIn(Authentication authentication) {

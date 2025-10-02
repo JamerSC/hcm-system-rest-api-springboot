@@ -3,10 +3,14 @@ package com.jamersc.springboot.hcm_system.service.attendance;
 import com.jamersc.springboot.hcm_system.dto.attendance.AttendanceResponseDTO;
 import com.jamersc.springboot.hcm_system.entity.Attendance;
 import com.jamersc.springboot.hcm_system.entity.Employee;
+import com.jamersc.springboot.hcm_system.entity.User;
 import com.jamersc.springboot.hcm_system.mapper.AttendanceMapper;
 import com.jamersc.springboot.hcm_system.repository.AttendanceRepository;
 import com.jamersc.springboot.hcm_system.repository.EmployeeRepository;
+import com.jamersc.springboot.hcm_system.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -20,17 +24,30 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     private final AttendanceRepository attendanceRepository;
     private final EmployeeRepository employeeRepository;
+    private final UserRepository userRepository;
     private final AttendanceMapper attendanceMapper;
 
-    public AttendanceServiceImpl(AttendanceRepository attendanceRepository, EmployeeRepository employeeRepository, AttendanceMapper attendanceMapper) {
+    public AttendanceServiceImpl(AttendanceRepository attendanceRepository, EmployeeRepository employeeRepository, UserRepository userRepository, AttendanceMapper attendanceMapper) {
         this.attendanceRepository = attendanceRepository;
         this.employeeRepository = employeeRepository;
+        this.userRepository = userRepository;
         this.attendanceMapper = attendanceMapper;
     }
 
     @Override
     public List<AttendanceResponseDTO> getAllAttendance() {
         return attendanceMapper.entitiesToResponseDtos(attendanceRepository.findAll());
+    }
+
+    @Override
+    public List<AttendanceResponseDTO> getMyAttendances(Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User currentUser = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("User nof found"));
+
+        List<Attendance> myAttendances = attendanceRepository.findByEmployee(currentUser.getEmployee());
+
+        return attendanceMapper.entitiesToResponseDtos(myAttendances);
     }
 
     @Override

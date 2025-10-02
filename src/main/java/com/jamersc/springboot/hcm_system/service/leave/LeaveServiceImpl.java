@@ -54,9 +54,9 @@ public class LeaveServiceImpl implements LeaveService {
     public List<LeaveResponseDTO> getMyLeaveRequests(Authentication authentication) {
         User currentUser = getUser(authentication);
 
-        List<Leave> requestedLeaves = leaveRepository.findByEmployee(currentUser.getEmployee());
+        List<Leave> myLeaveRequests = leaveRepository.findByEmployee(currentUser.getEmployee());
 
-        return leaveMapper.entitiesToResponseDtos(requestedLeaves);
+        return leaveMapper.entitiesToResponseDtos(myLeaveRequests);
     }
 
     @Override

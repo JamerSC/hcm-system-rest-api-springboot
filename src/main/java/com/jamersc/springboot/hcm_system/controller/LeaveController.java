@@ -46,7 +46,7 @@ public class LeaveController {
         return new ResponseEntity<>(leaveRequest, HttpStatus.CREATED);
     }
 
-    @GetMapping("/me")
+    @GetMapping("/me/profile")
     public ResponseEntity<List<LeaveResponseDTO>> getMyLeaveRequests(Authentication authentication) {
         List<LeaveResponseDTO> requestedLeaves = leaveService.getMyLeaveRequests(authentication);
         return new ResponseEntity<>(requestedLeaves, HttpStatus.OK);
