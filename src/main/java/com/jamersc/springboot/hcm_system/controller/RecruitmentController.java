@@ -4,6 +4,9 @@ import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantDto;
 import com.jamersc.springboot.hcm_system.dto.application.ApplicationResponseDTO;
 import com.jamersc.springboot.hcm_system.service.applicant.ApplicantService;
 import com.jamersc.springboot.hcm_system.service.application.ApplicationService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -24,12 +27,9 @@ public class RecruitmentController {
     }
 
     @GetMapping("/applicants")
-    public ResponseEntity<List<ApplicantDto>> getAllApplicants() {
-        List<ApplicantDto> listOfApplicants = applicantService.getAllApplicant();
-
-        if (listOfApplicants.isEmpty()) {
-            return ResponseEntity.noContent().build(); // No Content - HTTP 204
-        }
+    public ResponseEntity<Page<ApplicantDto>> getAllApplicants(
+            @PageableDefault(page = 0, size = 10, sort = "lastName") Pageable pageable) {
+        Page<ApplicantDto> listOfApplicants = applicantService.getAllApplicant(pageable);
         return new ResponseEntity<>(listOfApplicants, HttpStatus.OK);
     }
 
@@ -42,8 +42,9 @@ public class RecruitmentController {
 
     /*** APPLICATION **/
     @GetMapping("/applications")
-    public ResponseEntity<List<ApplicationResponseDTO>> getAllApplicationsSubmitted() {
-        List<ApplicationResponseDTO> applications = applicationService.getAllApplication();
+    public ResponseEntity<Page<ApplicationResponseDTO>> getAllApplicationsSubmitted(
+            @PageableDefault(page = 0, size = 10, sort = "status") Pageable pageable) {
+        Page<ApplicationResponseDTO> applications = applicationService.getAllApplication(pageable);
         return new ResponseEntity<>(applications, HttpStatus.OK);
     }
 

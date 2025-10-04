@@ -3,6 +3,8 @@ package com.jamersc.springboot.hcm_system.service.applicant;
 import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantDto;
 import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantProfileDTO;
 import com.jamersc.springboot.hcm_system.dto.application.ApplicationResponseDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 
 import java.util.List;
@@ -10,7 +12,7 @@ import java.util.Optional;
 
 public interface ApplicantService {
 
-    List<ApplicantDto> getAllApplicant(); // for admin/hr role
+    Page<ApplicantDto> getAllApplicant(Pageable pageable); // for admin/hr role
     Optional<ApplicantDto> getApplicantById(Long id); // for admin/hr role
     ApplicantProfileDTO getApplicantProfile(String username);
     void updateApplicantProfile(String username, ApplicantProfileDTO profileDTO);

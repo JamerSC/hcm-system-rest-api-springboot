@@ -12,6 +12,8 @@ import com.jamersc.springboot.hcm_system.repository.JobRepository;
 import com.jamersc.springboot.hcm_system.repository.UserRepository;
 import com.jamersc.springboot.hcm_system.service.email.EmailService;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -42,10 +44,12 @@ public class ApplicantServiceImpl implements ApplicantService {
         this.emailService = emailService;
     }
 
-
     @Override
-    public List<ApplicantDto> getAllApplicant() {
-        return applicantMapper.entityToApplicantDtoList(applicantRepository.findAll());
+    public Page<ApplicantDto> getAllApplicant(Pageable pageable) {
+        // fetch applicant from repository
+        Page<Applicant> applicants = applicantRepository.findAll(pageable);
+        // map the Page<Applicant> to Page<JobDTO>
+        return applicants.map(applicantMapper::entityToApplicantDto);
     }
 
     @Override

@@ -1,13 +1,15 @@
 package com.jamersc.springboot.hcm_system.service.application;
 
 import com.jamersc.springboot.hcm_system.dto.application.ApplicationResponseDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface ApplicationService {
-    List<ApplicationResponseDTO> getAllApplication();
+    Page<ApplicationResponseDTO> getAllApplication(Pageable pageable);
     Optional<ApplicationResponseDTO> getApplicationById(Long id);
     ApplicationResponseDTO initialQualification(Long id, Authentication authentication);
     ApplicationResponseDTO firstInterview(Long id, Authentication authentication);

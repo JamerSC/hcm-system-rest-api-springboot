@@ -5,6 +5,8 @@ import com.jamersc.springboot.hcm_system.entity.*;
 import com.jamersc.springboot.hcm_system.mapper.ApplicationMapper;
 import com.jamersc.springboot.hcm_system.repository.*;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -33,11 +35,19 @@ public class ApplicationServiceImpl implements ApplicationService {
         this.jobRepository = jobRepository;
     }
 
+//    @Override
+//    public List<ApplicationResponseDTO> getAllApplication() {
+//        return applicationMapper.entitiesToResponseDtos(
+//                applicationRepository.findAll()
+//        );
+//    }
+
     @Override
-    public List<ApplicationResponseDTO> getAllApplication() {
-        return applicationMapper.entitiesToResponseDtos(
-                applicationRepository.findAll()
-        );
+    public Page<ApplicationResponseDTO> getAllApplication(Pageable pageable) {
+        // fetch application
+        Page<Application> applications = applicationRepository.findAll(pageable);
+        // map application entity page to page dto
+        return applications.map(applicationMapper::entityToApplicationResponseDto);
     }
 
     @Override
