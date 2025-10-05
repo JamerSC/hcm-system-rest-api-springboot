@@ -11,6 +11,8 @@ import com.jamersc.springboot.hcm_system.repository.EmployeeRepository;
 import com.jamersc.springboot.hcm_system.repository.LeaveRepository;
 import com.jamersc.springboot.hcm_system.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -37,10 +39,9 @@ public class LeaveServiceImpl implements LeaveService {
 
 
     @Override
-    public List<LeaveResponseDTO> getAllLeaveRequest() {
-        return leaveMapper.entitiesToResponseDtos(
-                leaveRepository.findAll()
-        );
+    public Page<LeaveResponseDTO> getAllLeaveRequest(Pageable pageable) {
+        Page<Leave> leaves = leaveRepository.findAll(pageable);
+        return leaves.map(leaveMapper::entityToResponseDto);
     }
 
     @Override
@@ -51,12 +52,10 @@ public class LeaveServiceImpl implements LeaveService {
     }
 
     @Override
-    public List<LeaveResponseDTO> getMyLeaveRequests(Authentication authentication) {
+    public Page<LeaveResponseDTO> getMyLeaveRequests(Pageable pageable, Authentication authentication) {
         User currentUser = getUser(authentication);
-
-        List<Leave> myLeaveRequests = leaveRepository.findByEmployee(currentUser.getEmployee());
-
-        return leaveMapper.entitiesToResponseDtos(myLeaveRequests);
+        Page<Leave> myLeaveRequests = leaveRepository.findByEmployee(pageable, currentUser.getEmployee());
+        return myLeaveRequests.map(leaveMapper::entityToResponseDto);
     }
 
     @Override

@@ -12,7 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class DepartmentCreateDTO {
     @NotBlank(message = "Department is required!")
-    private String department;
+    private String name;
     @NotBlank(message = "Code is required!")
     private String code;
 }

@@ -31,5 +31,5 @@ public class Attendance {
 
     private LocalDateTime checkOutTime;
 
-    private AttendanceStatus attendanceStatus;
+    private AttendanceStatus status;
 }

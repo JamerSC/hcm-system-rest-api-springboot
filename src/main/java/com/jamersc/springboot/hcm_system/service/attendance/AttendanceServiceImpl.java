@@ -9,6 +9,8 @@ import com.jamersc.springboot.hcm_system.repository.AttendanceRepository;
 import com.jamersc.springboot.hcm_system.repository.EmployeeRepository;
 import com.jamersc.springboot.hcm_system.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -35,19 +37,20 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public List<AttendanceResponseDTO> getAllAttendance() {
-        return attendanceMapper.entitiesToResponseDtos(attendanceRepository.findAll());
+    public Page<AttendanceResponseDTO> getAllAttendance(Pageable pageable) {
+        Page<Attendance> attendances = attendanceRepository.findAll(pageable);
+        return attendances.map(attendanceMapper::entityToResponseDto);
     }
 
     @Override
-    public List<AttendanceResponseDTO> getMyAttendances(Authentication authentication) {
+    public Page<AttendanceResponseDTO> getMyAttendances(Pageable pageable, Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User currentUser = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("User nof found"));
 
-        List<Attendance> myAttendances = attendanceRepository.findByEmployee(currentUser.getEmployee());
+        Page<Attendance> myAttendances = attendanceRepository.findByEmployee(pageable,currentUser.getEmployee());
 
-        return attendanceMapper.entitiesToResponseDtos(myAttendances);
+        return myAttendances.map(attendanceMapper::entityToResponseDto);
     }
 
     @Override

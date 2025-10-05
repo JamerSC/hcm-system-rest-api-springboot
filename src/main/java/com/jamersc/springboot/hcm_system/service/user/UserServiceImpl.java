@@ -11,6 +11,8 @@ import com.jamersc.springboot.hcm_system.repository.EmployeeRepository;
 import com.jamersc.springboot.hcm_system.repository.RoleRepository;
 import com.jamersc.springboot.hcm_system.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,8 +41,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDTO> getAllUsers() {
-        return userMapper.entitiesToDtos(userRepository.findAll());
+    public Page<UserResponseDTO> getAllUsers(Pageable pageable) {
+        Page<User> users = userRepository.findAll(pageable);
+        return users.map(userMapper::entityToUserResponseDTO);
     }
 
     @Override

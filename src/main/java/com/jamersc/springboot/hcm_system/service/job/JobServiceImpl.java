@@ -12,6 +12,8 @@ import com.jamersc.springboot.hcm_system.repository.DepartmentRepository;
 import com.jamersc.springboot.hcm_system.repository.JobRepository;
 import com.jamersc.springboot.hcm_system.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -36,15 +38,15 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public List<JobDTO> getAllJob() {
-        return jobMapper.entitiesToJobDtos(jobRepository.findAll());
+    public Page<JobDTO> getAllJob(Pageable pageable) {
+        Page<Job> jobs = jobRepository.findAll(pageable);
+        return jobs.map(jobMapper::entityToJobDto);
     }
 
     @Override
-    public List<JobDTO> getOpenJobs() {
-        return jobMapper.entitiesToJobDtos(
-                jobRepository.findByStatus(JobStatus.OPEN)
-        );
+    public Page<JobDTO> getOpenJobs(Pageable pageable) {
+        Page<Job> openJobs = jobRepository.findByStatus(pageable, JobStatus.OPEN);
+        return openJobs.map(jobMapper::entityToJobDto);
     }
 
     @Override

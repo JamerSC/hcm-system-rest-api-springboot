@@ -13,6 +13,6 @@ import lombok.Setter;
 public class DepartmentDTO {
     private Long id;
     @NotBlank(message = "Department is required!")
-    private String department;
+    private String name;
     private String code;
 }

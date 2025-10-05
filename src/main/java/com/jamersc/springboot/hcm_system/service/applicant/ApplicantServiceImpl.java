@@ -141,12 +141,12 @@ public class ApplicantServiceImpl implements ApplicantService {
     }
 
     @Override
-    public List<ApplicationResponseDTO> getAllApplicantJobsApplied(Authentication authentication) {
+    public Page<ApplicationResponseDTO> getAllApplicantJobsApplied(Pageable pageable, Authentication authentication) {
         User applicantUser = getUser(authentication);
         Applicant applicant = applicantRepository.findByApplicantUser(applicantUser)
                 .orElseThrow(() -> new RuntimeException("Applicant profile not found."));
-
-        return applicationMapper.entitiesToResponseDtos(applicationRepository.findApplicantApplicationsById(applicant.getId()));
+        Page<Application> applications = applicationRepository.findApplicantApplicationsById(pageable ,applicant.getId());
+        return applications.map(applicationMapper::entityToApplicationResponseDto);
     }
 
     @Override

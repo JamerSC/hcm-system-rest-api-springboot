@@ -14,7 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class DepartmentResponseDTO {
     private Long id;
-    private String department;
+    private String name;
     private String code;
     private String createdByUsername;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Manila")

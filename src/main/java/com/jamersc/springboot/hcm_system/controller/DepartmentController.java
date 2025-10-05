@@ -6,6 +6,9 @@ import com.jamersc.springboot.hcm_system.dto.department.DepartmentResponseDTO;
 import com.jamersc.springboot.hcm_system.entity.Department;
 import com.jamersc.springboot.hcm_system.service.department.DepartmentService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -25,8 +28,9 @@ public class DepartmentController {
     }
 
     @GetMapping("/")
-    private ResponseEntity<List<DepartmentResponseDTO>> getAllDepartments() {
-        List<DepartmentResponseDTO> departments = departmentService.getAllDepartment();
+    private ResponseEntity<Page<DepartmentResponseDTO>> getAllDepartments(
+            @PageableDefault(page = 0, size = 10, sort = "name") Pageable pageable) {
+        Page<DepartmentResponseDTO> departments = departmentService.getAllDepartment(pageable);
         return new ResponseEntity<>(departments, HttpStatus.OK);
     }
 

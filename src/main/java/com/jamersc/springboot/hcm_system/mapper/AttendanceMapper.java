@@ -18,7 +18,7 @@ public interface AttendanceMapper {
 
 
     @Mapping(target = "employee", ignore = true)
-    @Mapping(target = "attendanceStatus", ignore = true)
+    @Mapping(target = "status", ignore = true)
     Attendance responseDtoToEntity(AttendanceResponseDTO dto);
 
     List<AttendanceResponseDTO> entitiesToResponseDtos(List<Attendance> attendances);

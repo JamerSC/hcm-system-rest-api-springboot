@@ -18,7 +18,7 @@ public interface ApplicantService {
     void updateApplicantProfile(String username, ApplicantProfileDTO profileDTO);
     void saveResume(String username, String file);
     void applyForJob(Long id, Authentication authentication);
-    List<ApplicationResponseDTO> getAllApplicantJobsApplied(Authentication authentication);
+    Page<ApplicationResponseDTO> getAllApplicantJobsApplied(Pageable pageable, Authentication authentication);
     Optional<ApplicationResponseDTO> getApplicantJobsAppliedById(Long id, Authentication authentication);
     void cancelApplication(Long id, Authentication authentication);
     void deleteApplicantAccount(Authentication authentication);

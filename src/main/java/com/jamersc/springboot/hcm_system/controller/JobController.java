@@ -5,6 +5,9 @@ import com.jamersc.springboot.hcm_system.dto.job.JobDTO;
 import com.jamersc.springboot.hcm_system.dto.job.JobResponseDTO;
 import com.jamersc.springboot.hcm_system.service.job.JobService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -24,8 +27,9 @@ public class JobController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<JobDTO>> getAllJobs() {
-        List<JobDTO> jobs = jobService.getAllJob();
+    public ResponseEntity<Page<JobDTO>> getAllJobs(
+            @PageableDefault(page = 0, size = 10, sort = "title") Pageable pageable) {
+        Page<JobDTO> jobs = jobService.getAllJob(pageable);
         return new ResponseEntity<>(jobs, HttpStatus.OK);
     }
 

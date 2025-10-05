@@ -20,5 +20,5 @@ public class AttendanceResponseDTO {
     private LocalDate attendanceDate;
     private LocalDateTime checkInTime;
     private LocalDateTime checkOutTime;
-    //private AttendanceStatus attendanceStatus;
+    //private AttendanceStatus status;
 }

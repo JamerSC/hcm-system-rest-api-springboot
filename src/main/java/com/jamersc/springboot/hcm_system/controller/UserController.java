@@ -5,6 +5,8 @@ import com.jamersc.springboot.hcm_system.dto.user.UserDTO;
 import com.jamersc.springboot.hcm_system.dto.user.UserResponseDTO;
 import com.jamersc.springboot.hcm_system.service.user.UserService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -24,8 +26,8 @@ public class UserController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<UserDTO>> getAllUsers() {
-        List<UserDTO> users = userService.getAllUsers();
+    public ResponseEntity<Page<UserResponseDTO>> getAllUsers(Pageable pageable) {
+        Page<UserResponseDTO> users = userService.getAllUsers(pageable);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 

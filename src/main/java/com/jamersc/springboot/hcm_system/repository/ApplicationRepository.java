@@ -3,6 +3,8 @@ package com.jamersc.springboot.hcm_system.repository;
 import com.jamersc.springboot.hcm_system.entity.Applicant;
 import com.jamersc.springboot.hcm_system.entity.Application;
 import com.jamersc.springboot.hcm_system.entity.Job;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,7 +19,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     //    List<Application> findApplicantApplicationsById(Long id);
 
     @Query("SELECT a FROM Application a JOIN FETCH a.applicant b WHERE b.id = :id")
-    List<Application> findApplicantApplicationsById(@Param("id") Long id);
+    Page<Application> findApplicantApplicationsById(Pageable pageable, @Param("id") Long id);
 
     List<Application> findByApplicant(Applicant applicant);
 

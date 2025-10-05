@@ -6,6 +6,9 @@ import com.jamersc.springboot.hcm_system.entity.Attendance;
 import com.jamersc.springboot.hcm_system.entity.Employee;
 import com.jamersc.springboot.hcm_system.service.attendance.AttendanceService;
 import com.jamersc.springboot.hcm_system.service.employee.EmployeeService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -27,14 +30,18 @@ public class AttendanceController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<AttendanceResponseDTO>> getAllAttendance() {
-        List<AttendanceResponseDTO> attendances = attendanceService.getAllAttendance();
+    public ResponseEntity<Page<AttendanceResponseDTO>> getAllAttendances(
+            @PageableDefault(page = 0, size = 10, sort = "attendanceDate") Pageable pageable) {
+        Page<AttendanceResponseDTO> attendances = attendanceService
+                .getAllAttendance(pageable);
         return new ResponseEntity<>(attendances, HttpStatus.OK);
     }
 
     @GetMapping("/me/profile")
-    public ResponseEntity<List<AttendanceResponseDTO>> getMyAttendances(Authentication authentication) {
-        List<AttendanceResponseDTO> myAttendances = attendanceService.getMyAttendances(authentication);
+    public ResponseEntity<Page<AttendanceResponseDTO>> getMyAttendances(
+            @PageableDefault(page = 0, size = 10, sort = "attendanceDate") Pageable pageable, Authentication authentication) {
+        Page<AttendanceResponseDTO> myAttendances = attendanceService
+                .getMyAttendances(pageable, authentication);
         return new ResponseEntity<>(myAttendances, HttpStatus.OK);
     }
 

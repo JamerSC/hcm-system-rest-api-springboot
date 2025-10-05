@@ -9,6 +9,8 @@ import com.jamersc.springboot.hcm_system.mapper.DepartmentMapper;
 import com.jamersc.springboot.hcm_system.repository.DepartmentRepository;
 import com.jamersc.springboot.hcm_system.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -32,10 +34,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 
     @Override
-    public List<DepartmentResponseDTO> getAllDepartment() {
-        return departmentMapper.entitiesToDeptResponseDto(
-                departmentRepository.findAll()
-        );
+    public Page<DepartmentResponseDTO> getAllDepartment(Pageable pageable) {
+        Page<Department> departments = departmentRepository.findAll(pageable);
+        return departments.map(departmentMapper::entityToDepartmentResponseDto);
     }
 
     @Override

@@ -21,7 +21,7 @@ public class Department {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String department;
+    private String name;
 
     @Column(nullable = false, unique = true)
     private String code;

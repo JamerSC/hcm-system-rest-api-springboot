@@ -6,6 +6,9 @@ import com.jamersc.springboot.hcm_system.dto.job.JobDTO;
 import com.jamersc.springboot.hcm_system.service.applicant.ApplicantService;
 import com.jamersc.springboot.hcm_system.service.job.JobService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -30,8 +33,9 @@ public class ApplicantController {
     }
 
     @GetMapping("/open/jobs")
-    public ResponseEntity<List<JobDTO>> getOpenJobs() {
-        List<JobDTO> listOfOpenJobs = jobService.getOpenJobs();
+    public ResponseEntity<Page<JobDTO>> getOpenJobs(
+            @PageableDefault(page = 0, size = 10, sort = "title") Pageable pageable) {
+        Page<JobDTO> listOfOpenJobs = jobService.getOpenJobs(pageable);
         return new ResponseEntity<>(listOfOpenJobs, HttpStatus.OK);
     }
 
@@ -39,12 +43,13 @@ public class ApplicantController {
     public ResponseEntity<String> applyForJob(
             @PathVariable Long id, Authentication authentication) {
         applicantService.applyForJob(id, authentication);
-        return new ResponseEntity<>("Successfully applied for the job.", HttpStatus.CREATED);
+        return new ResponseEntity<>("Job applied & application submitted successfully!", HttpStatus.CREATED);
     }
 
     @GetMapping("/jobs/applied")
-    public ResponseEntity<List<ApplicationResponseDTO>> getAllApplicantJobsApplied(Authentication authentication) {
-        List<ApplicationResponseDTO> appliedJobs = applicantService.getAllApplicantJobsApplied(authentication);
+    public ResponseEntity<Page<ApplicationResponseDTO>> getAllApplicantJobsApplied(
+            @PageableDefault(page = 0, size = 10, sort = "status") Pageable pageable, Authentication authentication) {
+        Page<ApplicationResponseDTO> appliedJobs = applicantService.getAllApplicantJobsApplied(pageable, authentication);
         return new ResponseEntity<>(appliedJobs, HttpStatus.OK);
     }
 

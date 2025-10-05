@@ -14,6 +14,9 @@ import com.jamersc.springboot.hcm_system.service.employee.EmployeeService;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Valid;
 import jakarta.validation.Validator;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -41,13 +44,9 @@ public class EmployeeController {
 
     // Get all employees
     @GetMapping("/")
-    public ResponseEntity<List<EmployeeResponseDTO>> getAllEmployees() {
-        List<EmployeeResponseDTO> employees = employeeService.getAllEmployee();
-
-        if (employees.isEmpty()) {
-            return ResponseEntity.noContent().build(); // HTTP 204
-        }
-        //return ResponseEntity.ok(employee);
+    public ResponseEntity<Page<EmployeeResponseDTO>> getAllEmployees(
+            @PageableDefault(page = 0, size = 10, sort = "id") Pageable pageable) {
+        Page<EmployeeResponseDTO> employees = employeeService.getAllEmployee(pageable);
         return new ResponseEntity<>(employees, HttpStatus.OK); // HTTP 200 List of Employees
     }
 

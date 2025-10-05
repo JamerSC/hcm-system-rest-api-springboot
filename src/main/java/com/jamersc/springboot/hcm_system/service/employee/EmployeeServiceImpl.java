@@ -12,6 +12,8 @@ import com.jamersc.springboot.hcm_system.mapper.EmployeeMapper;
 import com.jamersc.springboot.hcm_system.repository.EmployeeRepository;
 import com.jamersc.springboot.hcm_system.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -35,8 +37,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
     @Override
-    public List<EmployeeResponseDTO> getAllEmployee() {
-        return employeeMapper.entitiesToResponseDtos(employeeRepository.findAll());
+    public Page<EmployeeResponseDTO> getAllEmployee(Pageable pageable) {
+        Page<Employee> employees = employeeRepository.findAll(pageable);
+        return employees.map(employeeMapper::entityToEmployeeResponseDTO);
     }
 
     @Override
