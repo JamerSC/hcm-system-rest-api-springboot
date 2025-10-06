@@ -90,38 +90,41 @@ public class SecurityConfig {
                 .authorizeHttpRequests(configurer ->
                 configurer
                         // public access
-                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/register").permitAll()
-                        // Spring Security's default login form endpoint (if you use it), or just allow basic auth
-                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll() // Default login endpoint if you configure formLogin()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/register").permitAll() // Your registration endpoint
-                        // Authentication
-                        // Note: Always check the end point for each HTTP method
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/register").permitAll() // applicant registration
+                        // authentication
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/logout").hasAnyRole("APPLICANT", "EMPLOYEE")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/auth/me/change-password").hasAnyRole("APPLICANT", "EMPLOYEE")
+                        // Applicant
+                        .requestMatchers(HttpMethod.GET, "/api/v1/applicants/**").hasRole("APPLICANT")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/applicants/**").hasRole("APPLICANT")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/applicants/**").hasRole("APPLICANT")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/applicants/me").hasRole("APPLICANT")
+                        // Dashboard
                         .requestMatchers(HttpMethod.GET, "/api/v1/dashboard/").hasAnyRole("MANAGER", "ADMIN")
+                        // Employee
                         .requestMatchers(HttpMethod.GET, "/api/v1/employees").hasRole("EMPLOYEE")
                         .requestMatchers(HttpMethod.GET, "/api/v1/employees/**").hasRole("EMPLOYEE")
                         .requestMatchers(HttpMethod.POST, "/api/v1/employees/").hasRole("MANAGER")
                         .requestMatchers(HttpMethod.PUT, "/api/v1/employees/").hasRole("MANAGER")
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/employees/**").hasRole("MANAGER")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/employees/**").hasRole("ADMIN")
-                        // department
+                        // Department
                         .requestMatchers(HttpMethod.GET, "/api/v1/departments/**").hasAnyRole("MANAGER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/v1/departments/**").hasAnyRole("MANAGER", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/departments/**").hasAnyRole("ADMIN")
-                        // Jobs
+                        // Job
                         .requestMatchers(HttpMethod.GET, "/api/v1/jobs/**").hasAnyRole("MANAGER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/v1/jobs/**").hasAnyRole("MANAGER", "ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/jobs/**").hasAnyRole("MANAGER", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/jobs/**").hasAnyRole("ADMIN")
-                        // Add specific rules for applicant-related endpoints if they are different from employees
+                        // Recruitment
                         .requestMatchers(HttpMethod.GET, "/api/v1/recruitments/**").hasRole("MANAGER") // get applicant profile
-                        .requestMatchers(HttpMethod.GET, "/api/v1/applicants/**").hasRole("APPLICANT") // get applicant profile
-                        .requestMatchers(HttpMethod.POST, "/api/v1/applicants/**").hasRole("APPLICANT") // applicants resume
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/applicants/**").hasRole("APPLICANT") // applicant profile update
                         // Attendance
                         .requestMatchers(HttpMethod.GET, "/api/v1/attendances/me/profile").hasRole("EMPLOYEE")
                         .requestMatchers(HttpMethod.GET, "/api/v1/attendances/**").hasAnyRole("MANAGER", "ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/v1/attendances/**").hasRole("EMPLOYEE")
-                        .requestMatchers(HttpMethod.PATCH, "/api/v1/attendances/**").hasRole("EMPLOYEE")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/attendances/check-in").hasRole("EMPLOYEE")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/attendances/check-out").hasRole("EMPLOYEE")
                         // Leaves
                         .requestMatchers(HttpMethod.GET, "/api/v1/leaves/me").hasRole("EMPLOYEE")
                         .requestMatchers(HttpMethod.GET, "/api/v1/leaves/{id}").hasRole("EMPLOYEE")
