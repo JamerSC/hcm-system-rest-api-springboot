@@ -81,12 +81,12 @@ public class EmployeeController {
         return ResponseEntity.ok(profile);
     }
 
-    @PatchMapping("/{id}/profile")
-    public ResponseEntity<?> updateMyEmployeeProfile(@Valid @PathVariable Long id,
-                                              @RequestBody Map<String, Object> patchPayload) {
-//      // Optional
-        return null;
-    }
+//    @PatchMapping("/{id}/profile")
+//    public ResponseEntity<?> updateMyEmployeeProfile(@Valid @PathVariable Long id,
+//                                              @RequestBody Map<String, Object> patchPayload) {
+////      // Optional
+//        return null;
+//    }
 
 
     // Create Employee
@@ -113,21 +113,21 @@ public class EmployeeController {
 //        return new ResponseEntity<>(employee, HttpStatus.CREATED); // Created 201
 //    }
 
-    @PutMapping("/")
-    public ResponseEntity<?> updateEmployee(
-            @Valid @RequestBody EmployeeUpdateDTO employeeDTO,
-            BindingResult result, Authentication authentication) {
-
-        if (result.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            result.getFieldErrors().forEach(
-                    error -> errors.put(error.getField(), error.getDefaultMessage()));
-            return ResponseEntity.badRequest().body(errors);
-        }
-
-        Employee employee = employeeService.update(employeeDTO, authentication);
-        return new ResponseEntity<>(employee, HttpStatus.OK);
-    }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<?> updateEmployee(
+//            @Valid @RequestBody EmployeeUpdateDTO employeeDTO,
+//            BindingResult result, Authentication authentication) {
+//
+//        if (result.hasErrors()) {
+//            Map<String, String> errors = new HashMap<>();
+//            result.getFieldErrors().forEach(
+//                    error -> errors.put(error.getField(), error.getDefaultMessage()));
+//            return ResponseEntity.badRequest().body(errors);
+//        }
+//
+//        Employee employee = employeeService.update(employeeDTO, authentication);
+//        return new ResponseEntity<>(employee, HttpStatus.OK);
+//    }
 
     @PatchMapping("/{id}")
     public ResponseEntity<?> patchEmployee(

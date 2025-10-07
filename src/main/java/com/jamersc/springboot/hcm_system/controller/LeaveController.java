@@ -50,7 +50,7 @@ public class LeaveController {
         return new ResponseEntity<>(leaveRequest, HttpStatus.CREATED);
     }
 
-    @GetMapping("/me/profile")
+    @GetMapping("/me")
     public ResponseEntity<Page<LeaveResponseDTO>> getMyLeaveRequests(
             @PageableDefault(page = 0, size = 10, sort="submittedAt") Pageable pageable, Authentication authentication) {
         Page<LeaveResponseDTO> requestedLeaves = leaveService.getMyLeaveRequests(pageable, authentication);
