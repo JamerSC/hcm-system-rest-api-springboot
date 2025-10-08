@@ -9,6 +9,7 @@ import com.jamersc.springboot.hcm_system.entity.Employee;
 import com.jamersc.springboot.hcm_system.entity.Role;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.List;
@@ -65,8 +66,8 @@ public interface EmployeeMapper {
     @Mapping(target = "department", source = "job.department.name")
     @Mapping(target = "jobPosition", source = "job.title")
     @Mapping(target = "jobId", source = "job.id")
-    @Mapping(target = "updatedByUsername", source = "updatedBy.username")
-    @Mapping(target = "createdByUsername", source = "createdBy.username")
+    @Mapping(target = "updatedBy", source = "updatedBy.username")
+    @Mapping(target = "createdBy", source = "createdBy.username")
     EmployeeResponseDTO entityToEmployeeResponseDTO(Employee employee);
 
     // employee update

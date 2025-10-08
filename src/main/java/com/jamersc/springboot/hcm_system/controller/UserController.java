@@ -37,15 +37,15 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @PostMapping("/{employeeId}/create-user-access")
-    public ResponseEntity<UserResponseDTO> createUserAccessForEmployee(
+    @PostMapping("/{employeeId}/create-user")
+    public ResponseEntity<UserResponseDTO> createEmployeeUserAccess(
             @PathVariable Long employeeId, @Valid @RequestBody UserCreateDTO createDTO,
             Authentication authentication) {
         UserResponseDTO userResponseDTO = userService.createUser(employeeId, createDTO, authentication);
         return new ResponseEntity<>(userResponseDTO, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}/")
+    @PutMapping("/{id}/update-user")
     public ResponseEntity<UserResponseDTO> updateUser(
             @PathVariable Long id, @Valid @RequestBody UserDTO userDTO,
             Authentication authentication) {
@@ -61,7 +61,7 @@ public class UserController {
 //    }
 
     // Todo soft delete
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/delete-user")
     public String deleteUser(@PathVariable Long id) {
         userService.deleteUserById(id);
         return "User soft deleted, successfully!";

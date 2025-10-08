@@ -32,7 +32,7 @@ public class Employee {
     @Column(name = "salary")
     private Double salary;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "job_id", referencedColumnName = "id")
     private Job job;
 

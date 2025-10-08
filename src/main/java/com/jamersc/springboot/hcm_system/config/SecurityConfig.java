@@ -139,7 +139,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/recruitments/{id}/application/application/hire").hasRole("MANAGER")
                         // Attendance
                         .requestMatchers(HttpMethod.GET, "/api/v1/attendances/me/profile").hasRole("EMPLOYEE")
-                        .requestMatchers(HttpMethod.GET, "/api/v1/attendances/**").hasAnyRole("MANAGER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/attendances/").hasAnyRole("MANAGER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/v1/attendances/check-in").hasRole("EMPLOYEE")
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/attendances/check-out").hasRole("EMPLOYEE")
                         // Leaves
@@ -151,6 +151,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/leaves/{id}/approve-leave").hasRole("MANAGER")
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/leaves/{id}/reject-leave").hasRole("MANAGER")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/leaves/**").hasRole("ADMIN")
+                        // User Management
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/{id}").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/users/{employeeId}/create-user").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/users/{id}/update-user").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/users/{id}/delete-user").hasRole("ADMIN")
                         // All other requests require authentication
                         .anyRequest().authenticated()
         );
