@@ -79,6 +79,11 @@ public class Employee {
         return this.firstName.concat(" " + this.lastName);
     }
 
+    public String formattedSalary() {
+        if (this.salary == null) return "0.00";
+        return String.format("%,.2f", this.salary);
+    }
+
     public static void main(String[] args) {
         // create new object
         Employee employee = new Employee();

@@ -64,6 +64,7 @@ public interface EmployeeMapper {
     Employee createDtoToEntity(EmployeeCreateDTO dto);
 
     @Mapping(target = "department", source = "job.department.name")
+    @Mapping(target = "salary", expression = "java(employee.formattedSalary())")
     @Mapping(target = "jobPosition", source = "job.title")
     @Mapping(target = "jobId", source = "job.id")
     @Mapping(target = "updatedBy", source = "updatedBy.username")
