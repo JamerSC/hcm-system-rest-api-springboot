@@ -11,10 +11,15 @@ import lombok.Setter;
 @AllArgsConstructor
 public class DashboardDTO {
 
+    private Long totalUser;
     private Long totalJobs;
     private Long openJobs;
     private Long totalDepartments;
     private Long totalApplicants;
     private Long totalApplications;
     private Long totalEmployees;
+    private Long totalAttendances;
+    private Long totalLeaveRequest;
+    private Long totalSickLeave;
+    private Long totalVacationLeave;
 }
