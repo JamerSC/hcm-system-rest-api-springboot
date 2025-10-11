@@ -20,7 +20,6 @@ public class JobDTO {
     private String title;
     private String description;
     private String requirements;
-    @Enumerated(EnumType.STRING)
     private JobStatus status;
     private String location;
     private LocalDate postedDate;

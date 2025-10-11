@@ -21,7 +21,6 @@ public class JobResponseDTO {
     private String title;
     private String description;
     private String requirements;
-    @Enumerated(EnumType.STRING)
     private JobStatus status;
     private String location;
     private String postedByUsername;
