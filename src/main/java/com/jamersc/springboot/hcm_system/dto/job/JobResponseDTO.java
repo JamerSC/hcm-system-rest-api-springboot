@@ -23,13 +23,13 @@ public class JobResponseDTO {
     private String requirements;
     private JobStatus status;
     private String location;
-    private String postedByUsername;
+    private String postedBy;
     private LocalDate postedDate;
     private String department;
-    private String createdByUsername;
+    private String createdBy;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Manila")
     private Date createdAt;
-    private String updatedByUsername;
+    private String updatedBy;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Manila")
     private Date updatedAt;
 }

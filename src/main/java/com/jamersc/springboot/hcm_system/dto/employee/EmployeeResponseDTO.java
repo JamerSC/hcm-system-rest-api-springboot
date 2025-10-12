@@ -22,11 +22,8 @@ public class EmployeeResponseDTO {
     private String firstName;
     private String lastName;
     private String email;
-
-    private Long jobId;
     private String jobPosition;
     private String department;
-
     private LocalDate hiredDate;
     private String salary;
     private String createdBy;
@@ -35,5 +32,4 @@ public class EmployeeResponseDTO {
     private String updatedBy;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Manila")
     private Date updatedAt;
-
 }

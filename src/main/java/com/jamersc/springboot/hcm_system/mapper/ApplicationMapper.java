@@ -25,7 +25,7 @@ public interface ApplicationMapper {
     Application dtoToEntity(ApplicationDTO dto);
 
     @Mapping(target = "jobDescription", source = "job.description")
-    @Mapping(target = "updatedByUsername", source = "updatedBy.username")
+    @Mapping(target = "updatedBy", source = "updatedBy.employee.job.title")
     @Mapping(target = "jobPosition", source = "job.title")
     @Mapping(target = "applicantName", source = "applicant.firstName")
     ApplicationResponseDTO entityToApplicationResponseDto(Application application);

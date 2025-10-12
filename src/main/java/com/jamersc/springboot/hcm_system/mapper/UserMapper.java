@@ -40,6 +40,8 @@ public interface UserMapper {
     @Mapping(target = "applicant", ignore = true)
     User userCreateDtoToEntity(UserCreateDTO dto);
 
+    @Mapping(target = "createdBy", source = "createdBy.employee.job.title")
+    @Mapping(target = "updatedBy", source = "updatedBy.employee.job.title")
     UserResponseDTO entityToUserResponseDTO(User user);
 
     @Mapping(target = "password", ignore = true)

@@ -37,8 +37,8 @@ public interface DepartmentMapper {
 
     // response department mapper
     // convert department entity to the response dto
-    @Mapping(target = "updatedByUsername", source = "updatedBy.username")
-    @Mapping(target = "createdByUsername", source = "createdBy.username")
+    @Mapping(target = "updatedBy", source = "updatedBy.employee.job.title")
+    @Mapping(target = "createdBy", source = "createdBy.employee.job.title")
     DepartmentResponseDTO entityToDepartmentResponseDto(Department dept);
 
     List<DepartmentDTO> entitiesToDeptDtos(List<Department> departments);

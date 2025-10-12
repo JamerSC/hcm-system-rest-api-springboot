@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "attendances")
@@ -28,8 +29,32 @@ public class Attendance {
     private LocalDate attendanceDate;
 
     private LocalDateTime checkInTime;
-
     private LocalDateTime checkOutTime;
-
     private AttendanceStatus status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by_user_id", referencedColumnName = "id")
+    private User createdBy;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "updated_by_user_id", referencedColumnName = "id")
+    private User updatedBy;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = new Date();
+        updatedAt = new Date();
+    }
+
+    // Add JPA annotations for createdDate and modifiedDate
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = new Date();
+    }
 }

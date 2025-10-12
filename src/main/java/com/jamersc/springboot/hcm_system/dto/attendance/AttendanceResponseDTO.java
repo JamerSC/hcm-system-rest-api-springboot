@@ -1,5 +1,6 @@
 package com.jamersc.springboot.hcm_system.dto.attendance;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jamersc.springboot.hcm_system.entity.AttendanceStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,11 +15,15 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AttendanceResponseDTO {
-    private Long id;
-    private Long employeeId;
-    private String employeeFullName;
+    private Long attendanceId;
     private LocalDate attendanceDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Manila")
     private LocalDateTime checkInTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Manila")
     private LocalDateTime checkOutTime;
+    private Long employeeId;
+    private String employeeName;
+    private String jobTitle;
+    private String department;
     //private AttendanceStatus status;
 }

@@ -27,9 +27,9 @@ public class JobController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<Page<JobDTO>> getAllJobs(
+    public ResponseEntity<Page<JobResponseDTO>> getAllJobs(
             @PageableDefault(page = 0, size = 10, sort = "title") Pageable pageable) {
-        Page<JobDTO> jobs = jobService.getAllJob(pageable);
+        Page<JobResponseDTO> jobs = jobService.getAllJob(pageable);
         return new ResponseEntity<>(jobs, HttpStatus.OK);
     }
 

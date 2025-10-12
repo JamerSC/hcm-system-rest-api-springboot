@@ -1,5 +1,6 @@
 package com.jamersc.springboot.hcm_system.dto.leave;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jamersc.springboot.hcm_system.dto.user.UserDTO;
 import com.jamersc.springboot.hcm_system.dto.user.UserResponseDTO;
 import com.jamersc.springboot.hcm_system.entity.LeaveStatus;
@@ -25,6 +26,7 @@ public class LeaveResponseDTO {
     private LocalDate endDate;
     private String reason;
     private LeaveStatus status;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Manila")
     private Date submittedAt;
-    private UserResponseDTO approvedBy;
+    private String approvedBy;
 }
