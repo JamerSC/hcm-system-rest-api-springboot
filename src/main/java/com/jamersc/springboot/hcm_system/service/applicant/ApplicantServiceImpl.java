@@ -69,7 +69,7 @@ public class ApplicantServiceImpl implements ApplicantService {
 
     @Override
 //    @Transactional // Essential if you're fetching and then saving/updating
-    public void updateApplicantProfile(String username,
+    public ApplicantProfileDTO updateApplicantProfile(String username,
                                        ApplicantProfileDTO profileDTO) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(()-> new RuntimeException("Authenticated user not found: " + username));
@@ -85,8 +85,13 @@ public class ApplicantServiceImpl implements ApplicantService {
         // Map DTO fields to entity. You can use a mapper library (MapStruct) here.
         applicant.setFirstName(profileDTO.getFirstName());
         applicant.setLastName(profileDTO.getLastName());
+        applicant.setPhoneNumber(profileDTO.getPhoneNumber());
+        applicant.setAddress(profileDTO.getAddress());
+        applicant.setEducationLevel(profileDTO.getEducationLevel());
 
-        applicantRepository.save(applicant);
+        Applicant updatedApplicant = applicantRepository.save(applicant);
+
+        return applicantMapper.entityToProfileDto(updatedApplicant);
     }
 
     @Override
@@ -167,7 +172,7 @@ public class ApplicantServiceImpl implements ApplicantService {
     }
 
     @Override
-    public void cancelApplication(Long id, Authentication authentication) {
+    public void withdrawApplication(Long id, Authentication authentication) {
         // find application by id
         Application application = applicationRepository
                 .findById(id).orElseThrow(()-> new RuntimeException("Application id not found!"));

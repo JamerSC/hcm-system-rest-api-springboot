@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface ApplicantService {
@@ -15,11 +14,11 @@ public interface ApplicantService {
     Page<ApplicantDto> getAllApplicant(Pageable pageable); // for admin/hr role
     Optional<ApplicantDto> getApplicantById(Long id); // for admin/hr role
     ApplicantProfileDTO getApplicantProfile(String username);
-    void updateApplicantProfile(String username, ApplicantProfileDTO profileDTO);
+    ApplicantProfileDTO updateApplicantProfile(String username, ApplicantProfileDTO profileDTO);
     void saveResume(String username, String file);
     void applyForJob(Long id, Authentication authentication);
     Page<ApplicationResponseDTO> getAllApplicantJobsApplied(Pageable pageable, Authentication authentication);
     Optional<ApplicationResponseDTO> getApplicantJobsAppliedById(Long id, Authentication authentication);
-    void cancelApplication(Long id, Authentication authentication);
+    void withdrawApplication(Long id, Authentication authentication);
     void deleteApplicantAccount(Authentication authentication);
 }

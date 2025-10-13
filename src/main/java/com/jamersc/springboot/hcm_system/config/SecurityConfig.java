@@ -96,9 +96,14 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/logout").hasAnyRole("APPLICANT", "EMPLOYEE")
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/auth/me/change-password").hasAnyRole("APPLICANT", "EMPLOYEE")
                         // Applicant
-                        .requestMatchers(HttpMethod.GET, "/api/v1/applicants/**").hasRole("APPLICANT")
-                        .requestMatchers(HttpMethod.POST, "/api/v1/applicants/**").hasRole("APPLICANT")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/applicants/**").hasRole("APPLICANT")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/applicants/open/jobs").hasRole("APPLICANT")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/applicants/jobs/{id}/apply").hasRole("APPLICANT")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/applicants/applications/jobs-applied").hasRole("APPLICANT")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/applicants/jobs/application/{id}/view").hasRole("APPLICANT")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/applicants/application/{id}/withdraw").hasRole("APPLICANT")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/applicants/me/profile").hasRole("APPLICANT")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/applicants/update-profile").hasRole("APPLICANT")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/applicants/upload-resume").hasRole("APPLICANT")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/applicants/me").hasRole("APPLICANT")
                         // Dashboard
                         .requestMatchers(HttpMethod.GET, "/api/v1/dashboard/").hasRole("MANAGER")

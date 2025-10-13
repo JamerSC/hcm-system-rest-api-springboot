@@ -17,7 +17,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -46,24 +45,24 @@ public class ApplicantController {
         return new ResponseEntity<>("Job applied & application submitted successfully!", HttpStatus.CREATED);
     }
 
-    @GetMapping("/jobs/applied")
+    @GetMapping("/applications/jobs-applied")
     public ResponseEntity<Page<ApplicationResponseDTO>> getAllApplicantJobsApplied(
             @PageableDefault(page = 0, size = 10, sort = "status") Pageable pageable, Authentication authentication) {
         Page<ApplicationResponseDTO> appliedJobs = applicantService.getAllApplicantJobsApplied(pageable, authentication);
         return new ResponseEntity<>(appliedJobs, HttpStatus.OK);
     }
 
-    @GetMapping("/jobs/{id}/view")
+    @GetMapping("/application/{id}/view")
     public ResponseEntity<Optional<ApplicationResponseDTO>> getAppliedJob(
             @PathVariable Long id, Authentication authentication) {
         Optional<ApplicationResponseDTO> application = applicantService.getApplicantJobsAppliedById(id, authentication);
         return new ResponseEntity<>(application, HttpStatus.OK);
     }
 
-    @PatchMapping("/applications/{id}/cancel")
-    public ResponseEntity<String> cancelApplication(
+    @PatchMapping("/application/{id}/withdraw")
+    public ResponseEntity<String> withdrawApplication(
             @PathVariable Long id, Authentication authentication) {
-        applicantService.cancelApplication(id, authentication);
+        applicantService.withdrawApplication(id, authentication);
         return ResponseEntity.ok("Application has been successfully withdrawn.");
     }
 
@@ -77,17 +76,17 @@ public class ApplicantController {
 
     // Endpoint for updating applicant profile details (e.g., after registration)
     // The @AuthenticationPrincipal allows you to get the currently logged-in user's details
-    @PutMapping("/profile")
-    public ResponseEntity<String> updateApplicantProfile(
+    @PutMapping("/update-profile")
+    public ResponseEntity<ApplicantProfileDTO> updateApplicantProfile(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody ApplicantProfileDTO profileDTO) {
         // userDetails.getUsername() gives you the username of the logged-in user
-        applicantService.updateApplicantProfile(userDetails.getUsername(), profileDTO);
-        return ResponseEntity.ok("Applicant profile updated successfully!");
+        ApplicantProfileDTO profile = applicantService.updateApplicantProfile(userDetails.getUsername(), profileDTO);
+        return new ResponseEntity<>(profile, HttpStatus.OK);
     }
 
     // Endpoint for CV/Resume upload
-    @PostMapping("/profile/resume")
+    @PostMapping("/profile/upload-resume")
     public ResponseEntity<String> uploadResume(
             @AuthenticationPrincipal UserDetails userDetails,
             @Valid @RequestParam("file") MultipartFile file) {
