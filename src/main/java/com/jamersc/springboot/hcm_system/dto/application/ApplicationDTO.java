@@ -1,6 +1,7 @@
 package com.jamersc.springboot.hcm_system.dto.application;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jamersc.springboot.hcm_system.entity.ApplicationStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +20,9 @@ public class ApplicationDTO {
     private String jobPosition;
     private String jobDescription;
     private ApplicationStatus status = ApplicationStatus.NEW;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Manila")
     private Date appliedAt;
     private String updatedByUsername;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Manila")
     private Date updatedAt;
 }

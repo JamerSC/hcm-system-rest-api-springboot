@@ -2,7 +2,9 @@ package com.jamersc.springboot.hcm_system.service.applicant;
 
 import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantDto;
 import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantProfileDTO;
+import com.jamersc.springboot.hcm_system.dto.application.ApplicationDTO;
 import com.jamersc.springboot.hcm_system.dto.application.ApplicationResponseDTO;
+import com.jamersc.springboot.hcm_system.entity.Application;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -15,10 +17,10 @@ public interface ApplicantService {
     Optional<ApplicantDto> getApplicantById(Long id); // for admin/hr role
     ApplicantProfileDTO getApplicantProfile(String username);
     ApplicantProfileDTO updateApplicantProfile(String username, ApplicantProfileDTO profileDTO);
-    void saveResume(String username, String file);
-    void applyForJob(Long id, Authentication authentication);
+    void uploadResume(String username, String file);
+    ApplicationResponseDTO applyForJob(Long id, Authentication authentication);
     Page<ApplicationResponseDTO> getAllApplicantJobsApplied(Pageable pageable, Authentication authentication);
     Optional<ApplicationResponseDTO> getApplicantJobsAppliedById(Long id, Authentication authentication);
-    void withdrawApplication(Long id, Authentication authentication);
+    ApplicationResponseDTO withdrawApplication(Long id, Authentication authentication);
     void deleteApplicantAccount(Authentication authentication);
 }

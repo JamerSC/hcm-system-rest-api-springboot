@@ -15,14 +15,11 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ApplicationResponseDTO {
-    private Long id;
+    private Long applicationId;
     private String applicantName;
-    private String jobPosition;
-    private String jobDescription;
+    private String appliedPosition;
+    private String description;
     private ApplicationStatus status;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Manila")
     private Date appliedAt;
-    private String updatedBy;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Manila")
-    private Date updatedAt;
 }

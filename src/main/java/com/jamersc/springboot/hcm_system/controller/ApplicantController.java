@@ -1,6 +1,8 @@
 package com.jamersc.springboot.hcm_system.controller;
 
+import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantDto;
 import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantProfileDTO;
+import com.jamersc.springboot.hcm_system.dto.application.ApplicationDTO;
 import com.jamersc.springboot.hcm_system.dto.application.ApplicationResponseDTO;
 import com.jamersc.springboot.hcm_system.dto.job.JobDTO;
 import com.jamersc.springboot.hcm_system.service.applicant.ApplicantService;
@@ -39,10 +41,10 @@ public class ApplicantController {
     }
 
     @PostMapping("/jobs/{id}/apply")
-    public ResponseEntity<String> applyForJob(
+    public ResponseEntity<ApplicationResponseDTO> applyForJob(
             @PathVariable Long id, Authentication authentication) {
-        applicantService.applyForJob(id, authentication);
-        return new ResponseEntity<>("Job applied & application submitted successfully!", HttpStatus.CREATED);
+        ApplicationResponseDTO application = applicantService.applyForJob(id, authentication);
+        return new ResponseEntity<>(application, HttpStatus.CREATED);
     }
 
     @GetMapping("/applications/jobs-applied")
@@ -60,10 +62,10 @@ public class ApplicantController {
     }
 
     @PatchMapping("/application/{id}/withdraw")
-    public ResponseEntity<String> withdrawApplication(
+    public ResponseEntity<ApplicationResponseDTO> withdrawApplication(
             @PathVariable Long id, Authentication authentication) {
-        applicantService.withdrawApplication(id, authentication);
-        return ResponseEntity.ok("Application has been successfully withdrawn.");
+        ApplicationResponseDTO withdrawn = applicantService.withdrawApplication(id, authentication);
+        return new ResponseEntity<>(withdrawn, HttpStatus.OK);
     }
 
     @GetMapping("/me/profile")
@@ -94,7 +96,7 @@ public class ApplicantController {
         if (file.isEmpty()) {
             return new ResponseEntity<>("Please select the file to upload,", HttpStatus.BAD_REQUEST);
         }
-        applicantService.saveResume(userDetails.getUsername(), String.valueOf(file));
+        applicantService.uploadResume(userDetails.getUsername(), String.valueOf(file));
         return new ResponseEntity<>("Resume uploaded successfully", HttpStatus.OK);
     }
 

@@ -2,6 +2,7 @@ package com.jamersc.springboot.hcm_system.service.applicant;
 
 import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantDto;
 import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantProfileDTO;
+import com.jamersc.springboot.hcm_system.dto.application.ApplicationDTO;
 import com.jamersc.springboot.hcm_system.dto.application.ApplicationResponseDTO;
 import com.jamersc.springboot.hcm_system.entity.*;
 import com.jamersc.springboot.hcm_system.mapper.ApplicantMapper;
@@ -95,7 +96,7 @@ public class ApplicantServiceImpl implements ApplicantService {
     }
 
     @Override
-    public void saveResume(String username, String file) {
+    public void uploadResume(String username, String file) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(()-> new RuntimeException("Applicant profile not found for user: " + username));
         Applicant applicant = applicantRepository.findByApplicantUser(user)
@@ -106,7 +107,7 @@ public class ApplicantServiceImpl implements ApplicantService {
     }
 
     @Override
-    public void applyForJob(Long id, Authentication authentication) {
+    public ApplicationResponseDTO applyForJob(Long id, Authentication authentication) {
         // find the job
         Job job = jobRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Job not found"));
@@ -128,15 +129,17 @@ public class ApplicantServiceImpl implements ApplicantService {
         newApplication.setJob(job);
         newApplication.setUpdatedBy(applicantUser);
 
-        Application savedApplication = applicationRepository.save(newApplication);
+        Application submittedApplication = applicationRepository.save(newApplication);
 
         // email notification
-        String email = savedApplication.getApplicant().getUser().getEmail();
-        String fullName = savedApplication.getApplicant().getApplicantFullName();
-        String jobTitle = savedApplication.getJob().getTitle();
-        long applicationId = savedApplication.getId();
+        String email = submittedApplication.getApplicant().getUser().getEmail();
+        String fullName = submittedApplication.getApplicant().getApplicantFullName();
+        String jobTitle = submittedApplication.getJob().getTitle();
+        long applicationId = submittedApplication.getId();
 
         emailService.sendSubmittedApplicationEmail(email, fullName, applicationId, jobTitle);
+
+        return applicationMapper.entityToApplicationResponseDto(submittedApplication);
     }
 
     private User getUser(Authentication authentication) {
@@ -172,7 +175,7 @@ public class ApplicantServiceImpl implements ApplicantService {
     }
 
     @Override
-    public void withdrawApplication(Long id, Authentication authentication) {
+    public ApplicationResponseDTO withdrawApplication(Long id, Authentication authentication) {
         // find application by id
         Application application = applicationRepository
                 .findById(id).orElseThrow(()-> new RuntimeException("Application id not found!"));
@@ -182,7 +185,9 @@ public class ApplicantServiceImpl implements ApplicantService {
 
         application.setStatus(ApplicationStatus.WITHDRAWN);
         application.setUpdatedBy(applicantUser);
-        applicationRepository.save(application);
+        Application withdrawnApplication = applicationRepository.save(application);
+
+        return applicationMapper.entityToApplicationResponseDto(withdrawnApplication);
     }
 
     @Override

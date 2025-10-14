@@ -24,12 +24,14 @@ public interface ApplicationMapper {
     @Mapping(target = "applicant", ignore = true)
     Application dtoToEntity(ApplicationDTO dto);
 
-    @Mapping(target = "jobDescription", source = "job.description")
-    @Mapping(target = "updatedBy", source = "updatedBy.employee.job.title")
-    @Mapping(target = "jobPosition", source = "job.title")
-    @Mapping(target = "applicantName", source = "applicant.firstName")
+    @Mapping(target = "applicationId", source = "id")
+    @Mapping(target = "description", source = "job.description")
+    @Mapping(target = "appliedPosition", source = "job.title")
+    @Mapping(target = "applicantName", source = "applicant.applicantFullName")
     ApplicationResponseDTO entityToApplicationResponseDto(Application application);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
     @Mapping(target = "job", ignore = true)
     @Mapping(target = "applicant", ignore = true)
