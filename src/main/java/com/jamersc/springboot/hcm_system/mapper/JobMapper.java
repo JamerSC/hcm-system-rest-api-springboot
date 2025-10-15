@@ -16,6 +16,8 @@ public interface JobMapper {
 
 
     @Mapping(target = "department", source = "department.name")
+    @Mapping(target = "updatedBy", source = "updatedBy.employee.job.title")
+    @Mapping(target = "createdBy", source = "createdBy.employee.job.title")
     JobDTO entityToJobDto(Job job);
 
     @Mapping(target = "employees", ignore = true)
@@ -43,12 +45,13 @@ public interface JobMapper {
     @Mapping(target = "createdAt", ignore = true)
     Job jobCreateDtoToEntity(JobCreateDTO dto);
 
+    @Mapping(target = "jobId", source = "id")
     @Mapping(target = "postedBy", source = "postedBy.employee.job.title")
     @Mapping(target = "department", source = "department.name")
-    @Mapping(target = "updatedBy", source = "updatedBy.employee.job.title")
-    @Mapping(target = "createdBy", source = "createdBy.employee.job.title")
     JobResponseDTO entityToJobResponseDto(Job job);
 
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "employees", ignore = true)
     @Mapping(target = "department", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)

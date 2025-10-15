@@ -13,15 +13,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ApplicantProfileDTO {
-    // Remove 'id' as it's typically derived from the authenticated user
-    // Remove 'user' entity
-
-    // These fields are typically updated via a separate file upload or internal logic
-    // So you might remove them if client shouldn't set them directly in profile update
-
-    // private String currentStatus;
-
-    // ... other fields for their application profile (education, experience, personal details)
     @NotBlank(message = "First name is required for profile") // example validation
     private String firstName;
     @NotBlank(message = "Last name is required for profile")

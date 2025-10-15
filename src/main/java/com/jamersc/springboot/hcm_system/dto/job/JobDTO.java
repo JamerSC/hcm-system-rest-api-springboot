@@ -1,5 +1,6 @@
 package com.jamersc.springboot.hcm_system.dto.job;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jamersc.springboot.hcm_system.entity.Department;
 import com.jamersc.springboot.hcm_system.entity.JobStatus;
 import jakarta.persistence.EnumType;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -24,4 +26,10 @@ public class JobDTO {
     private String location;
     private LocalDate postedDate;
     private String department;
+    private String createdBy;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Manila")
+    private Date createdAt;
+    private String updatedBy;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Manila")
+    private Date updatedAt;
 }

@@ -13,8 +13,8 @@ import java.util.Optional;
 
 public interface JobService {
 
-    Page<JobResponseDTO> getAllJob(Pageable pageable);
-    Page<JobDTO> getOpenJobs(Pageable pageable);
+    Page<JobDTO> getAllJob(Pageable pageable);
+    Page<JobResponseDTO> getOpenJobs(Pageable pageable);
     Optional<JobResponseDTO> getJobById(Long id);
     JobResponseDTO save(JobCreateDTO dto, Authentication authentication);
     JobResponseDTO postJob(Long id, Authentication authentication);

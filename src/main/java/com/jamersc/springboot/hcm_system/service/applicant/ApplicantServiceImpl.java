@@ -1,8 +1,8 @@
 package com.jamersc.springboot.hcm_system.service.applicant;
 
-import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantDto;
+import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantDTO;
 import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantProfileDTO;
-import com.jamersc.springboot.hcm_system.dto.application.ApplicationDTO;
+import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantResponseDTO;
 import com.jamersc.springboot.hcm_system.dto.application.ApplicationResponseDTO;
 import com.jamersc.springboot.hcm_system.entity.*;
 import com.jamersc.springboot.hcm_system.mapper.ApplicantMapper;
@@ -46,7 +46,7 @@ public class ApplicantServiceImpl implements ApplicantService {
     }
 
     @Override
-    public Page<ApplicantDto> getAllApplicant(Pageable pageable) {
+    public Page<ApplicantDTO> getAllApplicant(Pageable pageable) {
         // fetch applicant from repository
         Page<Applicant> applicants = applicantRepository.findAll(pageable);
         // map the Page<Applicant> to Page<JobDTO>
@@ -54,7 +54,7 @@ public class ApplicantServiceImpl implements ApplicantService {
     }
 
     @Override
-    public Optional<ApplicantDto> getApplicantById(Long id) {
+    public Optional<ApplicantDTO> getApplicantById(Long id) {
 
         return Optional.ofNullable(applicantRepository.findById(id)
                 .map(applicantMapper::entityToApplicantDto)
@@ -62,15 +62,14 @@ public class ApplicantServiceImpl implements ApplicantService {
     }
 
     @Override
-    public ApplicantProfileDTO getApplicantProfile(String username) {
-        return applicantMapper.entityToProfileDto(
+    public ApplicantResponseDTO getApplicantProfile(String username) {
+        return applicantMapper.entityToResponseDto(
                 applicantRepository.findApplicantByUsername(username)
         );
     }
 
     @Override
-//    @Transactional // Essential if you're fetching and then saving/updating
-    public ApplicantProfileDTO updateApplicantProfile(String username,
+    public ApplicantResponseDTO updateApplicantProfile(String username,
                                        ApplicantProfileDTO profileDTO) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(()-> new RuntimeException("Authenticated user not found: " + username));
@@ -79,8 +78,6 @@ public class ApplicantServiceImpl implements ApplicantService {
                 .orElseGet(() -> { // Create new Applicant if not found (e.g., first profile update after registration)
                     Applicant newApplicant = new Applicant();
                     newApplicant.setUser(user);
-                    //set default status
-                    newApplicant.setCurrentStatus("Profile Created");
                     return newApplicant;
                 });
         // Map DTO fields to entity. You can use a mapper library (MapStruct) here.
@@ -92,18 +89,20 @@ public class ApplicantServiceImpl implements ApplicantService {
 
         Applicant updatedApplicant = applicantRepository.save(applicant);
 
-        return applicantMapper.entityToProfileDto(updatedApplicant);
+        return applicantMapper.entityToResponseDto(updatedApplicant);
     }
 
     @Override
-    public void uploadResume(String username, String file) {
+    public ApplicantResponseDTO uploadResume(String username, String file) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(()-> new RuntimeException("Applicant profile not found for user: " + username));
         Applicant applicant = applicantRepository.findByApplicantUser(user)
                 .orElseThrow(() -> new RuntimeException("Applicant profile not found for user: " + username));
 
         applicant.setCvFilePath(file);
-        applicantRepository.save(applicant);
+        Applicant uploadResume = applicantRepository.save(applicant);
+
+        return applicantMapper.entityToResponseDto(uploadResume);
     }
 
     @Override

@@ -1,10 +1,10 @@
 package com.jamersc.springboot.hcm_system.controller;
 
-import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantDto;
 import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantProfileDTO;
-import com.jamersc.springboot.hcm_system.dto.application.ApplicationDTO;
+import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantResponseDTO;
 import com.jamersc.springboot.hcm_system.dto.application.ApplicationResponseDTO;
 import com.jamersc.springboot.hcm_system.dto.job.JobDTO;
+import com.jamersc.springboot.hcm_system.dto.job.JobResponseDTO;
 import com.jamersc.springboot.hcm_system.service.applicant.ApplicantService;
 import com.jamersc.springboot.hcm_system.service.job.JobService;
 import jakarta.validation.Valid;
@@ -34,9 +34,9 @@ public class ApplicantController {
     }
 
     @GetMapping("/open/jobs")
-    public ResponseEntity<Page<JobDTO>> getOpenJobs(
+    public ResponseEntity<Page<JobResponseDTO>> getOpenJobs(
             @PageableDefault(page = 0, size = 10, sort = "title") Pageable pageable) {
-        Page<JobDTO> listOfOpenJobs = jobService.getOpenJobs(pageable);
+        Page<JobResponseDTO> listOfOpenJobs = jobService.getOpenJobs(pageable);
         return new ResponseEntity<>(listOfOpenJobs, HttpStatus.OK);
     }
 
@@ -69,35 +69,33 @@ public class ApplicantController {
     }
 
     @GetMapping("/me/profile")
-    public ResponseEntity<ApplicantProfileDTO> getMyApplicantProfile(
+    public ResponseEntity<ApplicantResponseDTO> getMyApplicantProfile(
             @AuthenticationPrincipal UserDetails userDetails) {
         String username = userDetails.getUsername();
-        ApplicantProfileDTO profile = applicantService.getApplicantProfile(username);
-        return ResponseEntity.ok(profile);
+        ApplicantResponseDTO profile = applicantService.getApplicantProfile(username);
+        return new ResponseEntity<>(profile, HttpStatus.OK);
     }
 
     // Endpoint for updating applicant profile details (e.g., after registration)
     // The @AuthenticationPrincipal allows you to get the currently logged-in user's details
     @PutMapping("/update-profile")
-    public ResponseEntity<ApplicantProfileDTO> updateApplicantProfile(
+    public ResponseEntity<ApplicantResponseDTO> updateApplicantProfile(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody ApplicantProfileDTO profileDTO) {
         // userDetails.getUsername() gives you the username of the logged-in user
-        ApplicantProfileDTO profile = applicantService.updateApplicantProfile(userDetails.getUsername(), profileDTO);
+        ApplicantResponseDTO profile = applicantService.updateApplicantProfile(userDetails.getUsername(), profileDTO);
         return new ResponseEntity<>(profile, HttpStatus.OK);
     }
 
     // Endpoint for CV/Resume upload
     @PostMapping("/profile/upload-resume")
-    public ResponseEntity<String> uploadResume(
+    public ResponseEntity<ApplicantResponseDTO> uploadResume(
             @AuthenticationPrincipal UserDetails userDetails,
             @Valid @RequestParam("file") MultipartFile file) {
 
-        if (file.isEmpty()) {
-            return new ResponseEntity<>("Please select the file to upload,", HttpStatus.BAD_REQUEST);
-        }
-        applicantService.uploadResume(userDetails.getUsername(), String.valueOf(file));
-        return new ResponseEntity<>("Resume uploaded successfully", HttpStatus.OK);
+        ApplicantResponseDTO uploadedResume = applicantService.uploadResume(userDetails.getUsername(), String.valueOf(file));
+
+        return new ResponseEntity<>(uploadedResume, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/me")

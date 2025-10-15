@@ -1,5 +1,6 @@
 package com.jamersc.springboot.hcm_system.controller;
 
+import com.jamersc.springboot.hcm_system.dto.attendance.AttendanceDTO;
 import com.jamersc.springboot.hcm_system.dto.attendance.AttendanceResponseDTO;
 import com.jamersc.springboot.hcm_system.dto.profile.EmployeeProfileDTO;
 import com.jamersc.springboot.hcm_system.entity.Attendance;
@@ -30,10 +31,9 @@ public class AttendanceController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<Page<AttendanceResponseDTO>> getAllAttendances(
+    public ResponseEntity<Page<AttendanceDTO>> getAllAttendances(
             @PageableDefault(page = 0, size = 10, sort = "attendanceDate") Pageable pageable) {
-        Page<AttendanceResponseDTO> attendances = attendanceService
-                .getAllAttendance(pageable);
+        Page<AttendanceDTO> attendances = attendanceService.getAllAttendance(pageable);
         return new ResponseEntity<>(attendances, HttpStatus.OK);
     }
 
@@ -53,7 +53,7 @@ public class AttendanceController {
 
         AttendanceResponseDTO attendanceRecord = attendanceService.checkIn(employee.getId());
 
-        return new ResponseEntity<>(attendanceRecord, HttpStatus.OK);
+        return new ResponseEntity<>(attendanceRecord, HttpStatus.CREATED);
     }
 
     @PatchMapping("/check-out")

@@ -19,7 +19,6 @@ public class Applicant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String cvFilePath; // Path or URL to stored CV/Resume
-    private String currentStatus; // e.g., "Registered", "CV Submitted", "Interviewed"
     private String firstName;
     private String lastName;
     private String phoneNumber;

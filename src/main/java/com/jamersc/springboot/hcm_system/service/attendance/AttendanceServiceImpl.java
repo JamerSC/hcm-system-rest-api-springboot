@@ -1,5 +1,6 @@
 package com.jamersc.springboot.hcm_system.service.attendance;
 
+import com.jamersc.springboot.hcm_system.dto.attendance.AttendanceDTO;
 import com.jamersc.springboot.hcm_system.dto.attendance.AttendanceResponseDTO;
 import com.jamersc.springboot.hcm_system.entity.Attendance;
 import com.jamersc.springboot.hcm_system.entity.Employee;
@@ -37,9 +38,9 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public Page<AttendanceResponseDTO> getAllAttendance(Pageable pageable) {
+    public Page<AttendanceDTO> getAllAttendance(Pageable pageable) {
         Page<Attendance> attendances = attendanceRepository.findAll(pageable);
-        return attendances.map(attendanceMapper::entityToResponseDto);
+        return attendances.map(attendanceMapper::entityToDto);
     }
 
     @Override

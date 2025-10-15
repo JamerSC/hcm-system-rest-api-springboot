@@ -17,19 +17,13 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class JobResponseDTO {
-    private Long id;
-    private String title;
-    private String description;
-    private String requirements;
-    private JobStatus status;
-    private String location;
-    private String postedBy;
+    private Long jobId;
     private LocalDate postedDate;
+    private String postedBy;
+    private String title;
     private String department;
-    private String createdBy;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Manila")
-    private Date createdAt;
-    private String updatedBy;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Manila")
-    private Date updatedAt;
+    private String description;
+    private String location;
+    private JobStatus status;
+    private String requirements;
 }
