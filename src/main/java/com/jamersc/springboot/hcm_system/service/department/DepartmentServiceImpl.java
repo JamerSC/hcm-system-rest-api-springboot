@@ -2,6 +2,7 @@ package com.jamersc.springboot.hcm_system.service.department;
 
 import com.jamersc.springboot.hcm_system.dto.department.DepartmentCreateDTO;
 import com.jamersc.springboot.hcm_system.dto.department.DepartmentDTO;
+import com.jamersc.springboot.hcm_system.dto.department.DepartmentPatchDTO;
 import com.jamersc.springboot.hcm_system.dto.department.DepartmentResponseDTO;
 import com.jamersc.springboot.hcm_system.entity.Department;
 import com.jamersc.springboot.hcm_system.entity.User;
@@ -46,12 +47,17 @@ public class DepartmentServiceImpl implements DepartmentService {
                 .orElseThrow(() -> new RuntimeException("Department id found! " + id));
     }
 
+    // Get user authentication
+    private User getUser(Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        return userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Authenticated user not found in the database"));
+    }
+
     @Override
     public DepartmentResponseDTO save(DepartmentCreateDTO dto, Authentication authentication) {
         // get the current user from authentication object
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User currentUser = userRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("Authenticated user not found in the database"));
+        User currentUser = getUser(authentication);
 
         // map the dto to entity
         Department department = departmentMapper.createDtoToEntity(dto);
@@ -65,6 +71,27 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 
         return departmentMapper.entityToDepartmentResponseDto(saveDepartment);
+    }
+
+
+    @Override
+    public DepartmentResponseDTO patchDepartment(Long id, DepartmentPatchDTO dto, Authentication authentication) {
+        User currentUser = getUser(authentication);
+        Department department = departmentRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Department not found"));
+
+        // Update only provided values (PATCH = partial update)
+        if (dto.getCode() != null && !dto.getCode().isBlank()) {
+            department.setCode(dto.getCode());
+        }
+
+        if (dto.getName() != null && !dto.getName().isBlank()) {
+            department.setName(dto.getName());
+        }
+
+        department.setUpdatedBy(currentUser);
+        Department patchedDepartment = departmentRepository.save(department);
+        return departmentMapper.entityToDepartmentResponseDto(patchedDepartment);
     }
 
     @Override

@@ -120,7 +120,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/departments/").hasRole("MANAGER")
                         .requestMatchers(HttpMethod.GET, "/api/v1/departments/{id}").hasRole("MANAGER")
                         .requestMatchers(HttpMethod.POST, "/api/v1/departments/").hasRole("MANAGER")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/departments/**").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/departments/{id}").hasAnyRole("MANAGER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/departments/{id}").hasAnyRole("ADMIN")
                         // Job
                         .requestMatchers(HttpMethod.GET, "/api/v1/jobs/").hasRole("MANAGER")
                         .requestMatchers(HttpMethod.GET, "/api/v1/jobs/{id}").hasRole("MANAGER")

@@ -1,9 +1,8 @@
 package com.jamersc.springboot.hcm_system.controller;
 
 import com.jamersc.springboot.hcm_system.dto.department.DepartmentCreateDTO;
-import com.jamersc.springboot.hcm_system.dto.department.DepartmentDTO;
+import com.jamersc.springboot.hcm_system.dto.department.DepartmentPatchDTO;
 import com.jamersc.springboot.hcm_system.dto.department.DepartmentResponseDTO;
-import com.jamersc.springboot.hcm_system.entity.Department;
 import com.jamersc.springboot.hcm_system.service.department.DepartmentService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -14,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -46,6 +44,13 @@ public class DepartmentController {
             Authentication authentication) {  // <-- Inject the Authentication object
         DepartmentResponseDTO department = departmentService.save(createDTO, authentication);
         return new ResponseEntity<>(department, HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<DepartmentResponseDTO> patchDepartment(
+            @PathVariable Long id, @RequestBody DepartmentPatchDTO patchDTO, Authentication authentication) {
+        DepartmentResponseDTO patchedDepartment = departmentService.patchDepartment(id, patchDTO, authentication);
+        return new ResponseEntity<>(patchedDepartment, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

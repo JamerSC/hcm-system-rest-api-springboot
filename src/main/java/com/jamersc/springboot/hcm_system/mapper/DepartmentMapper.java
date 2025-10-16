@@ -2,6 +2,7 @@ package com.jamersc.springboot.hcm_system.mapper;
 
 import com.jamersc.springboot.hcm_system.dto.department.DepartmentCreateDTO;
 import com.jamersc.springboot.hcm_system.dto.department.DepartmentDTO;
+import com.jamersc.springboot.hcm_system.dto.department.DepartmentPatchDTO;
 import com.jamersc.springboot.hcm_system.dto.department.DepartmentResponseDTO;
 import com.jamersc.springboot.hcm_system.entity.Department;
 import org.mapstruct.Mapper;
@@ -19,7 +20,6 @@ public interface DepartmentMapper {
     @Mapping(target = "updatedBy", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "jobs", ignore = true)
-    //q@Mapping(target = "id", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     Department deptDtoToEntity(DepartmentDTO dto);
@@ -40,6 +40,17 @@ public interface DepartmentMapper {
     @Mapping(target = "updatedBy", source = "updatedBy.employee.job.title")
     @Mapping(target = "createdBy", source = "createdBy.employee.job.title")
     DepartmentResponseDTO entityToDepartmentResponseDto(Department dept);
+
+    DepartmentPatchDTO entityToPatchDto(Department dept);
+
+
+    @Mapping(target = "updatedBy", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "jobs", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdBy",ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    Department patchDtoToEntity(DepartmentPatchDTO dto);
 
     List<DepartmentDTO> entitiesToDeptDtos(List<Department> departments);
 
