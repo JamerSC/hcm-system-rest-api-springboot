@@ -2,6 +2,7 @@ package com.jamersc.springboot.hcm_system.mapper;
 
 import com.jamersc.springboot.hcm_system.dto.job.JobCreateDTO;
 import com.jamersc.springboot.hcm_system.dto.job.JobDTO;
+import com.jamersc.springboot.hcm_system.dto.job.JobPatchDTO;
 import com.jamersc.springboot.hcm_system.dto.job.JobResponseDTO;
 import com.jamersc.springboot.hcm_system.entity.Job;
 import org.mapstruct.Mapper;
@@ -45,11 +46,27 @@ public interface JobMapper {
     @Mapping(target = "createdAt", ignore = true)
     Job jobCreateDtoToEntity(JobCreateDTO dto);
 
+    @Mapping(target = "departmentId", source = "department.id")
+    JobPatchDTO entityToPatchDto(Job job);
+
+    @Mapping(target = "updatedBy", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "status", ignore = true)
+    @Mapping(target = "postedDate", ignore = true)
+    @Mapping(target = "postedBy", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "employees", ignore = true)
+    @Mapping(target = "department", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    Job patchDtoToEntity(JobPatchDTO dto);
+
     @Mapping(target = "jobId", source = "id")
     @Mapping(target = "postedBy", source = "postedBy.employee.job.title")
     @Mapping(target = "department", source = "department.name")
     JobResponseDTO entityToJobResponseDto(Job job);
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "employees", ignore = true)

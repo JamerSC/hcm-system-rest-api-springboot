@@ -2,6 +2,7 @@ package com.jamersc.springboot.hcm_system.service.job;
 
 import com.jamersc.springboot.hcm_system.dto.job.JobCreateDTO;
 import com.jamersc.springboot.hcm_system.dto.job.JobDTO;
+import com.jamersc.springboot.hcm_system.dto.job.JobPatchDTO;
 import com.jamersc.springboot.hcm_system.dto.job.JobResponseDTO;
 import com.jamersc.springboot.hcm_system.entity.Job;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ public interface JobService {
     Optional<JobResponseDTO> getJobById(Long id);
     JobResponseDTO save(JobCreateDTO dto, Authentication authentication);
     JobResponseDTO postJob(Long id, Authentication authentication);
+    JobResponseDTO patchJob(Long id, JobPatchDTO dto, Authentication authentication);
     JobResponseDTO filledJob(Long id, Authentication authentication);
     JobResponseDTO closeJob(Long id, Authentication authentication);
     void deleteById(Long id);

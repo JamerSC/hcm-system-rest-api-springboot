@@ -2,6 +2,7 @@ package com.jamersc.springboot.hcm_system.service.job;
 
 import com.jamersc.springboot.hcm_system.dto.job.JobCreateDTO;
 import com.jamersc.springboot.hcm_system.dto.job.JobDTO;
+import com.jamersc.springboot.hcm_system.dto.job.JobPatchDTO;
 import com.jamersc.springboot.hcm_system.dto.job.JobResponseDTO;
 import com.jamersc.springboot.hcm_system.entity.Department;
 import com.jamersc.springboot.hcm_system.entity.Job;
@@ -87,6 +88,37 @@ public class JobServiceImpl implements JobService {
         Job openJob = jobRepository.save(job);
 
         return jobMapper.entityToJobResponseDto(openJob);
+    }
+
+    @Override
+    public JobResponseDTO patchJob(Long id, JobPatchDTO dto, Authentication authentication) {
+        Job job = jobRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Job not found"));
+
+        User currentUser = getUser(authentication);
+
+        if (dto.getTitle() != null && !dto.getTitle().isBlank()) {
+            job.setTitle(dto.getTitle());
+        }
+        if (dto.getDescription() != null && !dto.getDescription().isBlank()) {
+            job.setTitle(dto.getDescription());
+        }
+        if (dto.getRequirements() != null && !dto.getRequirements().isBlank()) {
+            job.setTitle(dto.getRequirements());
+        }
+        if (dto.getLocation() != null && !dto.getLocation().isBlank()) {
+            job.setTitle(dto.getRequirements());
+        }
+        if (dto.getDepartmentId() != null) {
+            Department department = departmentRepository.findById(dto.getDepartmentId())
+                    .orElseThrow(()-> new RuntimeException("Department not found"));
+            job.setDepartment(department);
+        }
+
+        job.setUpdatedBy(currentUser);
+        Job patchedJob = jobRepository.save(job);
+
+        return jobMapper.entityToJobResponseDto(patchedJob);
     }
 
     @Override

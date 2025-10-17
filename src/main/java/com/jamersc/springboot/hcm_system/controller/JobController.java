@@ -2,6 +2,7 @@ package com.jamersc.springboot.hcm_system.controller;
 
 import com.jamersc.springboot.hcm_system.dto.job.JobCreateDTO;
 import com.jamersc.springboot.hcm_system.dto.job.JobDTO;
+import com.jamersc.springboot.hcm_system.dto.job.JobPatchDTO;
 import com.jamersc.springboot.hcm_system.dto.job.JobResponseDTO;
 import com.jamersc.springboot.hcm_system.service.job.JobService;
 import jakarta.validation.Valid;
@@ -45,6 +46,13 @@ public class JobController {
             Authentication authentication) {
         JobResponseDTO jobResponseDTO = jobService.save(createDTO, authentication);
         return new ResponseEntity<>(jobResponseDTO, HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<JobResponseDTO> patchJob(
+            @PathVariable Long id, @RequestBody JobPatchDTO dto, Authentication authentication) {
+        JobResponseDTO patchedJob = jobService.patchJob(id, dto, authentication);
+        return new ResponseEntity<>(patchedJob, HttpStatus.OK);
     }
 
     @PatchMapping("/{id}/open")
