@@ -14,26 +14,12 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmployeePatchDTO {
-    private Long id;
-    @NotBlank(message = "First name is required")
     private String firstName;
-    @NotBlank(message = "Last name is required")
     private String lastName;
     @Email(message = "Email should be valid")
-    @NotBlank(message = "Email is required")
     private String email;
-
-    //@NotBlank(message = "Job Position is required")
-    //private String jobPosition;
-
     private Long jobId;
-
-    //@NotBlank(message = "Department is required")
-
-    private String department;
-    @NotNull(message = "Hired date is required")
     private LocalDate hiredDate;
-    @NotNull(message = "Salary is required")
     @Min(value = 0, message = "Salary must be a non-negative value")
     private Double salary;
 }

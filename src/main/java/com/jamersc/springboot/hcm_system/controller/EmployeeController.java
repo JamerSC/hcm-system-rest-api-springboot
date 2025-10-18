@@ -2,11 +2,7 @@ package com.jamersc.springboot.hcm_system.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.jamersc.springboot.hcm_system.dto.employee.EmployeeCreateDTO;
-import com.jamersc.springboot.hcm_system.dto.employee.EmployeeDTO;
-import com.jamersc.springboot.hcm_system.dto.employee.EmployeeResponseDTO;
-import com.jamersc.springboot.hcm_system.dto.profile.EmployeeProfileDTO;
-import com.jamersc.springboot.hcm_system.dto.employee.EmployeeUpdateDTO;
+import com.jamersc.springboot.hcm_system.dto.employee.*;
 import com.jamersc.springboot.hcm_system.entity.Employee;
 import com.jamersc.springboot.hcm_system.exception.EmployeeIDNotAllowedInRequestBodyException;
 import com.jamersc.springboot.hcm_system.exception.EmployeeNotFoundException;
@@ -20,9 +16,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -66,28 +59,11 @@ public class EmployeeController {
                 .orElseGet(()-> ResponseEntity.notFound().build()); // HTTP 404
     }
 
-//    @GetMapping("/{id}")
-//    public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable long id) {
-//        // Employee theEmployee = employeeService.findById(id);
-//        // return employeeService.findById(id);
-//        return new ResponseEntity<>(employeeService.findById(id), HttpStatus.OK);
-//    }
-
-    // get your employee profile
     @GetMapping("/me/profile")
-    public ResponseEntity<EmployeeProfileDTO> getMyEmployeeProfile(@AuthenticationPrincipal UserDetails userDetails) {
-        String username = userDetails.getUsername();
-        EmployeeProfileDTO profile = employeeService.getEmployeeProfileByUsername(username);
-        return ResponseEntity.ok(profile);
+    public ResponseEntity<EmployeeProfileDTO> getMyEmployeeProfile(Authentication authentication) {
+        EmployeeProfileDTO myProfile = employeeService.getMyEmployeeProfile(authentication);
+        return new ResponseEntity<>(myProfile, HttpStatus.OK);
     }
-
-//    @PatchMapping("/{id}/profile")
-//    public ResponseEntity<?> updateMyEmployeeProfile(@Valid @PathVariable Long id,
-//                                              @RequestBody Map<String, Object> patchPayload) {
-////      // Optional
-//        return null;
-//    }
-
 
     // Create Employee
     @PostMapping("/")
@@ -95,76 +71,16 @@ public class EmployeeController {
             @Valid @RequestBody EmployeeCreateDTO employeeDTO,
             Authentication authentication) {
 
-//        Moved to GlobalExceptionHandler class
-//        if (result.hasErrors()) {
-//            Map<String, String> errors = new HashMap<>();
-//            result.getFieldErrors().forEach(
-//                    error -> errors.put(error.getField(), error.getDefaultMessage()));
-//            return ResponseEntity.badRequest().body(errors);
-//        }
         EmployeeResponseDTO employee = employeeService.save(employeeDTO, authentication);
 
         return new ResponseEntity<>(employee, HttpStatus.CREATED); // Created 201
     }
 
-//    @PostMapping("/")
-//    public ResponseEntity<Employee> createEmployee(@Valid @RequestBody EmployeeDTO employeeDTO){
-//        Employee employee = employeeService.save(employeeDTO);
-//        return new ResponseEntity<>(employee, HttpStatus.CREATED); // Created 201
-//    }
-
-//    @PutMapping("/{id}")
-//    public ResponseEntity<?> updateEmployee(
-//            @Valid @RequestBody EmployeeUpdateDTO employeeDTO,
-//            BindingResult result, Authentication authentication) {
-//
-//        if (result.hasErrors()) {
-//            Map<String, String> errors = new HashMap<>();
-//            result.getFieldErrors().forEach(
-//                    error -> errors.put(error.getField(), error.getDefaultMessage()));
-//            return ResponseEntity.badRequest().body(errors);
-//        }
-//
-//        Employee employee = employeeService.update(employeeDTO, authentication);
-//        return new ResponseEntity<>(employee, HttpStatus.OK);
-//    }
-
     @PatchMapping("/{id}")
-    public ResponseEntity<?> patchEmployee(
-            @Valid @PathVariable Long id, @RequestBody Map<String, Object> patchPayload,
-            Authentication authentication) {
-
-        // find the employee in the db
-        Optional<EmployeeDTO> tempEmployee = employeeService.findById(id);
-
-        // throw exception if null or not existing
-        if (tempEmployee.isEmpty()) {
-            throw new EmployeeNotFoundException("Employee ID not found - " + id);
-        }
-
-        // throw the exception if the request body contains id - not allowed to change the key
-        if (patchPayload.containsKey("id")) {
-            throw new EmployeeIDNotAllowedInRequestBodyException("Cannot change primary key to a value that already exists - " + id);
-        }
-
-        // apply the patch payload to employee
-        EmployeeDTO patchEmployee = apply(patchPayload, tempEmployee.get());
-
-        // ✅ Manual validation
-        Set<ConstraintViolation<EmployeeDTO>> violations = validator.validate(patchEmployee);
-        if (!violations.isEmpty()) {
-            Map<String, String> errors = new HashMap<>();
-            for (ConstraintViolation<EmployeeDTO> violation : violations) {
-                String field = violation.getPropertyPath().toString();
-                String message = violation.getMessage();
-                errors.put(field, message);
-            }
-            return ResponseEntity.badRequest().body(errors);
-        }
-
-        Employee employee = employeeService.patch(patchEmployee, authentication);
-
-        return new ResponseEntity<>(employee, HttpStatus.OK);
+    public ResponseEntity<EmployeeResponseDTO> patchEmployeeProfile(
+            @PathVariable Long id, @RequestBody EmployeePatchDTO dto, Authentication authentication) {
+        EmployeeResponseDTO patchedEmployee = employeeService.patchEmployee(id, dto, authentication);
+        return new ResponseEntity<>(patchedEmployee, HttpStatus.OK);
     }
 
     private EmployeeDTO apply(Map<String, Object> patchPayload, EmployeeDTO tempEmployee) {
@@ -194,11 +110,4 @@ public class EmployeeController {
         employeeService.deleteEmployeeByID(id);
         return ResponseEntity.noContent().build(); // HTTP 204
     }
-
-/*    @DeleteMapping("/{id}")
-    public String deleteEmployee(@PathVariable Long id) {
-        EmployeeDTO tempEmployee = employeeService.findById(id);
-        employeeService.deleteEmployeeByID(id);
-        return "Deleted employee id - " + id;
-    }*/
 }

@@ -1,24 +1,26 @@
 package com.jamersc.springboot.hcm_system.service.employee;
 
-import com.jamersc.springboot.hcm_system.dto.employee.EmployeeCreateDTO;
-import com.jamersc.springboot.hcm_system.dto.employee.EmployeeDTO;
-import com.jamersc.springboot.hcm_system.dto.employee.EmployeeResponseDTO;
-import com.jamersc.springboot.hcm_system.dto.profile.EmployeeProfileDTO;
-import com.jamersc.springboot.hcm_system.dto.employee.EmployeeUpdateDTO;
+import com.jamersc.springboot.hcm_system.dto.employee.*;
+import com.jamersc.springboot.hcm_system.entity.Job;
 import com.jamersc.springboot.hcm_system.entity.User;
 import com.jamersc.springboot.hcm_system.exception.EmployeeNotFoundException;
 import com.jamersc.springboot.hcm_system.entity.Employee;
 import com.jamersc.springboot.hcm_system.mapper.EmployeeMapper;
 import com.jamersc.springboot.hcm_system.repository.EmployeeRepository;
+import com.jamersc.springboot.hcm_system.repository.JobRepository;
 import com.jamersc.springboot.hcm_system.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
@@ -28,11 +30,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
     private final UserRepository userRepository;
+    private final JobRepository jobRepository;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper, UserRepository userRepository) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper, UserRepository userRepository, JobRepository jobRepository) {
         this.employeeRepository = employeeRepository;
         this.employeeMapper = employeeMapper;
         this.userRepository = userRepository;
+        this.jobRepository = jobRepository;
     }
 
 
@@ -65,29 +69,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeProfileDTO getEmployeeProfileByUsername(String username) {
-        return employeeMapper.entityToProfileDto(
-                employeeRepository.findEmployeeByUsername(username)
-        );
+    public EmployeeProfileDTO getMyEmployeeProfile(Authentication authentication) {
+        User userDetails = getUser(authentication);
+        Employee myProfile = employeeRepository.findEmployeeByUsername(userDetails.getUsername());
+        return employeeMapper.entityToProfileDto(myProfile);
     }
-
-//    @Override
-//    public Optional<EmployeeDTO> findById(Long id) {
-//        return employeeRepository.findById(id)
-//                .map(employeeMapper::entityToDto);
-//    }
-
-//    @Override
-//    public EmployeeDTO findById(Long id) {
-////        Employee employee = employeeRepository.findById(id).orElse(null);
-////        if(employee != null) {
-////            return employee;
-////        }
-////        throw new EmployeeIDNotAllowedException("Employee id not found. - " + id);
-//        return employeeRepository.findById(id)
-//                .map(employeeMapper::entityToDto)
-//                .orElseThrow(() -> new EmployeeIDNotAllowedException("Employee id not found. - " + id));
-//    }
 
     @Override
     public EmployeeResponseDTO save(EmployeeCreateDTO employeeDTO, Authentication authentication) {
@@ -124,18 +110,36 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee patch(EmployeeDTO employeeDTO, Authentication authentication) {
-        // get current user from authentication
+    public EmployeeResponseDTO patchEmployee(Long id, EmployeePatchDTO dto, Authentication authentication) {
         User currentUser = getUser(authentication);
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Employee not found"));
 
-        // map dto to entity
-        Employee employee = employeeMapper.dtoToEntity(employeeDTO);
-
-        // set updated by current user
+        if (dto.getFirstName() != null && !dto.getFirstName().isBlank()) {
+            employee.setFirstName(dto.getFirstName());
+        }
+        if (dto.getLastName() != null && !dto.getLastName().isBlank()) {
+            employee.setLastName(dto.getLastName());
+        }
+        if (dto.getEmail() != null && !dto.getEmail().isBlank()) {
+            employee.setEmail(dto.getEmail());
+        }
+        if (dto.getJobId() != null) {
+            Job job = jobRepository.findById(dto.getJobId())
+                    .orElseThrow(() -> new RuntimeException("Job not found"));
+            employee.setJob(job);
+        }
+        if (dto.getHiredDate() != null) {
+            employee.setHiredDate(dto.getHiredDate());
+        }
+        if (dto.getSalary() != null) {
+            employee.setSalary(dto.getSalary());
+        }
         employee.setUpdatedBy(currentUser);
 
-        // save/patch employee
-        return employeeRepository.save(employee);
+        Employee patchedEmployee = employeeRepository.save(employee);
+
+        return employeeMapper.entityToEmployeeResponseDTO(patchedEmployee);
     }
 
     @Override

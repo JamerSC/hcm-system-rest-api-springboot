@@ -2,9 +2,7 @@ package com.jamersc.springboot.hcm_system.controller;
 
 import com.jamersc.springboot.hcm_system.dto.attendance.AttendanceDTO;
 import com.jamersc.springboot.hcm_system.dto.attendance.AttendanceResponseDTO;
-import com.jamersc.springboot.hcm_system.dto.profile.EmployeeProfileDTO;
-import com.jamersc.springboot.hcm_system.entity.Attendance;
-import com.jamersc.springboot.hcm_system.entity.Employee;
+import com.jamersc.springboot.hcm_system.dto.employee.EmployeeProfileDTO;
 import com.jamersc.springboot.hcm_system.service.attendance.AttendanceService;
 import com.jamersc.springboot.hcm_system.service.employee.EmployeeService;
 import org.springframework.data.domain.Page;
@@ -16,18 +14,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/v1/attendances")
 public class AttendanceController {
 
     private final AttendanceService attendanceService;
-    private final EmployeeService employeeService;
 
     public AttendanceController(AttendanceService attendanceService, EmployeeService employeeService) {
         this.attendanceService = attendanceService;
-        this.employeeService = employeeService;
     }
 
     @GetMapping("/")
@@ -48,21 +42,15 @@ public class AttendanceController {
 
     @PostMapping("/check-in")
     public ResponseEntity<AttendanceResponseDTO> attendanceCheckIn(Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        EmployeeProfileDTO employee = employeeService.getEmployeeProfileByUsername(userDetails.getUsername());
-
-        AttendanceResponseDTO attendanceRecord = attendanceService.checkIn(employee.getId());
-
+        AttendanceResponseDTO attendanceRecord = attendanceService
+                .checkIn(authentication);
         return new ResponseEntity<>(attendanceRecord, HttpStatus.CREATED);
     }
 
     @PatchMapping("/check-out")
     public ResponseEntity<AttendanceResponseDTO> attendanceCheckOut(Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        EmployeeProfileDTO employee = employeeService.getEmployeeProfileByUsername(userDetails.getUsername());
-
-        AttendanceResponseDTO attendanceRecord = attendanceService.checkOut(employee.getId());
-
+        AttendanceResponseDTO attendanceRecord = attendanceService
+                .checkOut(authentication);
         return new ResponseEntity<>(attendanceRecord, HttpStatus.OK);
     }
 }

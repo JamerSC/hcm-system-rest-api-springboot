@@ -14,6 +14,6 @@ public interface AttendanceService {
 
     Page<AttendanceDTO> getAllAttendance(Pageable pageable);
     Page<AttendanceResponseDTO> getMyAttendances(Pageable pageable, Authentication authentication);
-    AttendanceResponseDTO checkIn(Long employeeId);
-    AttendanceResponseDTO checkOut(Long employeeId);
+    AttendanceResponseDTO checkIn(Authentication authentication);
+    AttendanceResponseDTO checkOut(Authentication authentication);
 }

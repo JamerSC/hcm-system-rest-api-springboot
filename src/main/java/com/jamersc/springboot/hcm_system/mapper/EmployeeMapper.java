@@ -1,15 +1,10 @@
 package com.jamersc.springboot.hcm_system.mapper;
 
-import com.jamersc.springboot.hcm_system.dto.employee.EmployeeCreateDTO;
-import com.jamersc.springboot.hcm_system.dto.employee.EmployeeDTO;
-import com.jamersc.springboot.hcm_system.dto.employee.EmployeeResponseDTO;
-import com.jamersc.springboot.hcm_system.dto.profile.EmployeeProfileDTO;
-import com.jamersc.springboot.hcm_system.dto.employee.EmployeeUpdateDTO;
+import com.jamersc.springboot.hcm_system.dto.employee.*;
 import com.jamersc.springboot.hcm_system.entity.Employee;
 import com.jamersc.springboot.hcm_system.entity.Role;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.List;
@@ -83,6 +78,20 @@ public interface EmployeeMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "user", ignore = true)
     Employee updateDtoToEntity(EmployeeUpdateDTO dto);
+
+    @Mapping(target = "jobId", source = "employee.job.id")
+    EmployeePatchDTO entityToPatchDto(Employee employee);
+
+    @Mapping(target = "user", ignore = true)
+    @Mapping(target = "updatedBy", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "leaves", ignore = true)
+    @Mapping(target = "job", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "attendanceRecords", ignore = true)
+    Employee patchDtoToEntity(EmployeePatchDTO dto);
 
     // List collection of employee
     List<EmployeeDTO> entitiesToDtos(List<Employee> employees);
