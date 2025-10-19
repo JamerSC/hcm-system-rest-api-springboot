@@ -15,6 +15,7 @@ public interface LeaveService {
     Optional<LeaveResponseDTO> getLeaveRequestById(Long id);
     Page<LeaveResponseDTO> getMyLeaveRequests(Pageable pageable, Authentication authentication);
     LeaveResponseDTO submitLeaveRequest(LeaveCreateDTO dto, Authentication authentication);
+    LeaveResponseDTO cancelLeaveRequest(Long id, Authentication authentication);
     LeaveResponseDTO updateLeaveRequest(Long id, LeaveUpdateDTO dto, Authentication authentication);
     LeaveResponseDTO approveLeaveRequest(Long id, Authentication authentication);
     LeaveResponseDTO rejectLeaveRequest(Long id, Authentication authentication);

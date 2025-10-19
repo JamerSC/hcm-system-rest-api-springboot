@@ -1,5 +1,6 @@
 package com.jamersc.springboot.hcm_system.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum LeaveType {
@@ -18,5 +19,15 @@ public enum LeaveType {
     @JsonValue
     public String getDisplayLeaveTypeValue() {
         return displayLeaveTypeValue;
+    }
+
+    @JsonCreator
+    public static LeaveType fromValue(String value) {
+        for (LeaveType type : LeaveType.values()) {
+            if (type.name().equalsIgnoreCase(value) || type.displayLeaveTypeValue.equalsIgnoreCase(value)) {
+                return type;
+            }
+        }
+        throw new IllegalArgumentException("Unknown leave type: " + value);
     }
 }

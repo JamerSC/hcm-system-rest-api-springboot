@@ -1,6 +1,7 @@
 package com.jamersc.springboot.hcm_system.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum AttendanceStatus {
@@ -17,5 +18,15 @@ public enum AttendanceStatus {
     @JsonValue
     public String getDisplayAttendanceStatusValue() {
         return displayAttendanceStatusValue;
+    }
+
+    @JsonCreator
+    public static AttendanceStatus fromValue(String value) {
+        for (AttendanceStatus status : AttendanceStatus.values()) {
+            if (status.name().equalsIgnoreCase(value) || status.displayAttendanceStatusValue.equalsIgnoreCase(value)) {
+                return status;
+            }
+        }
+        throw new IllegalArgumentException("Unknown attendance status: " + value);
     }
 }

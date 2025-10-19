@@ -18,7 +18,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,13 +26,11 @@ public class LeaveServiceImpl implements LeaveService {
 
     private final LeaveRepository leaveRepository;
     private final UserRepository userRepository;
-    private final EmployeeRepository employeeRepository;
     private final LeaveMapper leaveMapper;
 
     public LeaveServiceImpl(LeaveRepository leaveRepository, UserRepository userRepository, EmployeeRepository employeeRepository, LeaveMapper leaveMapper) {
         this.leaveRepository = leaveRepository;
         this.userRepository = userRepository;
-        this.employeeRepository = employeeRepository;
         this.leaveMapper = leaveMapper;
     }
 
@@ -68,7 +65,7 @@ public class LeaveServiceImpl implements LeaveService {
         leaveRequest.setStartDate(dto.getStartDate());
         leaveRequest.setEndDate(dto.getEndDate());
         leaveRequest.setReason(dto.getReason());
-        leaveRequest.setStatus(LeaveStatus.PENDING);
+        leaveRequest.setStatus(LeaveStatus.SUBMITTED);
         leaveRequest.setSubmittedAt(new Date());
         leaveRequest.setCreatedBy(currentUser);
         leaveRequest.setUpdatedBy(currentUser);
@@ -76,6 +73,17 @@ public class LeaveServiceImpl implements LeaveService {
         Leave submitted = leaveRepository.save(leaveRequest);
 
         return leaveMapper.entityToResponseDto(submitted);
+    }
+
+    @Override
+    public LeaveResponseDTO cancelLeaveRequest(Long id, Authentication authentication) {
+        User currentUser = getUser(authentication);
+        Leave leave = leaveRepository.findById(id)
+                .orElseThrow(()->new RuntimeException("Leave not found"));
+        leave.setStatus(LeaveStatus.CANCELLED);
+        leave.setUpdatedBy(currentUser);
+        Leave cancelledLeave = leaveRepository.save(leave);
+        return leaveMapper.entityToResponseDto(cancelledLeave);
     }
 
     @Override

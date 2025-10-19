@@ -151,7 +151,8 @@ public class SecurityConfig {
                         // Leaves
                         .requestMatchers(HttpMethod.GET, "/api/v1/leaves/").hasRole("MANAGER")
                         .requestMatchers(HttpMethod.GET, "/api/v1/leaves/{id}").hasRole("MANAGER")
-                        .requestMatchers(HttpMethod.POST, "/api/v1/leaves/").hasRole("EMPLOYEE")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/leaves/submit").hasRole("EMPLOYEE")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/leaves/{id}/cancel").hasRole("MANAGER")
                         .requestMatchers(HttpMethod.GET, "/api/v1/leaves/me").hasRole("EMPLOYEE")
                         .requestMatchers(HttpMethod.PUT, "/api/v1/leaves/{id}").hasRole("EMPLOYEE")
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/leaves/{id}/approve-leave").hasRole("MANAGER")

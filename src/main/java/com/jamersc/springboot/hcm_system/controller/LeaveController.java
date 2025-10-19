@@ -41,13 +41,20 @@ public class LeaveController {
     }
 
 
-    @PostMapping("/")
+    @PostMapping("/submit")
     public ResponseEntity<LeaveResponseDTO> submitLeaveRequest(
             @Valid @RequestBody LeaveCreateDTO createDTO,
             Authentication authentication) {
-        LeaveResponseDTO leaveRequest =
+        LeaveResponseDTO submittedLeaveRequest =
                 leaveService.submitLeaveRequest(createDTO, authentication);
-        return new ResponseEntity<>(leaveRequest, HttpStatus.CREATED);
+        return new ResponseEntity<>(submittedLeaveRequest, HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/{id}/cancel")
+    public ResponseEntity<LeaveResponseDTO> cancelLeaveRequest(
+            @PathVariable Long id, Authentication authentication) {
+        LeaveResponseDTO canceledLeaveRequest = leaveService.cancelLeaveRequest(id, authentication);
+        return new ResponseEntity<>(canceledLeaveRequest, HttpStatus.OK);
     }
 
     @GetMapping("/me")

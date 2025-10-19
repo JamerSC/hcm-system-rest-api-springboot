@@ -1,5 +1,6 @@
 package com.jamersc.springboot.hcm_system.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum ApplicationStatus {
@@ -23,5 +24,15 @@ public enum ApplicationStatus {
     @JsonValue
     public String getDisplayApplicationStatusValue() {
         return displayApplicationStatusValue;
+    }
+
+    @JsonCreator
+    public static ApplicationStatus fromValue(String value) {
+        for (ApplicationStatus status : ApplicationStatus.values()) {
+            if (status.name().equalsIgnoreCase(value) || status.displayApplicationStatusValue.equalsIgnoreCase(value)) {
+                return status;
+            }
+        }
+        throw new IllegalArgumentException("Unknown application status: " + value);
     }
 }

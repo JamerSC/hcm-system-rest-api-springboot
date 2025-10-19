@@ -38,7 +38,7 @@ public class Leave {
     private String reason;
 
     @Enumerated(EnumType.STRING)
-    private LeaveStatus status = LeaveStatus.PENDING;
+    private LeaveStatus status = LeaveStatus.SUBMITTED;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date submittedAt = new Date();

@@ -24,17 +24,12 @@ public enum JobStatus {
 
     // BEST PRACTICE: This static method allows easy conversion from the display value back to the enum,
     // useful if you map the display value on the DTO.
-    public static JobStatus fromDisplayJobStatusValue(String displayValue) {
+    public static JobStatus fromDisplayJobStatusValue(String value) {
         for (JobStatus status : JobStatus.values()) {
-            if (status.displayJobStatusValue.equalsIgnoreCase(displayValue)) {
+            if (status.name().equalsIgnoreCase(value) || status.displayJobStatusValue.equalsIgnoreCase(value)) {
                 return status;
             }
         }
-        throw new IllegalArgumentException("Unknown display value for JobStatus: " + displayValue);
+        throw new IllegalArgumentException("Unknown display value for JobStatus: " + value);
     }
-
-//    CREATED,
-//    OPEN,
-//    CLOSED,
-//    FILLED
 }
