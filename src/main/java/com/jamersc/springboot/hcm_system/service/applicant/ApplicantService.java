@@ -7,6 +7,7 @@ import com.jamersc.springboot.hcm_system.dto.application.ApplicationResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
@@ -16,7 +17,7 @@ public interface ApplicantService {
     Optional<ApplicantDTO> getApplicantById(Long id); // for admin/hr role
     ApplicantResponseDTO getApplicantProfile(String username);
     ApplicantResponseDTO updateApplicantProfile(String username, ApplicantProfileDTO profileDTO);
-    ApplicantResponseDTO uploadResume(String username, String file);
+    ApplicantResponseDTO uploadResume(MultipartFile file, Authentication authentication);
     ApplicationResponseDTO applyForJob(Long id, Authentication authentication);
     Page<ApplicationResponseDTO> getAllApplicantJobsApplied(Pageable pageable, Authentication authentication);
     Optional<ApplicationResponseDTO> getApplicantJobsAppliedById(Long id, Authentication authentication);

@@ -90,10 +90,10 @@ public class ApplicantController {
     // Endpoint for CV/Resume upload
     @PostMapping("/profile/upload-resume")
     public ResponseEntity<ApplicantResponseDTO> uploadResume(
-            @AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestParam("file") MultipartFile file) {
+            @Valid @RequestParam("file") MultipartFile file,
+            Authentication authentication) {
 
-        ApplicantResponseDTO uploadedResume = applicantService.uploadResume(userDetails.getUsername(), String.valueOf(file));
+        ApplicantResponseDTO uploadedResume = applicantService.uploadResume(file, authentication);
 
         return new ResponseEntity<>(uploadedResume, HttpStatus.CREATED);
     }

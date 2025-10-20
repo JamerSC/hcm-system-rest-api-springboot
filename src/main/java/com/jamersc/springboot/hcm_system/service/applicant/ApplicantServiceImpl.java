@@ -12,12 +12,14 @@ import com.jamersc.springboot.hcm_system.repository.ApplicationRepository;
 import com.jamersc.springboot.hcm_system.repository.JobRepository;
 import com.jamersc.springboot.hcm_system.repository.UserRepository;
 import com.jamersc.springboot.hcm_system.service.email.EmailService;
+import com.jamersc.springboot.hcm_system.service.file.FileStorageService;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,16 +34,17 @@ public class ApplicantServiceImpl implements ApplicantService {
     private final UserRepository userRepository; // fetch user repository
     private final ApplicantMapper applicantMapper; // mapping of applicant entity and dto
     private final ApplicationMapper applicationMapper;
-
+    private final FileStorageService fileStorageService;
     private final EmailService emailService;
 
-    public ApplicantServiceImpl(ApplicantRepository applicantRepository, ApplicationRepository applicationRepository, JobRepository jobRepository, UserRepository userRepository, ApplicantMapper applicantMapper, ApplicationMapper applicationMapper, EmailService emailService) {
+    public ApplicantServiceImpl(ApplicantRepository applicantRepository, ApplicationRepository applicationRepository, JobRepository jobRepository, UserRepository userRepository, ApplicantMapper applicantMapper, ApplicationMapper applicationMapper, FileStorageService fileStorageService, EmailService emailService) {
         this.applicantRepository = applicantRepository;
         this.applicationRepository = applicationRepository;
         this.jobRepository = jobRepository;
         this.userRepository = userRepository;
         this.applicantMapper = applicantMapper;
         this.applicationMapper = applicationMapper;
+        this.fileStorageService = fileStorageService;
         this.emailService = emailService;
     }
 
@@ -93,13 +96,18 @@ public class ApplicantServiceImpl implements ApplicantService {
     }
 
     @Override
-    public ApplicantResponseDTO uploadResume(String username, String file) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(()-> new RuntimeException("Applicant profile not found for user: " + username));
-        Applicant applicant = applicantRepository.findByApplicantUser(user)
-                .orElseThrow(() -> new RuntimeException("Applicant profile not found for user: " + username));
+    public ApplicantResponseDTO uploadResume(MultipartFile file, Authentication authentication) {
+        User applicantUser = getUser(authentication);
+        Applicant applicant = applicantRepository.findByApplicantUser(applicantUser)
+                .orElseThrow(() -> new RuntimeException("Applicant profile not found for user: " + applicantUser));
+        // 1. BEST PRACTICE: Store the file first, retrieve the path/name
+        // Use the user's ID to make the file name unique and searchable
+        String storeFileName = fileStorageService.storeFile(file, String.valueOf(applicantUser.getId()));
 
-        applicant.setCvFilePath(file);
+        // 2. Update the database record with the file path
+        applicant.setCvFilePath(storeFileName);
+        applicant.setUpdatedBy(applicantUser);
+
         Applicant uploadResume = applicantRepository.save(applicant);
 
         return applicantMapper.entityToResponseDto(uploadResume);
