@@ -49,18 +49,18 @@ public class ApplicantServiceImpl implements ApplicantService {
     }
 
     @Override
-    public Page<ApplicantDTO> getAllApplicant(Pageable pageable) {
+    public Page<ApplicantResponseDTO> getAllApplicant(Pageable pageable) {
         // fetch applicant from repository
         Page<Applicant> applicants = applicantRepository.findAll(pageable);
         // map the Page<Applicant> to Page<JobDTO>
-        return applicants.map(applicantMapper::entityToApplicantDto);
+        return applicants.map(applicantMapper::entityToResponseDto);
     }
 
     @Override
-    public Optional<ApplicantDTO> getApplicantById(Long id) {
+    public Optional<ApplicantResponseDTO> getApplicantById(Long id) {
 
         return Optional.ofNullable(applicantRepository.findById(id)
-                .map(applicantMapper::entityToApplicantDto)
+                .map(applicantMapper::entityToResponseDto)
                 .orElseThrow(()-> new RuntimeException("Applicant id not found - " + id)));
     }
 

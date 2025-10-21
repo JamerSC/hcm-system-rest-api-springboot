@@ -13,8 +13,8 @@ import java.util.Optional;
 
 public interface ApplicantService {
 
-    Page<ApplicantDTO> getAllApplicant(Pageable pageable); // for admin/hr role
-    Optional<ApplicantDTO> getApplicantById(Long id); // for admin/hr role
+    Page<ApplicantResponseDTO> getAllApplicant(Pageable pageable); // for admin/hr role
+    Optional<ApplicantResponseDTO> getApplicantById(Long id); // for admin/hr role
     ApplicantResponseDTO getApplicantProfile(String username);
     ApplicantResponseDTO updateApplicantProfile(String username, ApplicantProfileDTO profileDTO);
     ApplicantResponseDTO uploadResume(MultipartFile file, Authentication authentication);

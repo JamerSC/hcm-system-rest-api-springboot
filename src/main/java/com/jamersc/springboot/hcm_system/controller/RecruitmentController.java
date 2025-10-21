@@ -1,6 +1,7 @@
 package com.jamersc.springboot.hcm_system.controller;
 
 import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantDTO;
+import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantResponseDTO;
 import com.jamersc.springboot.hcm_system.dto.application.ApplicationResponseDTO;
 import com.jamersc.springboot.hcm_system.service.applicant.ApplicantService;
 import com.jamersc.springboot.hcm_system.service.application.ApplicationService;
@@ -26,16 +27,16 @@ public class RecruitmentController {
     }
 
     @GetMapping("/applicants")
-    public ResponseEntity<Page<ApplicantDTO>> getAllApplicants(
+    public ResponseEntity<Page<ApplicantResponseDTO>> getAllApplicants(
             @PageableDefault(page = 0, size = 10, sort = "lastName") Pageable pageable) {
-        Page<ApplicantDTO> listOfApplicants = applicantService.getAllApplicant(pageable);
+        Page<ApplicantResponseDTO> listOfApplicants = applicantService.getAllApplicant(pageable);
         return new ResponseEntity<>(listOfApplicants, HttpStatus.OK);
     }
 
     @GetMapping("/{id}/applicant")
-    public ResponseEntity<Optional<ApplicantDTO>> getApplicantById(
+    public ResponseEntity<Optional<ApplicantResponseDTO>> getApplicantById(
             @PathVariable Long id) {
-        Optional<ApplicantDTO> profile = applicantService.getApplicantById(id);
+        Optional<ApplicantResponseDTO> profile = applicantService.getApplicantById(id);
         return ResponseEntity.ok(profile);
     }
 
