@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "applications")
@@ -22,7 +24,7 @@ public class Application {
     // applicants user id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "applicant_id", nullable = false , referencedColumnName = "id")
-    private Applicant applicant;
+    private Applicant applicant; // name of applicant
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "job_id", nullable = false, referencedColumnName = "id")
@@ -40,6 +42,25 @@ public class Application {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+
+
+    // other subject information
+    private String email;
+    private String phone;
+    private String mobile;
+    private String linkedInProfile; // link or name text field
+    private String degree; // degree table college, associate, masters single selection - cms
+    private Set<Employee> employees = new HashSet<>(); // arrays of employees
+    private String source; // create source fb, linkedin, single selection - cms
+    private Date availability; // date picker
+    // contract
+    private Double expectedSalary;
+    private Double proposedSalary;
+    // tabs
+    private String applicationSummary;
+    private String skills; // it should be a cms of skills
+
+
 
     @PrePersist
     protected void onCreate() {
