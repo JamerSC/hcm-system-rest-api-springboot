@@ -219,7 +219,16 @@ public class ApplicationServiceImpl implements ApplicationService {
         newEmployee.setUpdatedBy(currentUser);
 
         // save new employee entity
-        employeeRepository.save(newEmployee);
+        Employee employee = employeeRepository.save(newEmployee);
+
+//        // auto create employee contract
+//        Contract contract = new Contract();
+//        contract.setEmployee(employee);
+//        contract.setCreatedBy(currentUser);
+//        contract.setUpdatedBy(currentUser);
+//        contract.setSalary(application.getProposedSalary());
+//        contract.setTitle(application.getJob().getTitle());
+//        // other fields to populate
 
         // update application status
         Application hireApplicant = applicationRepository.save(application);

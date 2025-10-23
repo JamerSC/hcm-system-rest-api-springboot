@@ -30,9 +30,11 @@ public class Contract {
 
     //
     private String salaryStructureType; // cms employee, worker, etc
-    private Department department; // name of dept, dropdown, cms
+    // employee department
+    //private Department department; // name of dept, dropdown, cms
     private String salaryStructure; // ex. different base salary structure for labor, engineer etc
-    private Job job; // name of job
+    // employee job
+    //private Job job; // name of job
     private String contractType; // enums or cms,  dropdown, cms
     private String contractDetails;
 

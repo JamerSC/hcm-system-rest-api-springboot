@@ -50,7 +50,7 @@ public class Application {
     private String mobile;
     private String linkedInProfile; // link or name text field
     private String degree; // degree table college, associate, masters single selection - cms
-    private Set<Employee> employees = new HashSet<>(); // arrays of employees
+    private Set<String> employees = new HashSet<>(); // arrays of employees
     private String source; // create source fb, linkedin, single selection - cms
     private Date availability; // date picker
     // contract

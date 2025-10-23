@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum ApplicationStatus {
-    NEW("Application Submitted"),
+    NEW("New Application"),
     INITIAL_QUALIFICATION("Initial Qualification"),
     FIRST_INTERVIEW("First Interview"),
     SECOND_INTERVIEW("Second Interview"),
