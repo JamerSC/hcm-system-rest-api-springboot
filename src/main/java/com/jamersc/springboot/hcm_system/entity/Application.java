@@ -43,7 +43,7 @@ public class Application {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
 
-
+    // Null Values - Recruiter or TA will populate this
     // other subject information
     private String email;
     private String phone;
