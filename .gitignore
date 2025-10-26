@@ -1,3 +1,8 @@
+# updated 10-26-2025
+# ===================================
+# 🧱 SPRING BOOT / MAVEN DEFAULT
+# ===================================
+
 HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
@@ -31,3 +36,80 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# ===================================
+# 🔒 SECURITY & CONFIGURATION
+# ===================================
+
+# Environment variables
+.env
+.env.*
+
+# Sensitive config files
+src/main/resources/application.properties
+src/main/resources/application.yml
+src/main/resources/application-local.properties
+src/main/resources/application-dev.properties
+src/main/resources/application-prod.properties
+
+# Include example template files, static, & templates
+!src/main/resources/application-sample.properties
+!src/main/resources/static/
+!src/main/resources/templates/
+
+# Keys or credentials
+*.key
+*.pem
+*.crt
+*.keystore
+
+# ===================================
+# 🧩 LOGS / TEMP FILES
+# ===================================
+
+*.log
+logs/
+*.tmp
+*.bak
+*.swp
+
+# ===================================
+# 💻 OS-SPECIFIC FILES
+# ===================================
+
+.DS_Store
+Thumbs.db
+
+#HELP.md
+#target/
+#.mvn/wrapper/maven-wrapper.jar
+#!**/src/main/**/target/
+#!**/src/test/**/target/
+#
+#### STS ###
+#.apt_generated
+#.classpath
+#.factorypath
+#.project
+#.settings
+#.springBeans
+#.sts4-cache
+#
+#### IntelliJ IDEA ###
+#.idea
+#*.iws
+#*.iml
+#*.ipr
+#
+#### NetBeans ###
+#/nbproject/private/
+#/nbbuild/
+#/dist/
+#/nbdist/
+#/.nb-gradle/
+#build/
+#!**/src/main/**/build/
+#!**/src/test/**/build/
+#
+#### VS Code ###
+#.vscode/

@@ -36,7 +36,7 @@ public class User {
     @Column(nullable = false)
     private String lastName;
 
-    // Example of roles associated with the user
+    // Roles associated with Users
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}) // Or ManyToMany if a user can have multiple roles
     @JoinTable(
             name = "user_roles", // Name of the join table

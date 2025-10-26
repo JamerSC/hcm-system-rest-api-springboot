@@ -22,7 +22,16 @@ public class Role {
     @Column(nullable = false, unique = true) // roleName should ideally be unique
     private String roleName;
 
-    // A Role can be assigned to multiple Users
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY) // mappedBy refers to the 'roles' field in the User Entity
+    // mappedBy refers to the 'roles' field in the User Entity
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
     private Set<User> users = new HashSet<>();
+
+    // Permissions associated with Roles
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}) // Or ManyToMany if a user can have multiple roles
+    @JoinTable(
+            name = "roles_permissions", // Name of the join table
+            joinColumns = @JoinColumn(name = "role_id"), // Column in user_roles that refers to user_id
+            inverseJoinColumns = @JoinColumn(name = "permission_id") // Column in user_roles that refers to role_id
+    )
+    private Set<Permission> permissions = new HashSet<>();
 }
