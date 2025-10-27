@@ -1,6 +1,7 @@
 package com.jamersc.springboot.hcm_system.service.application;
 
 import com.jamersc.springboot.hcm_system.dto.application.ApplicationResponseDTO;
+import com.jamersc.springboot.hcm_system.dto.application.ApplicationUpdateDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -11,6 +12,7 @@ import java.util.Optional;
 public interface ApplicationService {
     Page<ApplicationResponseDTO> getAllApplication(Pageable pageable);
     Optional<ApplicationResponseDTO> getApplicationById(Long id);
+    ApplicationResponseDTO updateApplicationInformation(Long id, ApplicationUpdateDTO dto, Authentication authentication);
     ApplicationResponseDTO initialQualification(Long id, Authentication authentication);
     ApplicationResponseDTO firstInterview(Long id, Authentication authentication);
     ApplicationResponseDTO secondInterview(Long id, Authentication authentication);

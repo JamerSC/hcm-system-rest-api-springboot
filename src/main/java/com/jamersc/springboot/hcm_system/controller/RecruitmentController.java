@@ -3,6 +3,7 @@ package com.jamersc.springboot.hcm_system.controller;
 import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantDTO;
 import com.jamersc.springboot.hcm_system.dto.applicant.ApplicantResponseDTO;
 import com.jamersc.springboot.hcm_system.dto.application.ApplicationResponseDTO;
+import com.jamersc.springboot.hcm_system.dto.application.ApplicationUpdateDTO;
 import com.jamersc.springboot.hcm_system.service.applicant.ApplicantService;
 import com.jamersc.springboot.hcm_system.service.application.ApplicationService;
 import org.springframework.data.domain.Page;
@@ -53,6 +54,13 @@ public class RecruitmentController {
             @PathVariable Long id) {
         Optional<ApplicationResponseDTO> application = applicationService.getApplicationById(id);
         return new ResponseEntity<>(application, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/update-application")
+    public ResponseEntity<ApplicationResponseDTO> updateApplication(
+            @PathVariable Long id, @RequestBody ApplicationUpdateDTO dto, Authentication authentication) {
+        ApplicationResponseDTO updatedApplication = applicationService.updateApplicationInformation(id, dto, authentication);
+        return new ResponseEntity<>(updatedApplication, HttpStatus.OK);
     }
 
     @PatchMapping("/{id}/application/initial-qualification")
