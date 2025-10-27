@@ -1,6 +1,7 @@
 package com.jamersc.springboot.hcm_system.service.application;
 
 import com.jamersc.springboot.hcm_system.dto.application.ApplicationResponseDTO;
+import com.jamersc.springboot.hcm_system.dto.application.ApplicationUpdateDTO;
 import com.jamersc.springboot.hcm_system.entity.*;
 import com.jamersc.springboot.hcm_system.mapper.ApplicationMapper;
 import com.jamersc.springboot.hcm_system.repository.*;
@@ -22,7 +23,6 @@ public class ApplicationServiceImpl implements ApplicationService {
     private final ApplicationRepository applicationRepository;
     private final ApplicationMapper applicationMapper;
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final EmployeeRepository employeeRepository;
     private final JobRepository jobRepository;
 
@@ -30,7 +30,6 @@ public class ApplicationServiceImpl implements ApplicationService {
         this.applicationRepository = applicationRepository;
         this.applicationMapper = applicationMapper;
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
         this.employeeRepository = employeeRepository;
         this.jobRepository = jobRepository;
     }
@@ -55,6 +54,38 @@ public class ApplicationServiceImpl implements ApplicationService {
         return Optional.ofNullable(applicationRepository.findById(id)
                 .map(applicationMapper::entityToApplicationResponseDto)
                 .orElseThrow(()-> new RuntimeException("Application not found")));
+    }
+
+    @Override
+    public ApplicationResponseDTO updateApplicationInformation(Long id, ApplicationUpdateDTO dto, Authentication authentication) {
+        Application application = applicationRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Application not found"));
+        User currentUser = getUser(authentication);
+
+        // 3. Update only the fields provided in DTO (non-null updates)
+        if (dto.getEmail() != null) application.setEmail(dto.getEmail());
+        if (dto.getPhone() != null) application.setPhone(dto.getPhone());
+        if (dto.getMobile() != null) application.setMobile(dto.getMobile());
+        if (dto.getLinkedInProfile() != null) application.setLinkedInProfile(dto.getLinkedInProfile());
+        if (dto.getDegree() != null) application.setDegree(dto.getDegree());
+        if (dto.getEmployees() != null && !dto.getEmployees().isEmpty()) application.setEmployees(dto.getEmployees());
+        if (dto.getSource() != null) application.setSource(dto.getSource());
+        if (dto.getAvailability() != null) application.setAvailability(dto.getAvailability());
+        if (dto.getExpectedSalary() != null) application.setExpectedSalary(dto.getExpectedSalary());
+        if (dto.getProposedSalary() != null) application.setProposedSalary(dto.getProposedSalary());
+        if (dto.getApplicationSummary() != null) application.setApplicationSummary(dto.getApplicationSummary());
+        if (dto.getSkills() != null) application.setSkills(dto.getSkills());
+        if (dto.getStatus() != null) application.setStatus(dto.getStatus());
+
+        // 4. Set updater info
+        application.setUpdatedBy(currentUser);
+        application.setUpdatedAt(new Date());
+
+        // 5. Save updated entity
+        Application updatedApplication = applicationRepository.save(application);
+
+        // 6. Return mapped response
+        return applicationMapper.entityToApplicationResponseDto(updatedApplication);
     }
 
     @Override
