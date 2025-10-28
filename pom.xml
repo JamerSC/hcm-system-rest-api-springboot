@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.jamersc.springboot</groupId>
-	<artifactId>hcm-system</artifactId>
+	<artifactId>hcm-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>hcm-system</name>
-	<description>Human Capital Management (HCM) System Project</description>
+	<description>Human Capital Management [HCM] API Project</description>
 	<url/>
 	<licenses>
 		<license/>

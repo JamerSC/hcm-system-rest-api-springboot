@@ -1,0 +1,94 @@
+package com.jamersc.springboot.hcm_api.controller;
+
+import com.jamersc.springboot.hcm_api.dto.auth.ChangePasswordDTO;
+import com.jamersc.springboot.hcm_api.dto.auth.LoginRequestDTO;
+import com.jamersc.springboot.hcm_api.dto.auth.LoginResponseDTO;
+import com.jamersc.springboot.hcm_api.dto.auth.RegistrationRequestDTO;
+import com.jamersc.springboot.hcm_api.entity.User;
+import com.jamersc.springboot.hcm_api.security.JwtTokenProvider;
+import com.jamersc.springboot.hcm_api.service.auth.AuthService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.stream.Collectors;
+
+@RestController
+@RequestMapping("/api/v1/auth")
+public class AuthController {
+
+    private final AuthService authService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider tokenProvider;
+
+    public AuthController(AuthService authService, AuthenticationManager authenticationManager, JwtTokenProvider tokenProvider) {
+        this.authService = authService;
+        this.authenticationManager = authenticationManager;
+        this.tokenProvider = tokenProvider;
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> registerAccount(@Valid @RequestBody RegistrationRequestDTO requestDTO) {
+        User user = authService.registerNewUserAndApplicant(requestDTO);
+        return ResponseEntity.ok("Registered User: " + user);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDTO> authenticateUser(@Valid @RequestBody LoginRequestDTO loginRequest){
+        // authenticate the user
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getUsername(), loginRequest.getPassword()
+                )
+        );
+
+        // Unlike session-based, we don't need to set the context here for later requests.
+        // We only need it for the token generation below.
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // *** THIS IS THE KEY CHANGE ***
+        // Generate JWT token
+        String jwt = tokenProvider.generateToken(authentication);
+
+        // Build the response dto
+        LoginResponseDTO response = new LoginResponseDTO(
+                "Login successful",
+                loginRequest.getUsername(),
+                authentication.getAuthorities().stream()
+                        .map(GrantedAuthority::getAuthority)// Get the role string (e.g., "ROLE_ADMIN")
+                        .collect(Collectors.toSet()),
+                jwt,
+                "Bearer"
+        );
+
+        // If you were using JWT, you'd generate and return the JWT token here
+        // String jwt = jwtTokenProvider.generateToken(authentication);
+        // response.setAccessToken(jwt);
+
+        return ResponseEntity.ok(response); // Return 200 OK with success message and roles/token
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logoutUser() {
+        // Clear the security context for the current request.
+        // This is important in a stateless environment to ensure no
+        // subsequent code within the same request lifecycle is treated
+        // as authenticated.
+        SecurityContextHolder.clearContext();
+        return ResponseEntity.ok("User logged out successfully!");
+    }
+
+    @PatchMapping("/me/change-password")
+    public ResponseEntity<String> changePassword(
+            @Valid @RequestBody ChangePasswordDTO changePasswordDTO,
+            Authentication authentication) {
+        authService.changePassword(changePasswordDTO, authentication);
+        return new ResponseEntity<>("Password changed successfully!", HttpStatus.OK);
+    }
+}
