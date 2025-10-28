@@ -1,0 +1,18 @@
+package com.jamersc.springboot.hcm_api.service.department;
+
+import com.jamersc.springboot.hcm_api.dto.department.DepartmentCreateDTO;
+import com.jamersc.springboot.hcm_api.dto.department.DepartmentPatchDTO;
+import com.jamersc.springboot.hcm_api.dto.department.DepartmentResponseDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+
+import java.util.Optional;
+
+public interface DepartmentService {
+    Page<DepartmentResponseDTO> getAllDepartment(Pageable pageable);
+    Optional<DepartmentResponseDTO> getDepartmentById(Long id);
+    DepartmentResponseDTO save(DepartmentCreateDTO dto, Authentication authentication);
+    DepartmentResponseDTO patchDepartment(Long id, DepartmentPatchDTO dto, Authentication authentication);
+    void deleteDepartmentById(Long id);
+}
