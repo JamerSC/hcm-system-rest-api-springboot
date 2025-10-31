@@ -1,7 +1,7 @@
 package com.jamersc.springboot.hcm_api.service.attendance;
 
-import com.jamersc.springboot.hcm_api.dto.attendance.AttendanceDTO;
-import com.jamersc.springboot.hcm_api.dto.attendance.AttendanceResponseDTO;
+import com.jamersc.springboot.hcm_api.dto.attendance.AttendanceDto;
+import com.jamersc.springboot.hcm_api.dto.attendance.AttendanceResponseDto;
 import com.jamersc.springboot.hcm_api.entity.Attendance;
 import com.jamersc.springboot.hcm_api.entity.User;
 import com.jamersc.springboot.hcm_api.mapper.AttendanceMapper;
@@ -33,13 +33,13 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public Page<AttendanceDTO> getAllAttendance(Pageable pageable) {
+    public Page<AttendanceDto> getAllAttendance(Pageable pageable) {
         Page<Attendance> attendances = attendanceRepository.findAll(pageable);
         return attendances.map(attendanceMapper::entityToDto);
     }
 
     @Override
-    public Page<AttendanceResponseDTO> getMyAttendances(Pageable pageable, Authentication authentication) {
+    public Page<AttendanceResponseDto> getMyAttendances(Pageable pageable, Authentication authentication) {
         User currentUser = getUser(authentication);
 
         Page<Attendance> myAttendances = attendanceRepository.findByEmployee(pageable,currentUser.getEmployee());
@@ -54,7 +54,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public AttendanceResponseDTO checkIn(Authentication authentication) {
+    public AttendanceResponseDto checkIn(Authentication authentication) {
         User currentUser = getUser(authentication);
 
         // checked if the employee already checked in
@@ -72,7 +72,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public AttendanceResponseDTO checkOut(Authentication authentication) {
+    public AttendanceResponseDto checkOut(Authentication authentication) {
         User currentUser = getUser(authentication);
 
         // find today's attendance record

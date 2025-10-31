@@ -1,8 +1,8 @@
 package com.jamersc.springboot.hcm_api.mapper;
 
-import com.jamersc.springboot.hcm_api.dto.applicant.ApplicantDTO;
-import com.jamersc.springboot.hcm_api.dto.applicant.ApplicantProfileDTO;
-import com.jamersc.springboot.hcm_api.dto.applicant.ApplicantResponseDTO;
+import com.jamersc.springboot.hcm_api.dto.applicant.ApplicantDto;
+import com.jamersc.springboot.hcm_api.dto.applicant.ApplicantProfileDto;
+import com.jamersc.springboot.hcm_api.dto.applicant.ApplicantResponseDto;
 import com.jamersc.springboot.hcm_api.entity.Applicant;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -25,7 +25,7 @@ public interface ApplicantMapper {
      * Fields in the entity not present in the DTO (like id, user, cvFilePath, currentStatus)
      * will simply be ignored, which is the desired behavior for a profile DTO.
      */
-    ApplicantDTO entityToApplicantDto(Applicant applicant);
+    ApplicantDto entityToApplicantDto(Applicant applicant);
 
     @Mapping(target = "lastName", ignore = true)
     @Mapping(target = "firstName", ignore = true)
@@ -35,11 +35,11 @@ public interface ApplicantMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "id", ignore = true)
-    Applicant applicantDtoToEntity(ApplicantDTO dto);
+    Applicant applicantDtoToEntity(ApplicantDto dto);
 
     @Mapping(target = "email", source = "user.email")
     @Mapping(target = "applicantFullName", source = "applicantFullName")
-    ApplicantResponseDTO entityToResponseDto(Applicant applicant);
+    ApplicantResponseDto entityToResponseDto(Applicant applicant);
 
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
@@ -53,11 +53,11 @@ public interface ApplicantMapper {
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "address", ignore = true)
-    Applicant responseDtoToEntity(ApplicantResponseDTO dto);
+    Applicant responseDtoToEntity(ApplicantResponseDto dto);
 
     @Mapping(target = "email", source = "user.email")
     @Mapping(target = "username", source = "user.username")
-    ApplicantProfileDTO entityToProfileDto(Applicant applicant);
+    ApplicantProfileDto entityToProfileDto(Applicant applicant);
 
     // Maps an ApplicantDTO to an Applicant entity .
     @Mapping(target = "lastName", ignore = true)
@@ -68,7 +68,7 @@ public interface ApplicantMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "user", ignore = true) //  source = ""
     @Mapping(target = "id", ignore = true)
-    Applicant profileDtoToEntity(ApplicantDTO dto);
+    Applicant profileDtoToEntity(ApplicantDto dto);
 
 
     @Mapping(target = "updatedBy", ignore = true)
@@ -78,7 +78,7 @@ public interface ApplicantMapper {
     @Mapping(target = "user", ignore = true) // 'id' should not be updated from the DTO
     @Mapping(target = "id", ignore = true) // 'user' should not be updated from the DTO
     @Mapping(target = "cvFilePath", ignore = true)  // 'cvFilePath' typically updated separately
-    void updateEntityFromProfileDto(ApplicantProfileDTO dto, @MappingTarget Applicant applicant);
+    void updateEntityFromProfileDto(ApplicantProfileDto dto, @MappingTarget Applicant applicant);
 
     /**
      * Creates a new Applicant entity from an ApplicantProfileDTO.
@@ -96,14 +96,14 @@ public interface ApplicantMapper {
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "cvFilePath", ignore = true)
-    Applicant profileDtoToNewEntity(ApplicantProfileDTO dto);
+    Applicant profileDtoToNewEntity(ApplicantProfileDto dto);
 
     // If you ever need to map the User entity itself to a DTO (e.g., UserIdDTO),
     // you would add a method here, but it's not directly related to ApplicantProfileDTO's purpose.
     // Example: UserIdDTO userToUserIdDto(User user);
-    List<ApplicantDTO> entityToApplicantDtoList(List<Applicant> applicants);
+    List<ApplicantDto> entityToApplicantDtoList(List<Applicant> applicants);
 
-    List<ApplicantResponseDTO> entitiesToResponseDtos(List<Applicant> applicant);
+    List<ApplicantResponseDto> entitiesToResponseDtos(List<Applicant> applicant);
 
-    List<Applicant> responseDtosToEntities(List<ApplicantResponseDTO> dto);
+    List<Applicant> responseDtosToEntities(List<ApplicantResponseDto> dto);
 }

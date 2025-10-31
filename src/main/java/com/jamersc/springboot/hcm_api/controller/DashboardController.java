@@ -1,6 +1,6 @@
 package com.jamersc.springboot.hcm_api.controller;
 
-import com.jamersc.springboot.hcm_api.dto.dashboard.DashboardDTO;
+import com.jamersc.springboot.hcm_api.dto.dashboard.DashboardDto;
 import com.jamersc.springboot.hcm_api.service.dashboard.DashboardService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +19,8 @@ public class DashboardController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<DashboardDTO> getDashboardData() {
-        DashboardDTO dashboardData = dashboardService.getDashboardData();
+    public ResponseEntity<DashboardDto> getDashboardData() {
+        DashboardDto dashboardData = dashboardService.getDashboardData();
         return new ResponseEntity<>(dashboardData, HttpStatus.OK);
     }
 }

@@ -1,9 +1,9 @@
 package com.jamersc.springboot.hcm_api.mapper;
 
-import com.jamersc.springboot.hcm_api.dto.department.DepartmentCreateDTO;
-import com.jamersc.springboot.hcm_api.dto.department.DepartmentDTO;
-import com.jamersc.springboot.hcm_api.dto.department.DepartmentPatchDTO;
-import com.jamersc.springboot.hcm_api.dto.department.DepartmentResponseDTO;
+import com.jamersc.springboot.hcm_api.dto.department.DepartmentCreateDto;
+import com.jamersc.springboot.hcm_api.dto.department.DepartmentDto;
+import com.jamersc.springboot.hcm_api.dto.department.DepartmentPatchDto;
+import com.jamersc.springboot.hcm_api.dto.department.DepartmentResponseDto;
 import com.jamersc.springboot.hcm_api.entity.Department;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -15,17 +15,17 @@ import java.util.List;
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface DepartmentMapper {
 
-    DepartmentDTO entityToDeptDto(Department dept);
+    DepartmentDto entityToDeptDto(Department dept);
 
     @Mapping(target = "updatedBy", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "jobs", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
-    Department deptDtoToEntity(DepartmentDTO dto);
+    Department deptDtoToEntity(DepartmentDto dto);
 
     // create department mapper
-    DepartmentCreateDTO entityToCreateDto(Department dept);
+    DepartmentCreateDto entityToCreateDto(Department dept);
 
     @Mapping(target = "updatedBy", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
@@ -33,15 +33,15 @@ public interface DepartmentMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
-    Department createDtoToEntity(DepartmentCreateDTO dto);
+    Department createDtoToEntity(DepartmentCreateDto dto);
 
     // response department mapper
     // convert department entity to the response dto
     @Mapping(target = "updatedBy", source = "updatedBy.employee.job.title")
     @Mapping(target = "createdBy", source = "createdBy.employee.job.title")
-    DepartmentResponseDTO entityToDepartmentResponseDto(Department dept);
+    DepartmentResponseDto entityToDepartmentResponseDto(Department dept);
 
-    DepartmentPatchDTO entityToPatchDto(Department dept);
+    DepartmentPatchDto entityToPatchDto(Department dept);
 
 
     @Mapping(target = "updatedBy", ignore = true)
@@ -50,11 +50,11 @@ public interface DepartmentMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdBy",ignore = true)
     @Mapping(target = "createdAt", ignore = true)
-    Department patchDtoToEntity(DepartmentPatchDTO dto);
+    Department patchDtoToEntity(DepartmentPatchDto dto);
 
-    List<DepartmentDTO> entitiesToDeptDtos(List<Department> departments);
+    List<DepartmentDto> entitiesToDeptDtos(List<Department> departments);
 
-    List<DepartmentResponseDTO> entitiesToDeptResponseDto(List<Department> departments);
+    List<DepartmentResponseDto> entitiesToDeptResponseDto(List<Department> departments);
 
-    List<Department> deptDtosToEntities(List<DepartmentDTO> deptDtos);
+    List<Department> deptDtosToEntities(List<DepartmentDto> deptDtos);
 }

@@ -1,8 +1,8 @@
 package com.jamersc.springboot.hcm_api.controller;
 
-import com.jamersc.springboot.hcm_api.dto.leave.LeaveCreateDTO;
-import com.jamersc.springboot.hcm_api.dto.leave.LeaveResponseDTO;
-import com.jamersc.springboot.hcm_api.dto.leave.LeaveUpdateDTO;
+import com.jamersc.springboot.hcm_api.dto.leave.LeaveCreateDto;
+import com.jamersc.springboot.hcm_api.dto.leave.LeaveResponseDto;
+import com.jamersc.springboot.hcm_api.dto.leave.LeaveUpdateDto;
 import com.jamersc.springboot.hcm_api.service.leave.LeaveService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -26,68 +26,68 @@ public class LeaveController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<Page<LeaveResponseDTO>> getAllLeaveRequests(
+    public ResponseEntity<Page<LeaveResponseDto>> getAllLeaveRequests(
             @PageableDefault(page = 0, size = 10, sort="submittedAt") Pageable pageable) {
-        Page<LeaveResponseDTO> leaveRequests = leaveService.getAllLeaveRequest(pageable);
+        Page<LeaveResponseDto> leaveRequests = leaveService.getAllLeaveRequest(pageable);
         return new ResponseEntity<>(leaveRequests, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<LeaveResponseDTO>> getLeaveRequestsById(@PathVariable Long id) {
-        Optional<LeaveResponseDTO> leaveRequest = leaveService.getLeaveRequestById(id);
+    public ResponseEntity<Optional<LeaveResponseDto>> getLeaveRequestsById(@PathVariable Long id) {
+        Optional<LeaveResponseDto> leaveRequest = leaveService.getLeaveRequestById(id);
         return new ResponseEntity<>(leaveRequest, HttpStatus.OK);
     }
 
 
     @PostMapping("/submit")
-    public ResponseEntity<LeaveResponseDTO> submitLeaveRequest(
-            @Valid @RequestBody LeaveCreateDTO createDTO,
+    public ResponseEntity<LeaveResponseDto> submitLeaveRequest(
+            @Valid @RequestBody LeaveCreateDto createDTO,
             Authentication authentication) {
-        LeaveResponseDTO submittedLeaveRequest =
+        LeaveResponseDto submittedLeaveRequest =
                 leaveService.submitLeaveRequest(createDTO, authentication);
         return new ResponseEntity<>(submittedLeaveRequest, HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}/cancel")
-    public ResponseEntity<LeaveResponseDTO> cancelLeaveRequest(
+    public ResponseEntity<LeaveResponseDto> cancelLeaveRequest(
             @PathVariable Long id, Authentication authentication) {
-        LeaveResponseDTO canceledLeaveRequest = leaveService.cancelLeaveRequest(id, authentication);
+        LeaveResponseDto canceledLeaveRequest = leaveService.cancelLeaveRequest(id, authentication);
         return new ResponseEntity<>(canceledLeaveRequest, HttpStatus.OK);
     }
 
     @GetMapping("/me")
-    public ResponseEntity<Page<LeaveResponseDTO>> getMyLeaveRequests(
+    public ResponseEntity<Page<LeaveResponseDto>> getMyLeaveRequests(
             @PageableDefault(page = 0, size = 10, sort="submittedAt") Pageable pageable, Authentication authentication) {
-        Page<LeaveResponseDTO> requestedLeaves = leaveService.getMyLeaveRequests(pageable, authentication);
+        Page<LeaveResponseDto> requestedLeaves = leaveService.getMyLeaveRequests(pageable, authentication);
         return new ResponseEntity<>(requestedLeaves, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<LeaveResponseDTO> updateLeaveRequest(
+    public ResponseEntity<LeaveResponseDto> updateLeaveRequest(
             @PathVariable Long id,
-            @Valid @RequestBody LeaveUpdateDTO updateDTO,
+            @Valid @RequestBody LeaveUpdateDto updateDTO,
             Authentication authentication) {
-        LeaveResponseDTO updateLeaveRequest = leaveService.updateLeaveRequest(id, updateDTO, authentication);
+        LeaveResponseDto updateLeaveRequest = leaveService.updateLeaveRequest(id, updateDTO, authentication);
         return new ResponseEntity<>(updateLeaveRequest, HttpStatus.OK);
     }
 
     @PatchMapping("/{id}/approve-leave")
-    public ResponseEntity<LeaveResponseDTO> approveLeaveRequest(
+    public ResponseEntity<LeaveResponseDto> approveLeaveRequest(
             @PathVariable Long id, Authentication authentication) {
-        LeaveResponseDTO approvedLeaveRequest = leaveService.approveLeaveRequest(id, authentication);
+        LeaveResponseDto approvedLeaveRequest = leaveService.approveLeaveRequest(id, authentication);
         return new ResponseEntity<>(approvedLeaveRequest, HttpStatus.OK);
     }
 
     @PatchMapping("/{id}/reject-leave")
-    public ResponseEntity<LeaveResponseDTO> rejectLeaveRequest(
+    public ResponseEntity<LeaveResponseDto> rejectLeaveRequest(
             @PathVariable Long id, Authentication authentication) {
-        LeaveResponseDTO rejectedLeaveRequest = leaveService.rejectLeaveRequest(id, authentication);
+        LeaveResponseDto rejectedLeaveRequest = leaveService.rejectLeaveRequest(id, authentication);
         return new ResponseEntity<>(rejectedLeaveRequest, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteLeaveRequestById(@PathVariable Long id) {
-        Optional<LeaveResponseDTO> tempLeaveRequest = leaveService.getLeaveRequestById(id);
+        Optional<LeaveResponseDto> tempLeaveRequest = leaveService.getLeaveRequestById(id);
 
         if (tempLeaveRequest.isEmpty()) {
             return ResponseEntity.notFound().build();

@@ -1,8 +1,8 @@
 package com.jamersc.springboot.hcm_api.controller;
 
-import com.jamersc.springboot.hcm_api.dto.applicant.ApplicantResponseDTO;
-import com.jamersc.springboot.hcm_api.dto.application.ApplicationResponseDTO;
-import com.jamersc.springboot.hcm_api.dto.application.ApplicationUpdateDTO;
+import com.jamersc.springboot.hcm_api.dto.applicant.ApplicantResponseDto;
+import com.jamersc.springboot.hcm_api.dto.application.ApplicationResponseDto;
+import com.jamersc.springboot.hcm_api.dto.application.ApplicationUpdateDto;
 import com.jamersc.springboot.hcm_api.service.applicant.ApplicantService;
 import com.jamersc.springboot.hcm_api.service.application.ApplicationService;
 import org.springframework.data.domain.Page;
@@ -27,94 +27,94 @@ public class RecruitmentController {
     }
 
     @GetMapping("/applicants")
-    public ResponseEntity<Page<ApplicantResponseDTO>> getAllApplicants(
+    public ResponseEntity<Page<ApplicantResponseDto>> getAllApplicants(
             @PageableDefault(page = 0, size = 10, sort = "lastName") Pageable pageable) {
-        Page<ApplicantResponseDTO> listOfApplicants = applicantService.getAllApplicant(pageable);
+        Page<ApplicantResponseDto> listOfApplicants = applicantService.getAllApplicant(pageable);
         return new ResponseEntity<>(listOfApplicants, HttpStatus.OK);
     }
 
     @GetMapping("/{id}/applicant")
-    public ResponseEntity<Optional<ApplicantResponseDTO>> getApplicantById(
+    public ResponseEntity<Optional<ApplicantResponseDto>> getApplicantById(
             @PathVariable Long id) {
-        Optional<ApplicantResponseDTO> profile = applicantService.getApplicantById(id);
+        Optional<ApplicantResponseDto> profile = applicantService.getApplicantById(id);
         return ResponseEntity.ok(profile);
     }
 
     /*** APPLICATION **/
     @GetMapping("/applications")
-    public ResponseEntity<Page<ApplicationResponseDTO>> getAllApplicationsSubmitted(
+    public ResponseEntity<Page<ApplicationResponseDto>> getAllApplicationsSubmitted(
             @PageableDefault(page = 0, size = 10, sort = "status") Pageable pageable) {
-        Page<ApplicationResponseDTO> applications = applicationService.getAllApplication(pageable);
+        Page<ApplicationResponseDto> applications = applicationService.getAllApplication(pageable);
         return new ResponseEntity<>(applications, HttpStatus.OK);
     }
 
     @GetMapping("/{id}/application")
-    public ResponseEntity<Optional<ApplicationResponseDTO>> getApplicationById(
+    public ResponseEntity<Optional<ApplicationResponseDto>> getApplicationById(
             @PathVariable Long id) {
-        Optional<ApplicationResponseDTO> application = applicationService.getApplicationById(id);
+        Optional<ApplicationResponseDto> application = applicationService.getApplicationById(id);
         return new ResponseEntity<>(application, HttpStatus.OK);
     }
 
     @PutMapping("/{id}/update-application")
-    public ResponseEntity<ApplicationResponseDTO> updateApplication(
-            @PathVariable Long id, @RequestBody ApplicationUpdateDTO dto, Authentication authentication) {
-        ApplicationResponseDTO updatedApplication = applicationService.updateApplicationInformation(id, dto, authentication);
+    public ResponseEntity<ApplicationResponseDto> updateApplication(
+            @PathVariable Long id, @RequestBody ApplicationUpdateDto dto, Authentication authentication) {
+        ApplicationResponseDto updatedApplication = applicationService.updateApplicationInformation(id, dto, authentication);
         return new ResponseEntity<>(updatedApplication, HttpStatus.OK);
     }
 
     @PatchMapping("/{id}/application/initial-qualification")
-    public ResponseEntity<ApplicationResponseDTO> initialQualification(
+    public ResponseEntity<ApplicationResponseDto> initialQualification(
             @PathVariable Long id, Authentication authentication) {
-        ApplicationResponseDTO initialQualification = applicationService.initialQualification(id, authentication);
+        ApplicationResponseDto initialQualification = applicationService.initialQualification(id, authentication);
         return new ResponseEntity<>(initialQualification, HttpStatus.OK);
     }
 
     @PatchMapping("/{id}/application/first-interview")
-    public ResponseEntity<ApplicationResponseDTO> firstInterview(
+    public ResponseEntity<ApplicationResponseDto> firstInterview(
             @PathVariable Long id, Authentication authentication) {
-        ApplicationResponseDTO firstInterview = applicationService.firstInterview(id, authentication);
+        ApplicationResponseDto firstInterview = applicationService.firstInterview(id, authentication);
         return new ResponseEntity<>(firstInterview, HttpStatus.OK);
     }
 
     @PatchMapping("/{id}/application/second-interview")
-    public ResponseEntity<ApplicationResponseDTO> secondInterview(
+    public ResponseEntity<ApplicationResponseDto> secondInterview(
             @PathVariable Long id, Authentication authentication) {
-        ApplicationResponseDTO secondInterview = applicationService.secondInterview(id, authentication);
+        ApplicationResponseDto secondInterview = applicationService.secondInterview(id, authentication);
         return new ResponseEntity<>(secondInterview, HttpStatus.OK);
     }
 
     @PatchMapping("/{id}/application/contract-proposal")
-    public ResponseEntity<ApplicationResponseDTO> contractProposal(
+    public ResponseEntity<ApplicationResponseDto> contractProposal(
             @PathVariable Long id, Authentication authentication) {
-        ApplicationResponseDTO contractProposal = applicationService.contractProposal(id, authentication);
+        ApplicationResponseDto contractProposal = applicationService.contractProposal(id, authentication);
         return new ResponseEntity<>(contractProposal, HttpStatus.OK);
     }
 
     @PatchMapping("/{id}/application/contract-signed")
-    public ResponseEntity<ApplicationResponseDTO> contractSigned(
+    public ResponseEntity<ApplicationResponseDto> contractSigned(
             @PathVariable Long id, Authentication authentication) {
-        ApplicationResponseDTO contractSigned = applicationService.contractSigned(id, authentication);
+        ApplicationResponseDto contractSigned = applicationService.contractSigned(id, authentication);
         return new ResponseEntity<>(contractSigned, HttpStatus.OK);
     }
 
     @PatchMapping("/{id}/application/approve")
-    public ResponseEntity<ApplicationResponseDTO> approveApplication(
+    public ResponseEntity<ApplicationResponseDto> approveApplication(
             @PathVariable Long id, Authentication authentication) {
-        ApplicationResponseDTO application = applicationService.approveApplication(id, authentication);
+        ApplicationResponseDto application = applicationService.approveApplication(id, authentication);
         return new ResponseEntity<>(application, HttpStatus.OK);
     }
 
     @PatchMapping("/{id}/application/reject")
-    public ResponseEntity<ApplicationResponseDTO> rejectApplication(
+    public ResponseEntity<ApplicationResponseDto> rejectApplication(
             @PathVariable Long id, Authentication authentication) {
-        ApplicationResponseDTO application = applicationService.rejectApplication(id, authentication);
+        ApplicationResponseDto application = applicationService.rejectApplication(id, authentication);
         return new ResponseEntity<>(application, HttpStatus.OK);
     }
 
     @PatchMapping("/{id}/application/hire")
-    public ResponseEntity<ApplicationResponseDTO> hireApplicant(
+    public ResponseEntity<ApplicationResponseDto> hireApplicant(
             @PathVariable Long id, Authentication authentication) {
-        ApplicationResponseDTO hireApplication = applicationService.hireApplication(id, authentication);
+        ApplicationResponseDto hireApplication = applicationService.hireApplication(id, authentication);
         return new ResponseEntity<>(hireApplication, HttpStatus.OK);
     }
 }

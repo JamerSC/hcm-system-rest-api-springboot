@@ -1,8 +1,8 @@
 package com.jamersc.springboot.hcm_api.controller;
 
-import com.jamersc.springboot.hcm_api.dto.department.DepartmentCreateDTO;
-import com.jamersc.springboot.hcm_api.dto.department.DepartmentPatchDTO;
-import com.jamersc.springboot.hcm_api.dto.department.DepartmentResponseDTO;
+import com.jamersc.springboot.hcm_api.dto.department.DepartmentCreateDto;
+import com.jamersc.springboot.hcm_api.dto.department.DepartmentPatchDto;
+import com.jamersc.springboot.hcm_api.dto.department.DepartmentResponseDto;
 import com.jamersc.springboot.hcm_api.service.department.DepartmentService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -26,36 +26,36 @@ public class DepartmentController {
     }
 
     @GetMapping("/")
-    private ResponseEntity<Page<DepartmentResponseDTO>> getAllDepartments(
+    private ResponseEntity<Page<DepartmentResponseDto>> getAllDepartments(
             @PageableDefault(page = 0, size = 10, sort = "name") Pageable pageable) {
-        Page<DepartmentResponseDTO> departments = departmentService.getAllDepartment(pageable);
+        Page<DepartmentResponseDto> departments = departmentService.getAllDepartment(pageable);
         return new ResponseEntity<>(departments, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<DepartmentResponseDTO>> getDepartmentById(@PathVariable Long id) {
-        Optional<DepartmentResponseDTO> department = departmentService.getDepartmentById(id);
+    public ResponseEntity<Optional<DepartmentResponseDto>> getDepartmentById(@PathVariable Long id) {
+        Optional<DepartmentResponseDto> department = departmentService.getDepartmentById(id);
         return new ResponseEntity<>(department, HttpStatus.OK);
     }
 
     @PostMapping("/")
-    public ResponseEntity<DepartmentResponseDTO> createDepartment(
-            @Valid @RequestBody DepartmentCreateDTO createDTO,
+    public ResponseEntity<DepartmentResponseDto> createDepartment(
+            @Valid @RequestBody DepartmentCreateDto createDTO,
             Authentication authentication) {  // <-- Inject the Authentication object
-        DepartmentResponseDTO department = departmentService.save(createDTO, authentication);
+        DepartmentResponseDto department = departmentService.save(createDTO, authentication);
         return new ResponseEntity<>(department, HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<DepartmentResponseDTO> patchDepartment(
-            @PathVariable Long id, @RequestBody DepartmentPatchDTO patchDTO, Authentication authentication) {
-        DepartmentResponseDTO patchedDepartment = departmentService.patchDepartment(id, patchDTO, authentication);
+    public ResponseEntity<DepartmentResponseDto> patchDepartment(
+            @PathVariable Long id, @RequestBody DepartmentPatchDto patchDTO, Authentication authentication) {
+        DepartmentResponseDto patchedDepartment = departmentService.patchDepartment(id, patchDTO, authentication);
         return new ResponseEntity<>(patchedDepartment, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteDepartmentById(@PathVariable Long id) {
-        Optional<DepartmentResponseDTO> tempDepartment =
+        Optional<DepartmentResponseDto> tempDepartment =
                 departmentService.getDepartmentById(id);
 
         if (tempDepartment.isEmpty()) {

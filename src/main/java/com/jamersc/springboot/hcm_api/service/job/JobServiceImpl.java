@@ -1,9 +1,9 @@
 package com.jamersc.springboot.hcm_api.service.job;
 
-import com.jamersc.springboot.hcm_api.dto.job.JobCreateDTO;
-import com.jamersc.springboot.hcm_api.dto.job.JobDTO;
-import com.jamersc.springboot.hcm_api.dto.job.JobPatchDTO;
-import com.jamersc.springboot.hcm_api.dto.job.JobResponseDTO;
+import com.jamersc.springboot.hcm_api.dto.job.JobCreateDto;
+import com.jamersc.springboot.hcm_api.dto.job.JobDto;
+import com.jamersc.springboot.hcm_api.dto.job.JobPatchDto;
+import com.jamersc.springboot.hcm_api.dto.job.JobResponseDto;
 import com.jamersc.springboot.hcm_api.entity.Department;
 import com.jamersc.springboot.hcm_api.entity.Job;
 import com.jamersc.springboot.hcm_api.entity.JobStatus;
@@ -38,26 +38,26 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public Page<JobDTO> getAllJob(Pageable pageable) {
+    public Page<JobDto> getAllJob(Pageable pageable) {
         Page<Job> jobs = jobRepository.findAll(pageable);
         return jobs.map(jobMapper::entityToJobDto);
     }
 
     @Override
-    public Page<JobResponseDTO> getOpenJobs(Pageable pageable) {
+    public Page<JobResponseDto> getOpenJobs(Pageable pageable) {
         Page<Job> openJobs = jobRepository.findByStatus(pageable, JobStatus.OPEN);
         return openJobs.map(jobMapper::entityToJobResponseDto);
     }
 
     @Override
-    public Optional<JobResponseDTO> getJobById(Long id) {
+    public Optional<JobResponseDto> getJobById(Long id) {
         return Optional.of(jobRepository.findById(id)
                         .map(jobMapper::entityToJobResponseDto))
                 .orElseThrow(() -> new RuntimeException("Job Id not found"));
     }
 
     @Override
-    public JobResponseDTO save(JobCreateDTO dto, Authentication authentication) {
+    public JobResponseDto save(JobCreateDto dto, Authentication authentication) {
         Department department = departmentRepository.findById(dto.getDepartmentId())
                 .orElseThrow(() -> new RuntimeException("Department id not found!"));
         
@@ -74,7 +74,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public JobResponseDTO postJob(Long id, Authentication authentication) {
+    public JobResponseDto postJob(Long id, Authentication authentication) {
         Job job = jobRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Job not found"));
 
@@ -90,7 +90,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public JobResponseDTO patchJob(Long id, JobPatchDTO dto, Authentication authentication) {
+    public JobResponseDto patchJob(Long id, JobPatchDto dto, Authentication authentication) {
         Job job = jobRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Job not found"));
 
@@ -121,7 +121,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public JobResponseDTO filledJob(Long id, Authentication authentication) {
+    public JobResponseDto filledJob(Long id, Authentication authentication) {
         Job job = jobRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Job not found"));
 
@@ -137,7 +137,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public JobResponseDTO closeJob(Long id, Authentication authentication) {
+    public JobResponseDto closeJob(Long id, Authentication authentication) {
         Job job = jobRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Job not found"));
 
