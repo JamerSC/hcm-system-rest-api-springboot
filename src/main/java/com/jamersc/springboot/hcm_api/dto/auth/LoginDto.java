@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginRequestDTO {
+public class LoginDto {
     @NotBlank(message = "Username is required")
     private String username;
     @NotBlank(message = "Password is required")

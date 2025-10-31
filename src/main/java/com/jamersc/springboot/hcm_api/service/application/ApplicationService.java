@@ -1,7 +1,7 @@
 package com.jamersc.springboot.hcm_api.service.application;
 
-import com.jamersc.springboot.hcm_api.dto.application.ApplicationResponseDTO;
-import com.jamersc.springboot.hcm_api.dto.application.ApplicationUpdateDTO;
+import com.jamersc.springboot.hcm_api.dto.application.ApplicationResponseDto;
+import com.jamersc.springboot.hcm_api.dto.application.ApplicationUpdateDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -9,15 +9,15 @@ import org.springframework.security.core.Authentication;
 import java.util.Optional;
 
 public interface ApplicationService {
-    Page<ApplicationResponseDTO> getAllApplication(Pageable pageable);
-    Optional<ApplicationResponseDTO> getApplicationById(Long id);
-    ApplicationResponseDTO updateApplicationInformation(Long id, ApplicationUpdateDTO dto, Authentication authentication);
-    ApplicationResponseDTO initialQualification(Long id, Authentication authentication);
-    ApplicationResponseDTO firstInterview(Long id, Authentication authentication);
-    ApplicationResponseDTO secondInterview(Long id, Authentication authentication);
-    ApplicationResponseDTO contractProposal(Long id, Authentication authentication);
-    ApplicationResponseDTO contractSigned(Long id, Authentication authentication);
-    ApplicationResponseDTO approveApplication(Long id, Authentication authentication);
-    ApplicationResponseDTO rejectApplication(Long id, Authentication authentication);
-    ApplicationResponseDTO hireApplication(Long id, Authentication authentication);
+    Page<ApplicationResponseDto> getAllApplication(Pageable pageable);
+    Optional<ApplicationResponseDto> getApplicationById(Long id);
+    ApplicationResponseDto updateApplicationInformation(Long id, ApplicationUpdateDto dto, Authentication authentication);
+    ApplicationResponseDto initialQualification(Long id, Authentication authentication);
+    ApplicationResponseDto firstInterview(Long id, Authentication authentication);
+    ApplicationResponseDto secondInterview(Long id, Authentication authentication);
+    ApplicationResponseDto contractProposal(Long id, Authentication authentication);
+    ApplicationResponseDto contractSigned(Long id, Authentication authentication);
+    ApplicationResponseDto approveApplication(Long id, Authentication authentication);
+    ApplicationResponseDto rejectApplication(Long id, Authentication authentication);
+    ApplicationResponseDto hireApplication(Long id, Authentication authentication);
 }

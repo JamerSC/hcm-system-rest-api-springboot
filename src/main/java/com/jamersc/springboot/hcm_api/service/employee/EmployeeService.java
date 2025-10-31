@@ -9,14 +9,14 @@ import org.springframework.security.core.Authentication;
 import java.util.Optional;
 
 public interface EmployeeService {
-    Page<EmployeeResponseDTO> getAllEmployee(Pageable pageable);
+    Page<EmployeeResponseDto> getAllEmployee(Pageable pageable);
     //EmployeeDTO findById(Long id);
-    Optional<EmployeeProfileDTO> findEmployeeProfileById(Long id);
-    Optional<EmployeeResponseDTO> findEmployeeById(Long id);
-    Optional<EmployeeDTO> findById(Long id);
-    EmployeeProfileDTO getMyEmployeeProfile(Authentication authentication);
-    EmployeeResponseDTO save(EmployeeCreateDTO employeeDTO, Authentication authentication);
-    Employee update(EmployeeUpdateDTO employeeDTO, Authentication authentication);
-    EmployeeResponseDTO patchEmployee(Long id, EmployeePatchDTO dto, Authentication authentication);
+    Optional<EmployeeProfileDto> findEmployeeProfileById(Long id);
+    Optional<EmployeeResponseDto> findEmployeeById(Long id);
+    Optional<EmployeeDto> findById(Long id);
+    EmployeeProfileDto getMyEmployeeProfile(Authentication authentication);
+    EmployeeResponseDto save(EmployeeCreateDto employeeDTO, Authentication authentication);
+    Employee update(EmployeeUpdateDto employeeDTO, Authentication authentication);
+    EmployeeResponseDto patchEmployee(Long id, EmployeePatchDto dto, Authentication authentication);
     void deleteEmployeeByID(Long id);
 }

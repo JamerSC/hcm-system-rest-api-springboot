@@ -1,7 +1,7 @@
 package com.jamersc.springboot.hcm_api.service.auth;
 
-import com.jamersc.springboot.hcm_api.dto.auth.ChangePasswordDTO;
-import com.jamersc.springboot.hcm_api.dto.auth.RegistrationRequestDTO;
+import com.jamersc.springboot.hcm_api.dto.auth.ChangePasswordDto;
+import com.jamersc.springboot.hcm_api.dto.auth.RegistrationDto;
 import com.jamersc.springboot.hcm_api.entity.Applicant;
 import com.jamersc.springboot.hcm_api.entity.Role;
 import com.jamersc.springboot.hcm_api.entity.User;
@@ -36,7 +36,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public User registerNewUserAndApplicant(RegistrationRequestDTO requestDTO) {
+    public User registerNewUserAndApplicant(RegistrationDto requestDTO) {
         if (userRepository.findByUsername(requestDTO.getUsername()).isPresent()) {
             throw new IllegalArgumentException("Username already exists!");
         }
@@ -76,7 +76,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void changePassword(ChangePasswordDTO changePasswordDTO, Authentication authentication) {
+    public void changePassword(ChangePasswordDto changePasswordDTO, Authentication authentication) {
         // get authenticated user details
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User currentUser = userRepository.findByUsername(userDetails.getUsername())

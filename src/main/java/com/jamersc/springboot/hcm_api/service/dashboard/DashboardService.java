@@ -1,6 +1,6 @@
 package com.jamersc.springboot.hcm_api.service.dashboard;
 
-import com.jamersc.springboot.hcm_api.dto.dashboard.DashboardDTO;
+import com.jamersc.springboot.hcm_api.dto.dashboard.DashboardDto;
 import com.jamersc.springboot.hcm_api.entity.JobStatus;
 import com.jamersc.springboot.hcm_api.entity.LeaveType;
 import com.jamersc.springboot.hcm_api.repository.*;
@@ -31,7 +31,7 @@ public class DashboardService {
     }
 
     @Transactional
-    public DashboardDTO getDashboardData() {
+    public DashboardDto getDashboardData() {
 
         Long totalUser = userRepository.count();
         Long totalJobs = jobRepository.count();
@@ -45,7 +45,7 @@ public class DashboardService {
         Long totalSickLeave = leaveRepository.countByLeaveType(LeaveType.SICK_LEAVE);
         Long totalVacationLeave = leaveRepository.countByLeaveType(LeaveType.VACATION_LEAVE);
 
-        return new DashboardDTO(
+        return new DashboardDto(
                 totalUser,
                 totalJobs,
                 openJobs,

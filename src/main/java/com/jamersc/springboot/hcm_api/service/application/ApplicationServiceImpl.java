@@ -1,7 +1,7 @@
 package com.jamersc.springboot.hcm_api.service.application;
 
-import com.jamersc.springboot.hcm_api.dto.application.ApplicationResponseDTO;
-import com.jamersc.springboot.hcm_api.dto.application.ApplicationUpdateDTO;
+import com.jamersc.springboot.hcm_api.dto.application.ApplicationResponseDto;
+import com.jamersc.springboot.hcm_api.dto.application.ApplicationUpdateDto;
 import com.jamersc.springboot.hcm_api.entity.*;
 import com.jamersc.springboot.hcm_api.mapper.ApplicationMapper;
 import com.jamersc.springboot.hcm_api.repository.*;
@@ -41,7 +41,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 //    }
 
     @Override
-    public Page<ApplicationResponseDTO> getAllApplication(Pageable pageable) {
+    public Page<ApplicationResponseDto> getAllApplication(Pageable pageable) {
         // fetch application
         Page<Application> applications = applicationRepository.findAll(pageable);
         // map application entity page to page dto
@@ -49,14 +49,14 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public Optional<ApplicationResponseDTO> getApplicationById(Long id) {
+    public Optional<ApplicationResponseDto> getApplicationById(Long id) {
         return Optional.ofNullable(applicationRepository.findById(id)
                 .map(applicationMapper::entityToApplicationResponseDto)
                 .orElseThrow(()-> new RuntimeException("Application not found")));
     }
 
     @Override
-    public ApplicationResponseDTO updateApplicationInformation(Long id, ApplicationUpdateDTO dto, Authentication authentication) {
+    public ApplicationResponseDto updateApplicationInformation(Long id, ApplicationUpdateDto dto, Authentication authentication) {
         Application application = applicationRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Application not found"));
         User currentUser = getUser(authentication);
@@ -88,7 +88,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public ApplicationResponseDTO initialQualification(Long id, Authentication authentication) {
+    public ApplicationResponseDto initialQualification(Long id, Authentication authentication) {
         // find application id
         Application application = applicationRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Application not found"));
@@ -106,7 +106,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public ApplicationResponseDTO firstInterview(Long id, Authentication authentication) {
+    public ApplicationResponseDto firstInterview(Long id, Authentication authentication) {
         // find application id
         Application application = applicationRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Application not found"));
@@ -124,7 +124,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public ApplicationResponseDTO secondInterview(Long id, Authentication authentication) {
+    public ApplicationResponseDto secondInterview(Long id, Authentication authentication) {
         // find application id
         Application application = applicationRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Application not found"));
@@ -142,7 +142,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public ApplicationResponseDTO contractProposal(Long id, Authentication authentication) {
+    public ApplicationResponseDto contractProposal(Long id, Authentication authentication) {
         // find application id
         Application application = applicationRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Application not found"));
@@ -160,7 +160,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public ApplicationResponseDTO contractSigned(Long id, Authentication authentication) {
+    public ApplicationResponseDto contractSigned(Long id, Authentication authentication) {
         // find application id
         Application application = applicationRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Application not found"));
@@ -178,7 +178,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public ApplicationResponseDTO approveApplication(Long id, Authentication authentication) {
+    public ApplicationResponseDto approveApplication(Long id, Authentication authentication) {
         // find application id
         Application application = applicationRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Application not found"));
@@ -196,7 +196,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public ApplicationResponseDTO rejectApplication(Long id, Authentication authentication) {
+    public ApplicationResponseDto rejectApplication(Long id, Authentication authentication) {
         // find application id
         Application application = applicationRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Application not found"));
@@ -214,7 +214,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public ApplicationResponseDTO hireApplication(Long id, Authentication authentication) {
+    public ApplicationResponseDto hireApplication(Long id, Authentication authentication) {
         // check application
         Application application = applicationRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Application not found"));

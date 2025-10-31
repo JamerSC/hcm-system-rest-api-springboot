@@ -1,8 +1,8 @@
 package com.jamersc.springboot.hcm_api.service.department;
 
-import com.jamersc.springboot.hcm_api.dto.department.DepartmentCreateDTO;
-import com.jamersc.springboot.hcm_api.dto.department.DepartmentPatchDTO;
-import com.jamersc.springboot.hcm_api.dto.department.DepartmentResponseDTO;
+import com.jamersc.springboot.hcm_api.dto.department.DepartmentCreateDto;
+import com.jamersc.springboot.hcm_api.dto.department.DepartmentPatchDto;
+import com.jamersc.springboot.hcm_api.dto.department.DepartmentResponseDto;
 import com.jamersc.springboot.hcm_api.entity.Department;
 import com.jamersc.springboot.hcm_api.entity.User;
 import com.jamersc.springboot.hcm_api.mapper.DepartmentMapper;
@@ -33,13 +33,13 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 
     @Override
-    public Page<DepartmentResponseDTO> getAllDepartment(Pageable pageable) {
+    public Page<DepartmentResponseDto> getAllDepartment(Pageable pageable) {
         Page<Department> departments = departmentRepository.findAll(pageable);
         return departments.map(departmentMapper::entityToDepartmentResponseDto);
     }
 
     @Override
-    public Optional<DepartmentResponseDTO> getDepartmentById(Long id) {
+    public Optional<DepartmentResponseDto> getDepartmentById(Long id) {
         return Optional.of(departmentRepository.findById(id)
                         .map(departmentMapper::entityToDepartmentResponseDto))
                 .orElseThrow(() -> new RuntimeException("Department id found! " + id));
@@ -53,7 +53,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public DepartmentResponseDTO save(DepartmentCreateDTO dto, Authentication authentication) {
+    public DepartmentResponseDto save(DepartmentCreateDto dto, Authentication authentication) {
         // get the current user from authentication object
         User currentUser = getUser(authentication);
 
@@ -73,7 +73,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 
     @Override
-    public DepartmentResponseDTO patchDepartment(Long id, DepartmentPatchDTO dto, Authentication authentication) {
+    public DepartmentResponseDto patchDepartment(Long id, DepartmentPatchDto dto, Authentication authentication) {
         User currentUser = getUser(authentication);
         Department department = departmentRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Department not found"));

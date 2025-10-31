@@ -1,8 +1,8 @@
 package com.jamersc.springboot.hcm_api.mapper;
 
-import com.jamersc.springboot.hcm_api.dto.leave.LeaveCreateDTO;
-import com.jamersc.springboot.hcm_api.dto.leave.LeaveDTO;
-import com.jamersc.springboot.hcm_api.dto.leave.LeaveResponseDTO;
+import com.jamersc.springboot.hcm_api.dto.leave.LeaveCreateDto;
+import com.jamersc.springboot.hcm_api.dto.leave.LeaveDto;
+import com.jamersc.springboot.hcm_api.dto.leave.LeaveResponseDto;
 import com.jamersc.springboot.hcm_api.entity.Leave;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -14,16 +14,17 @@ import java.util.List;
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface LeaveMapper {
 
-    LeaveDTO entityToDto(Leave leave);
+    LeaveDto entityToDto(Leave leave);
+
     @Mapping(target = "updatedBy", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
-    Leave dtoToEntity(LeaveDTO dto);
+    Leave dtoToEntity(LeaveDto dto);
 
     @Mapping(target = "approvedBy", source = "approvedBy.employee.job.title")
     @Mapping(target = "employeeFullName", source = "employee.employeeFullName")
-    LeaveResponseDTO entityToResponseDto(Leave leave);
+    LeaveResponseDto entityToResponseDto(Leave leave);
 
     @Mapping(target = "approvedBy", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
@@ -31,9 +32,9 @@ public interface LeaveMapper {
     @Mapping(target = "employee", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
-    Leave responseDtoToEntity(LeaveResponseDTO responseDTO);
+    Leave responseDtoToEntity(LeaveResponseDto responseDTO);
 
-    LeaveCreateDTO entityToCreateDto(Leave leave);
+    LeaveCreateDto entityToCreateDto(Leave leave);
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
@@ -43,9 +44,9 @@ public interface LeaveMapper {
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "approvedBy", ignore = true)
-    Leave createDtoToEntity(LeaveCreateDTO dto);
+    Leave createDtoToEntity(LeaveCreateDto dto);
 
 
-    List<LeaveResponseDTO> entitiesToResponseDtos(List<Leave> leaves);
+    List<LeaveResponseDto> entitiesToResponseDtos(List<Leave> leaves);
 
 }

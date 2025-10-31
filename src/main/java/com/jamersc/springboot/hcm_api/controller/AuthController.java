@@ -1,9 +1,9 @@
 package com.jamersc.springboot.hcm_api.controller;
 
-import com.jamersc.springboot.hcm_api.dto.auth.ChangePasswordDTO;
-import com.jamersc.springboot.hcm_api.dto.auth.LoginRequestDTO;
-import com.jamersc.springboot.hcm_api.dto.auth.LoginResponseDTO;
-import com.jamersc.springboot.hcm_api.dto.auth.RegistrationRequestDTO;
+import com.jamersc.springboot.hcm_api.dto.auth.ChangePasswordDto;
+import com.jamersc.springboot.hcm_api.dto.auth.LoginDto;
+import com.jamersc.springboot.hcm_api.dto.auth.LoginResponseDto;
+import com.jamersc.springboot.hcm_api.dto.auth.RegistrationDto;
 import com.jamersc.springboot.hcm_api.entity.User;
 import com.jamersc.springboot.hcm_api.security.JwtTokenProvider;
 import com.jamersc.springboot.hcm_api.service.auth.AuthService;
@@ -34,13 +34,13 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerAccount(@Valid @RequestBody RegistrationRequestDTO requestDTO) {
+    public ResponseEntity<?> registerAccount(@Valid @RequestBody RegistrationDto requestDTO) {
         User user = authService.registerNewUserAndApplicant(requestDTO);
         return ResponseEntity.ok("Registered User: " + user);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> authenticateUser(@Valid @RequestBody LoginRequestDTO loginRequest){
+    public ResponseEntity<LoginResponseDto> authenticateUser(@Valid @RequestBody LoginDto loginRequest){
         // authenticate the user
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -57,7 +57,7 @@ public class AuthController {
         String jwt = tokenProvider.generateToken(authentication);
 
         // Build the response dto
-        LoginResponseDTO response = new LoginResponseDTO(
+        LoginResponseDto response = new LoginResponseDto(
                 "Login successful",
                 loginRequest.getUsername(),
                 authentication.getAuthorities().stream()
@@ -86,7 +86,7 @@ public class AuthController {
 
     @PatchMapping("/me/change-password")
     public ResponseEntity<String> changePassword(
-            @Valid @RequestBody ChangePasswordDTO changePasswordDTO,
+            @Valid @RequestBody ChangePasswordDto changePasswordDTO,
             Authentication authentication) {
         authService.changePassword(changePasswordDTO, authentication);
         return new ResponseEntity<>("Password changed successfully!", HttpStatus.OK);

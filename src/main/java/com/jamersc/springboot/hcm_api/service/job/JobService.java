@@ -1,9 +1,9 @@
 package com.jamersc.springboot.hcm_api.service.job;
 
-import com.jamersc.springboot.hcm_api.dto.job.JobCreateDTO;
-import com.jamersc.springboot.hcm_api.dto.job.JobDTO;
-import com.jamersc.springboot.hcm_api.dto.job.JobPatchDTO;
-import com.jamersc.springboot.hcm_api.dto.job.JobResponseDTO;
+import com.jamersc.springboot.hcm_api.dto.job.JobCreateDto;
+import com.jamersc.springboot.hcm_api.dto.job.JobDto;
+import com.jamersc.springboot.hcm_api.dto.job.JobPatchDto;
+import com.jamersc.springboot.hcm_api.dto.job.JobResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -12,13 +12,13 @@ import java.util.Optional;
 
 public interface JobService {
 
-    Page<JobDTO> getAllJob(Pageable pageable);
-    Page<JobResponseDTO> getOpenJobs(Pageable pageable);
-    Optional<JobResponseDTO> getJobById(Long id);
-    JobResponseDTO save(JobCreateDTO dto, Authentication authentication);
-    JobResponseDTO postJob(Long id, Authentication authentication);
-    JobResponseDTO patchJob(Long id, JobPatchDTO dto, Authentication authentication);
-    JobResponseDTO filledJob(Long id, Authentication authentication);
-    JobResponseDTO closeJob(Long id, Authentication authentication);
+    Page<JobDto> getAllJob(Pageable pageable);
+    Page<JobResponseDto> getOpenJobs(Pageable pageable);
+    Optional<JobResponseDto> getJobById(Long id);
+    JobResponseDto save(JobCreateDto dto, Authentication authentication);
+    JobResponseDto postJob(Long id, Authentication authentication);
+    JobResponseDto patchJob(Long id, JobPatchDto dto, Authentication authentication);
+    JobResponseDto filledJob(Long id, Authentication authentication);
+    JobResponseDto closeJob(Long id, Authentication authentication);
     void deleteById(Long id);
 }

@@ -1,7 +1,7 @@
 package com.jamersc.springboot.hcm_api.controller;
 
-import com.jamersc.springboot.hcm_api.dto.attendance.AttendanceDTO;
-import com.jamersc.springboot.hcm_api.dto.attendance.AttendanceResponseDTO;
+import com.jamersc.springboot.hcm_api.dto.attendance.AttendanceDto;
+import com.jamersc.springboot.hcm_api.dto.attendance.AttendanceResponseDto;
 import com.jamersc.springboot.hcm_api.service.attendance.AttendanceService;
 import com.jamersc.springboot.hcm_api.service.employee.EmployeeService;
 import org.springframework.data.domain.Page;
@@ -23,31 +23,31 @@ public class AttendanceController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<Page<AttendanceDTO>> getAllAttendances(
+    public ResponseEntity<Page<AttendanceDto>> getAllAttendances(
             @PageableDefault(page = 0, size = 10, sort = "attendanceDate") Pageable pageable) {
-        Page<AttendanceDTO> attendances = attendanceService.getAllAttendance(pageable);
+        Page<AttendanceDto> attendances = attendanceService.getAllAttendance(pageable);
         return new ResponseEntity<>(attendances, HttpStatus.OK);
     }
 
     @GetMapping("/me/profile")
-    public ResponseEntity<Page<AttendanceResponseDTO>> getMyAttendances(
+    public ResponseEntity<Page<AttendanceResponseDto>> getMyAttendances(
             @PageableDefault(page = 0, size = 10, sort = "attendanceDate") Pageable pageable, Authentication authentication) {
-        Page<AttendanceResponseDTO> myAttendances = attendanceService
+        Page<AttendanceResponseDto> myAttendances = attendanceService
                 .getMyAttendances(pageable, authentication);
         return new ResponseEntity<>(myAttendances, HttpStatus.OK);
     }
 
 
     @PostMapping("/check-in")
-    public ResponseEntity<AttendanceResponseDTO> attendanceCheckIn(Authentication authentication) {
-        AttendanceResponseDTO attendanceRecord = attendanceService
+    public ResponseEntity<AttendanceResponseDto> attendanceCheckIn(Authentication authentication) {
+        AttendanceResponseDto attendanceRecord = attendanceService
                 .checkIn(authentication);
         return new ResponseEntity<>(attendanceRecord, HttpStatus.CREATED);
     }
 
     @PatchMapping("/check-out")
-    public ResponseEntity<AttendanceResponseDTO> attendanceCheckOut(Authentication authentication) {
-        AttendanceResponseDTO attendanceRecord = attendanceService
+    public ResponseEntity<AttendanceResponseDto> attendanceCheckOut(Authentication authentication) {
+        AttendanceResponseDto attendanceRecord = attendanceService
                 .checkOut(authentication);
         return new ResponseEntity<>(attendanceRecord, HttpStatus.OK);
     }

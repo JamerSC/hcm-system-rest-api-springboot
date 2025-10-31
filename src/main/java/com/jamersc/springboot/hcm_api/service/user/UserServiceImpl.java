@@ -1,8 +1,8 @@
 package com.jamersc.springboot.hcm_api.service.user;
 
-import com.jamersc.springboot.hcm_api.dto.user.UserCreateDTO;
-import com.jamersc.springboot.hcm_api.dto.user.UserDTO;
-import com.jamersc.springboot.hcm_api.dto.user.UserResponseDTO;
+import com.jamersc.springboot.hcm_api.dto.user.UserCreateDto;
+import com.jamersc.springboot.hcm_api.dto.user.UserDto;
+import com.jamersc.springboot.hcm_api.dto.user.UserResponseDto;
 import com.jamersc.springboot.hcm_api.entity.Employee;
 import com.jamersc.springboot.hcm_api.entity.Role;
 import com.jamersc.springboot.hcm_api.entity.User;
@@ -40,20 +40,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserResponseDTO> getAllUsers(Pageable pageable) {
+    public Page<UserResponseDto> getAllUsers(Pageable pageable) {
         Page<User> users = userRepository.findAll(pageable);
         return users.map(userMapper::entityToUserResponseDTO);
     }
 
     @Override
-    public Optional<UserResponseDTO> findUserById(Long id) {
+    public Optional<UserResponseDto> findUserById(Long id) {
         return Optional.ofNullable(userRepository.findById(id)
                 .map(userMapper::entityToUserResponseDTO)
                 .orElseThrow(()-> new RuntimeException("User not found.")));
     }
 
     @Override
-    public UserResponseDTO createUser(Long employeeId, UserCreateDTO createDTO, Authentication authentication) {
+    public UserResponseDto createUser(Long employeeId, UserCreateDto createDTO, Authentication authentication) {
         // fetch employee
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(()-> new RuntimeException("Employee not found"));
@@ -100,7 +100,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDTO update(UserDTO userDTO, Authentication authentication) {
+    public UserResponseDto update(UserDto userDTO, Authentication authentication) {
         return null;
     }
 
