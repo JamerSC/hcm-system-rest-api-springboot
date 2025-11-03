@@ -12,7 +12,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponseDto {
+public class UserResponseDTO {
     private String username;
     private String email;
     private String firstName;

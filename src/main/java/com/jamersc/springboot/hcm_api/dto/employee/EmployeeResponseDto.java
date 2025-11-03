@@ -13,7 +13,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmployeeResponseDto {
+public class EmployeeResponseDTO {
     private Long id;
     private String firstName;
     private String lastName;

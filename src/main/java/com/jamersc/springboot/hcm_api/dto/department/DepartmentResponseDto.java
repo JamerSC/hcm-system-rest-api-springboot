@@ -12,7 +12,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DepartmentResponseDto {
+public class DepartmentResponseDTO {
     private Long id;
     private String name;
     private String code;

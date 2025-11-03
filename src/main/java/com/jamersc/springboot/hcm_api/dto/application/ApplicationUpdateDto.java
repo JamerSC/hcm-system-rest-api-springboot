@@ -16,7 +16,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApplicationUpdateDto {
+public class ApplicationUpdateDTO {
     private Long applicationId;
     private String applicantName;
     private String appliedPosition;

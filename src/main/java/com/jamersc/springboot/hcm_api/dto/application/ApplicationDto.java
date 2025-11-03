@@ -14,7 +14,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApplicationDto {
+public class ApplicationDTO {
     private Long id;
     private String applicantName;
     private String jobPosition;

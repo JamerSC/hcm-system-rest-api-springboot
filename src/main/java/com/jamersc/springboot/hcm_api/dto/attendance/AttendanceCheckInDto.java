@@ -1,4 +1,4 @@
 package com.jamersc.springboot.hcm_api.dto.attendance;
 
-public class AttendanceCheckInDto {
+public class AttendanceCheckInDTO {
 }

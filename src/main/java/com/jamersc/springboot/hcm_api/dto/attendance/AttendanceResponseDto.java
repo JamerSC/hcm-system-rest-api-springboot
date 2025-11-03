@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AttendanceResponseDto {
+public class AttendanceResponseDTO {
     private Long attendanceId;
     private LocalDate attendanceDate;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Manila")

@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class JobResponseDto {
+public class JobResponseDTO {
     private Long jobId;
     private LocalDate postedDate;
     private String postedBy;

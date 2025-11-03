@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserCreateDto {
+public class UserCreateDTO {
 
     @NotBlank(message = "Username is required")
     @Size(min = 8, max = 30, message = "Username must be between 8 and 30 characters")
