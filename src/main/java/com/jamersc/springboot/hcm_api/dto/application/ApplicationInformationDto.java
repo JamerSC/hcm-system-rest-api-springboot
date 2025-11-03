@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ApplicationInformationDTO {
+public class ApplicationInformationDto {
 
     private Long id;
 

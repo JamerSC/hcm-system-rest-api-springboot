@@ -11,7 +11,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginResponseDTO {
+public class LoginResponseDto {
     private String message;
     private String username;
     private Set<String> roles; // Send back the roles for client-side authorization

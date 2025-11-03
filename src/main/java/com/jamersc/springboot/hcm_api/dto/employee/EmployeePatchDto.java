@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmployeePatchDTO {
+public class EmployeePatchDto {
     private String firstName;
     private String lastName;
     @Email(message = "Email should be valid")

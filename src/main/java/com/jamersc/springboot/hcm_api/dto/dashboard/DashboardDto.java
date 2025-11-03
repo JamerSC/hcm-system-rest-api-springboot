@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DashboardDTO {
+public class DashboardDto {
 
     private Long totalUser;
     private Long totalJobs;

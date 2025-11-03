@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApplicantUpdateProfileDTO {
+public class ApplicantUpdateProfileDto {
     // Remove 'id' as it's typically derived from the authenticated user
     // Remove 'user' entity
 

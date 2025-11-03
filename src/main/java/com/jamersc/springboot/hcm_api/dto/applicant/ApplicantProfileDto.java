@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApplicantProfileDTO {
+public class ApplicantProfileDto {
     @NotBlank(message = "First name is required for profile") // example validation
     private String firstName;
     @NotBlank(message = "Last name is required for profile")

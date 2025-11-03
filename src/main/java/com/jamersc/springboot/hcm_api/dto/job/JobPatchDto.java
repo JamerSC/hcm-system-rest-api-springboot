@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class JobPatchDTO {
+public class JobPatchDto {
     private String title;
     private String description;
     private String requirements;

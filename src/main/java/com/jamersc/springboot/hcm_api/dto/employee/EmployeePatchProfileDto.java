@@ -12,7 +12,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmployeePatchProfileDTO {
+public class EmployeePatchProfileDto {
     private Long id;
     private String firstName;
     private String lastName;

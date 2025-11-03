@@ -15,7 +15,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AttendanceDTO {
+public class AttendanceDto {
     private Long attendanceId;
     private LocalDate attendanceDate;
 

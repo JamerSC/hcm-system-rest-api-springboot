@@ -15,7 +15,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LeaveResponseDTO {
+public class LeaveResponseDto {
     private Long id;
     private String employeeFullName;
     private LeaveType leaveType;

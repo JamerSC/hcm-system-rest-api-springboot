@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class JobCreateDTO {
+public class JobCreateDto {
     @NotBlank(message = "Job title is required")
     private String title;
     @NotBlank(message = "Description is required")

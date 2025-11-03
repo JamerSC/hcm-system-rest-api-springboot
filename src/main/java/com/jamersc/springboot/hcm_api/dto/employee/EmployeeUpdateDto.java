@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmployeeUpdateDTO {
+public class EmployeeUpdateDto {
     private Long id;
     @NotBlank(message = "First name is required")
     private String firstName;

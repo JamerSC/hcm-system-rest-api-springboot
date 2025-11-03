@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DepartmentDTO {
+public class DepartmentDto {
     private Long id;
     @NotBlank(message = "Department is required!")
     private String name;

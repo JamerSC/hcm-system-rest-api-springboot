@@ -12,7 +12,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmployeeProfileDTO {
+public class EmployeeProfileDto {
     // Fields from Employee entity
     private Long id;
     private String firstName;
