@@ -26,30 +26,30 @@ public class UserController {
 
     @GetMapping("/")
     public ResponseEntity<Page<UserResponseDto>> getAllUsers(Pageable pageable) {
-        Page<UserResponseDto> users = userService.getAllUsers(pageable);
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        Page<UserResponseDto> systemUsers = userService.getAllUsers(pageable);
+        return new ResponseEntity<>(systemUsers, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Optional<UserResponseDto>> getUserById(@PathVariable Long id) {
-        Optional<UserResponseDto> user = userService.findUserById(id);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        Optional<UserResponseDto> gotUser = userService.findUserById(id);
+        return new ResponseEntity<>(gotUser, HttpStatus.OK);
     }
 
     @PostMapping("/{employeeId}/create-user")
     public ResponseEntity<UserResponseDto> createEmployeeUserAccess(
             @PathVariable Long employeeId, @Valid @RequestBody UserCreateDto createDTO,
             Authentication authentication) {
-        UserResponseDto userResponseDTO = userService.createUser(employeeId, createDTO, authentication);
-        return new ResponseEntity<>(userResponseDTO, HttpStatus.CREATED);
+        UserResponseDto createdUser = userService.createUser(employeeId, createDTO, authentication);
+        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}/update-user")
-    public ResponseEntity<UserResponseDto> updateUser(
+    public ResponseEntity<UserResponseDto> updateEmployeeUser(
             @PathVariable Long id, @Valid @RequestBody UserDto userDTO,
             Authentication authentication) {
-        UserResponseDto userResponseDTO = userService.update(userDTO, authentication);
-        return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
+        UserResponseDto updatedUser = userService.update(userDTO, authentication);
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
 //    @PatchMapping("/{id}/")
