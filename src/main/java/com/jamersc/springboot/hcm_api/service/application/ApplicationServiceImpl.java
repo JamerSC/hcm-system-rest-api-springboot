@@ -38,7 +38,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
 //    @Override
-//    public List<ApplicationResponseDTO> getAllApplication() {
+//    public List<ApplicationResponseDto> getAllApplication() {
 //        return applicationMapper.entitiesToResponseDtos(
 //                applicationRepository.findAll()
 //        );
