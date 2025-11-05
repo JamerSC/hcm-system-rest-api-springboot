@@ -6,6 +6,8 @@ import com.jamersc.springboot.hcm_api.entity.*;
 import com.jamersc.springboot.hcm_api.mapper.ApplicationMapper;
 import com.jamersc.springboot.hcm_api.repository.*;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -19,6 +21,8 @@ import java.util.Optional;
 @Service
 @Transactional
 public class ApplicationServiceImpl implements ApplicationService {
+
+    private static final Logger log = LoggerFactory.getLogger(ApplicationServiceImpl.class);
     private final ApplicationRepository applicationRepository;
     private final ApplicationMapper applicationMapper;
     private final UserRepository userRepository;
@@ -34,7 +38,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
 //    @Override
-//    public List<ApplicationResponseDTO> getAllApplication() {
+//    public List<ApplicationResponseDto> getAllApplication() {
 //        return applicationMapper.entitiesToResponseDtos(
 //                applicationRepository.findAll()
 //        );

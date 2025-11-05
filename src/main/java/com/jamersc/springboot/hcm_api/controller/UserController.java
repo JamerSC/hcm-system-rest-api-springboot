@@ -53,9 +53,9 @@ public class UserController {
     }
 
 //    @PatchMapping("/{id}/")
-//    public ResponseEntity<UserResponseDTO> patchUser(
-//            @PathVariable Long id, @Valid @RequestBody UserCreateDTO createDTO) {
-//        UserResponseDTO userResponseDTO = null;
+//    public ResponseEntity<UserResponseDto> patchUser(
+//            @PathVariable Long id, @Valid @RequestBody UserCreateDto createDTO) {
+//        UserResponseDto userResponseDTO = null;
 //        return new ResponseEntity<>(userResponseDTO, HttpStatus.CREATED);
 //    }
 

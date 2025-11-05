@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface EmployeeService {
     Page<EmployeeResponseDto> getAllEmployee(Pageable pageable);
-    //EmployeeDTO findById(Long id);
+    //EmployeeDto findById(Long id);
     Optional<EmployeeProfileDto> findEmployeeProfileById(Long id);
     Optional<EmployeeResponseDto> findEmployeeById(Long id);
     Optional<EmployeeDto> findById(Long id);

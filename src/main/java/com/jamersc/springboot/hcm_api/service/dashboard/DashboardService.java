@@ -5,11 +5,14 @@ import com.jamersc.springboot.hcm_api.entity.JobStatus;
 import com.jamersc.springboot.hcm_api.entity.LeaveType;
 import com.jamersc.springboot.hcm_api.repository.*;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DashboardService {
 
+    private static final Logger log = LoggerFactory.getLogger(DashboardService.class);
     private final UserRepository userRepository;
     private final ApplicantRepository applicantRepository;
     private final ApplicationRepository applicationRepository;

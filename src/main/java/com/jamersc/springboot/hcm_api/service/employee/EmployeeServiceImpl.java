@@ -10,6 +10,8 @@ import com.jamersc.springboot.hcm_api.repository.EmployeeRepository;
 import com.jamersc.springboot.hcm_api.repository.JobRepository;
 import com.jamersc.springboot.hcm_api.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -22,6 +24,7 @@ import java.util.Optional;
 @Transactional
 public class EmployeeServiceImpl implements EmployeeService {
 
+    private static final Logger log = LoggerFactory.getLogger(EmployeeServiceImpl.class);
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
     private final UserRepository userRepository;

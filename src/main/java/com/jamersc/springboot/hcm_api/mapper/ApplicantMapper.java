@@ -20,7 +20,7 @@ import java.util.List;
 public interface ApplicantMapper {
 
     /**
-     * Maps an Applicant entity to an ApplicantProfileDTO.
+     * Maps an Applicant entity to an ApplicantProfileDto.
      * MapStruct will automatically map fields with the same name.
      * Fields in the entity not present in the DTO (like id, user, cvFilePath, currentStatus)
      * will simply be ignored, which is the desired behavior for a profile DTO.
@@ -59,7 +59,7 @@ public interface ApplicantMapper {
     @Mapping(target = "username", source = "user.username")
     ApplicantProfileDto entityToProfileDto(Applicant applicant);
 
-    // Maps an ApplicantDTO to an Applicant entity .
+    // Maps an ApplicantDto to an Applicant entity .
     @Mapping(target = "lastName", ignore = true)
     @Mapping(target = "firstName", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
@@ -81,7 +81,7 @@ public interface ApplicantMapper {
     void updateEntityFromProfileDto(ApplicantProfileDto dto, @MappingTarget Applicant applicant);
 
     /**
-     * Creates a new Applicant entity from an ApplicantProfileDTO.
+     * Creates a new Applicant entity from an ApplicantProfileDto.
      * This method is used when creating a *new* applicant, not updating.
      * You'll need to handle 'user' association separately in your service layer
      * since the DTO doesn't contain user information directly.
@@ -99,7 +99,7 @@ public interface ApplicantMapper {
     Applicant profileDtoToNewEntity(ApplicantProfileDto dto);
 
     // If you ever need to map the User entity itself to a DTO (e.g., UserIdDTO),
-    // you would add a method here, but it's not directly related to ApplicantProfileDTO's purpose.
+    // you would add a method here, but it's not directly related to ApplicantProfileDto's purpose.
     // Example: UserIdDTO userToUserIdDto(User user);
     List<ApplicantDto> entityToApplicantDtoList(List<Applicant> applicants);
 
