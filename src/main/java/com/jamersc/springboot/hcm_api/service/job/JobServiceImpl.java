@@ -12,7 +12,10 @@ import com.jamersc.springboot.hcm_api.mapper.JobMapper;
 import com.jamersc.springboot.hcm_api.repository.DepartmentRepository;
 import com.jamersc.springboot.hcm_api.repository.JobRepository;
 import com.jamersc.springboot.hcm_api.repository.UserRepository;
+import com.jamersc.springboot.hcm_api.service.user.UserServiceImpl;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -25,6 +28,7 @@ import java.util.Optional;
 @Transactional
 public class JobServiceImpl implements JobService {
 
+    private static final Logger log = LoggerFactory.getLogger(JobServiceImpl.class);
     private final JobRepository jobRepository;
     private final UserRepository userRepository;
     private final JobMapper jobMapper;

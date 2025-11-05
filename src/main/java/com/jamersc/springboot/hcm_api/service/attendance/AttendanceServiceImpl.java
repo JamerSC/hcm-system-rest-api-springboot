@@ -9,6 +9,8 @@ import com.jamersc.springboot.hcm_api.repository.AttendanceRepository;
 import com.jamersc.springboot.hcm_api.repository.EmployeeRepository;
 import com.jamersc.springboot.hcm_api.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -22,6 +24,7 @@ import java.time.LocalDateTime;
 @Transactional
 public class AttendanceServiceImpl implements AttendanceService {
 
+    private static final Logger log = LoggerFactory.getLogger(AttendanceServiceImpl.class);
     private final AttendanceRepository attendanceRepository;
     private final UserRepository userRepository;
     private final AttendanceMapper attendanceMapper;

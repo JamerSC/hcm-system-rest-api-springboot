@@ -9,6 +9,8 @@ import com.jamersc.springboot.hcm_api.mapper.DepartmentMapper;
 import com.jamersc.springboot.hcm_api.repository.DepartmentRepository;
 import com.jamersc.springboot.hcm_api.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -21,6 +23,7 @@ import java.util.Optional;
 @Transactional
 public class DepartmentServiceImpl implements DepartmentService {
 
+    private static final Logger log = LoggerFactory.getLogger(DepartmentServiceImpl.class);
     private final DepartmentRepository departmentRepository;
     private final DepartmentMapper departmentMapper;
     private final UserRepository userRepository;

@@ -13,6 +13,8 @@ import com.jamersc.springboot.hcm_api.repository.UserRepository;
 import com.jamersc.springboot.hcm_api.service.email.EmailService;
 import com.jamersc.springboot.hcm_api.service.file.FileStorageService;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -27,6 +29,7 @@ import java.util.Optional;
 @Transactional
 public class ApplicantServiceImpl implements ApplicantService {
 
+    private static final Logger log = LoggerFactory.getLogger(ApplicantServiceImpl.class);
     private final ApplicantRepository applicantRepository; // fetch applicant
     private final ApplicationRepository applicationRepository;
     private final JobRepository jobRepository;
