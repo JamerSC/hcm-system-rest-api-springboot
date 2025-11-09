@@ -10,6 +10,8 @@ import com.jamersc.springboot.hcm_api.repository.EmployeeRepository;
 import com.jamersc.springboot.hcm_api.repository.JobRepository;
 import com.jamersc.springboot.hcm_api.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -22,6 +24,7 @@ import java.util.Optional;
 @Transactional
 public class EmployeeServiceImpl implements EmployeeService {
 
+    private static final Logger log = LoggerFactory.getLogger(EmployeeServiceImpl.class);
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
     private final UserRepository userRepository;
@@ -36,27 +39,27 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
     @Override
-    public Page<EmployeeResponseDTO> getAllEmployee(Pageable pageable) {
+    public Page<EmployeeResponseDto> getAllEmployee(Pageable pageable) {
         Page<Employee> employees = employeeRepository.findAll(pageable);
         return employees.map(employeeMapper::entityToEmployeeResponseDTO);
     }
 
     @Override
-    public Optional<EmployeeProfileDTO> findEmployeeProfileById(Long id) {
+    public Optional<EmployeeProfileDto> findEmployeeProfileById(Long id) {
        return Optional.ofNullable(employeeRepository.findEmployeeWithUserAndRolesById(id)
                 .map(employeeMapper::entityToProfileDto).orElseThrow(
                         () -> new EmployeeNotFoundException("Employee id not found - " + id))
        );
     }
 
-    public Optional<EmployeeResponseDTO> findEmployeeById(Long id) {
+    public Optional<EmployeeResponseDto> findEmployeeById(Long id) {
         return Optional.ofNullable(employeeRepository.findById(id)
                 .map(employeeMapper::entityToEmployeeResponseDTO).orElseThrow(
                         () -> new EmployeeNotFoundException("Employee id not found - " + id))
         );
     }
 
-    public Optional<EmployeeDTO> findById(Long id) {
+    public Optional<EmployeeDto> findById(Long id) {
         return Optional.ofNullable(employeeRepository.findById(id)
                 .map(employeeMapper::entityToDto).orElseThrow(
                         () -> new EmployeeNotFoundException("Employee id not found - " + id))
@@ -64,14 +67,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeProfileDTO getMyEmployeeProfile(Authentication authentication) {
+    public EmployeeProfileDto getMyEmployeeProfile(Authentication authentication) {
         User userDetails = getUser(authentication);
         Employee myProfile = employeeRepository.findEmployeeByUsername(userDetails.getUsername());
         return employeeMapper.entityToProfileDto(myProfile);
     }
 
     @Override
-    public EmployeeResponseDTO save(EmployeeCreateDTO employeeDTO, Authentication authentication) {
+    public EmployeeResponseDto save(EmployeeCreateDto employeeDTO, Authentication authentication) {
         // get current user
         User currentUser = getUser(authentication);
 
@@ -90,7 +93,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee update(EmployeeUpdateDTO employeeDTO, Authentication authentication) {
+    public Employee update(EmployeeUpdateDto employeeDTO, Authentication authentication) {
         // get current user
         User currentUser = getUser(authentication);
 
@@ -105,7 +108,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeResponseDTO patchEmployee(Long id, EmployeePatchDTO dto, Authentication authentication) {
+    public EmployeeResponseDto patchEmployee(Long id, EmployeePatchDto dto, Authentication authentication) {
         User currentUser = getUser(authentication);
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Employee not found"));

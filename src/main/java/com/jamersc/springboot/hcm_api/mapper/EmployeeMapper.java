@@ -17,7 +17,7 @@ public interface EmployeeMapper {
 
     // employee
     @Mapping(target = "jobId", source = "job.id")
-    EmployeeDTO entityToDto(Employee employee);
+    EmployeeDto entityToDto(Employee employee);
 
     @Mapping(target = "leaves", ignore = true)
     @Mapping(target = "attendanceRecords", ignore = true)
@@ -27,13 +27,13 @@ public interface EmployeeMapper {
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "user", ignore = true)
-    Employee dtoToEntity(EmployeeDTO dto);
+    Employee dtoToEntity(EmployeeDto dto);
 
     // employee profile
     @Mapping(target = "jobPosition", source = "job.title")
     @Mapping(target = "username", source = "user.username")
     @Mapping(target = "roles", expression = "java(mapRoles(employee.getUser().getRoles()))")
-    EmployeeProfileDTO entityToProfileDto(Employee employee);
+    EmployeeProfileDto entityToProfileDto(Employee employee);
 
     default Set<String> mapRoles(Set<Role> roles) {
         if (roles==null) {
@@ -45,7 +45,7 @@ public interface EmployeeMapper {
 
     // create employee mapper
     @Mapping(target = "jobId", source = "job.id")
-    EmployeeCreateDTO createEntityToDto(Employee employee);
+    EmployeeCreateDto createEntityToDto(Employee employee);
 
     @Mapping(target = "leaves", ignore = true)
     @Mapping(target = "attendanceRecords", ignore = true)
@@ -56,18 +56,18 @@ public interface EmployeeMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "id", ignore = true)
-    Employee createDtoToEntity(EmployeeCreateDTO dto);
+    Employee createDtoToEntity(EmployeeCreateDto dto);
 
     @Mapping(target = "department", source = "job.department.name")
     @Mapping(target = "salary", expression = "java(employee.formattedSalary())")
     @Mapping(target = "jobPosition", source = "job.title")
     @Mapping(target = "updatedBy", source = "updatedBy.employee.job.title")
     @Mapping(target = "createdBy", source = "createdBy.employee.job.title")
-    EmployeeResponseDTO entityToEmployeeResponseDTO(Employee employee);
+    EmployeeResponseDto entityToEmployeeResponseDTO(Employee employee);
 
     // employee update
     @Mapping(target = "jobId", source = "job.id")
-    EmployeeUpdateDTO updateEntityToDto(Employee employee);
+    EmployeeUpdateDto updateEntityToDto(Employee employee);
 
     @Mapping(target = "leaves", ignore = true)
     @Mapping(target = "attendanceRecords", ignore = true)
@@ -77,10 +77,10 @@ public interface EmployeeMapper {
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "user", ignore = true)
-    Employee updateDtoToEntity(EmployeeUpdateDTO dto);
+    Employee updateDtoToEntity(EmployeeUpdateDto dto);
 
     @Mapping(target = "jobId", source = "employee.job.id")
-    EmployeePatchDTO entityToPatchDto(Employee employee);
+    EmployeePatchDto entityToPatchDto(Employee employee);
 
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
@@ -91,13 +91,13 @@ public interface EmployeeMapper {
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "attendanceRecords", ignore = true)
-    Employee patchDtoToEntity(EmployeePatchDTO dto);
+    Employee patchDtoToEntity(EmployeePatchDto dto);
 
     // List collection of employee
-    List<EmployeeDTO> entitiesToDtos(List<Employee> employees);
+    List<EmployeeDto> entitiesToDtos(List<Employee> employees);
 
-    List<EmployeeResponseDTO> entitiesToResponseDtos(List<Employee> employees);
+    List<EmployeeResponseDto> entitiesToResponseDtos(List<Employee> employees);
 
-    List<Employee> dtosToEntities(List<EmployeeDTO> dtos);
+    List<Employee> dtosToEntities(List<EmployeeDto> dtos);
 
 }

@@ -1,7 +1,7 @@
 package com.jamersc.springboot.hcm_api.service.auth;
 
-import com.jamersc.springboot.hcm_api.dto.auth.ChangePasswordDTO;
-import com.jamersc.springboot.hcm_api.dto.auth.RegistrationRequestDTO;
+import com.jamersc.springboot.hcm_api.dto.auth.ChangePasswordDto;
+import com.jamersc.springboot.hcm_api.dto.auth.RegistrationDto;
 import com.jamersc.springboot.hcm_api.entity.Applicant;
 import com.jamersc.springboot.hcm_api.entity.Role;
 import com.jamersc.springboot.hcm_api.entity.User;
@@ -10,6 +10,8 @@ import com.jamersc.springboot.hcm_api.repository.RoleRepository;
 import com.jamersc.springboot.hcm_api.repository.UserRepository;
 import com.jamersc.springboot.hcm_api.service.email.EmailService;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,6 +23,8 @@ import java.util.Set;
 @Service
 @Transactional
 public class AuthServiceImpl implements AuthService {
+
+    private static final Logger log = LoggerFactory.getLogger(AuthServiceImpl.class);
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private  final PasswordEncoder passwordEncoder;
@@ -36,7 +40,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public User registerNewUserAndApplicant(RegistrationRequestDTO requestDTO) {
+    public User registerNewUserAndApplicant(RegistrationDto requestDTO) {
         if (userRepository.findByUsername(requestDTO.getUsername()).isPresent()) {
             throw new IllegalArgumentException("Username already exists!");
         }
@@ -76,7 +80,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void changePassword(ChangePasswordDTO changePasswordDTO, Authentication authentication) {
+    public void changePassword(ChangePasswordDto changePasswordDTO, Authentication authentication) {
         // get authenticated user details
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User currentUser = userRepository.findByUsername(userDetails.getUsername())

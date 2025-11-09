@@ -33,53 +33,53 @@ public class EmployeeController {
 
     // Get all employees
     @GetMapping("/")
-    public ResponseEntity<Page<EmployeeResponseDTO>> getAllEmployees(
+    public ResponseEntity<Page<EmployeeResponseDto>> getAllEmployees(
             @PageableDefault(page = 0, size = 10, sort = "id") Pageable pageable) {
-        Page<EmployeeResponseDTO> employees = employeeService.getAllEmployee(pageable);
+        Page<EmployeeResponseDto> employees = employeeService.getAllEmployee(pageable);
         return new ResponseEntity<>(employees, HttpStatus.OK); // HTTP 200 List of Employees
     }
 
     // Get employee profile with username & role
     @GetMapping("/{id}/profile")
-    public ResponseEntity<Optional<EmployeeProfileDTO>> getEmployeeProfile(@PathVariable Long id) {
-        Optional<EmployeeProfileDTO> profile = employeeService.findEmployeeProfileById(id);
+    public ResponseEntity<Optional<EmployeeProfileDto>> getEmployeeProfile(@PathVariable Long id) {
+        Optional<EmployeeProfileDto> profile = employeeService.findEmployeeProfileById(id);
         return ResponseEntity.ok(profile);
     }
 
     // Get employee by id
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeResponseDTO> getEmployeeById(@PathVariable Long id) {
-        Optional<EmployeeResponseDTO> employee = employeeService.findEmployeeById(id);
+    public ResponseEntity<EmployeeResponseDto> getEmployeeById(@PathVariable Long id) {
+        Optional<EmployeeResponseDto> employee = employeeService.findEmployeeById(id);
 
         return employee.map(ResponseEntity::ok) // HTTP 200 + body
                 .orElseGet(()-> ResponseEntity.notFound().build()); // HTTP 404
     }
 
     @GetMapping("/me/profile")
-    public ResponseEntity<EmployeeProfileDTO> getMyEmployeeProfile(Authentication authentication) {
-        EmployeeProfileDTO myProfile = employeeService.getMyEmployeeProfile(authentication);
+    public ResponseEntity<EmployeeProfileDto> getMyEmployeeProfile(Authentication authentication) {
+        EmployeeProfileDto myProfile = employeeService.getMyEmployeeProfile(authentication);
         return new ResponseEntity<>(myProfile, HttpStatus.OK);
     }
 
     // Create Employee
     @PostMapping("/")
-    public ResponseEntity<EmployeeResponseDTO> createEmployee(
-            @Valid @RequestBody EmployeeCreateDTO employeeDTO,
+    public ResponseEntity<EmployeeResponseDto> createEmployee(
+            @Valid @RequestBody EmployeeCreateDto employeeDTO,
             Authentication authentication) {
 
-        EmployeeResponseDTO employee = employeeService.save(employeeDTO, authentication);
+        EmployeeResponseDto employee = employeeService.save(employeeDTO, authentication);
 
         return new ResponseEntity<>(employee, HttpStatus.CREATED); // Created 201
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<EmployeeResponseDTO> patchEmployeeProfile(
-            @PathVariable Long id, @RequestBody EmployeePatchDTO dto, Authentication authentication) {
-        EmployeeResponseDTO patchedEmployee = employeeService.patchEmployee(id, dto, authentication);
+    public ResponseEntity<EmployeeResponseDto> patchEmployeeProfile(
+            @PathVariable Long id, @RequestBody EmployeePatchDto dto, Authentication authentication) {
+        EmployeeResponseDto patchedEmployee = employeeService.patchEmployee(id, dto, authentication);
         return new ResponseEntity<>(patchedEmployee, HttpStatus.OK);
     }
 
-    private EmployeeDTO apply(Map<String, Object> patchPayload, EmployeeDTO tempEmployee) {
+    private EmployeeDto apply(Map<String, Object> patchPayload, EmployeeDto tempEmployee) {
         // convert employee object to JSON object node
         // add Object mapper in dependency injection
         ObjectNode employeeNode = objectMapper.convertValue(tempEmployee, ObjectNode.class);
@@ -91,13 +91,13 @@ public class EmployeeController {
         employeeNode.setAll(patchNode);
 
         // return - convert JSON object node back to Employee Object
-        return objectMapper.convertValue(employeeNode, EmployeeDTO.class);
+        return objectMapper.convertValue(employeeNode, EmployeeDto.class);
     }
 
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteEmployee(@PathVariable Long id) {
-        Optional<EmployeeDTO> tempEmployee = employeeService.findById(id);
+        Optional<EmployeeDto> tempEmployee = employeeService.findById(id);
 
         if (tempEmployee.isEmpty()) {
             return ResponseEntity.notFound().build(); // HTTP 404

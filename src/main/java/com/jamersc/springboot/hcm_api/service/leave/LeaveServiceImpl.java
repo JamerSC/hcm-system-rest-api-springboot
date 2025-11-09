@@ -1,8 +1,8 @@
 package com.jamersc.springboot.hcm_api.service.leave;
 
-import com.jamersc.springboot.hcm_api.dto.leave.LeaveCreateDTO;
-import com.jamersc.springboot.hcm_api.dto.leave.LeaveResponseDTO;
-import com.jamersc.springboot.hcm_api.dto.leave.LeaveUpdateDTO;
+import com.jamersc.springboot.hcm_api.dto.leave.LeaveCreateDto;
+import com.jamersc.springboot.hcm_api.dto.leave.LeaveResponseDto;
+import com.jamersc.springboot.hcm_api.dto.leave.LeaveUpdateDto;
 import com.jamersc.springboot.hcm_api.entity.Leave;
 import com.jamersc.springboot.hcm_api.entity.LeaveStatus;
 import com.jamersc.springboot.hcm_api.entity.User;
@@ -11,6 +11,8 @@ import com.jamersc.springboot.hcm_api.repository.EmployeeRepository;
 import com.jamersc.springboot.hcm_api.repository.LeaveRepository;
 import com.jamersc.springboot.hcm_api.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -24,6 +26,7 @@ import java.util.Optional;
 @Transactional
 public class LeaveServiceImpl implements LeaveService {
 
+    private static final Logger log = LoggerFactory.getLogger(LeaveServiceImpl.class);
     private final LeaveRepository leaveRepository;
     private final UserRepository userRepository;
     private final LeaveMapper leaveMapper;
@@ -36,27 +39,27 @@ public class LeaveServiceImpl implements LeaveService {
 
 
     @Override
-    public Page<LeaveResponseDTO> getAllLeaveRequest(Pageable pageable) {
+    public Page<LeaveResponseDto> getAllLeaveRequest(Pageable pageable) {
         Page<Leave> leaves = leaveRepository.findAll(pageable);
         return leaves.map(leaveMapper::entityToResponseDto);
     }
 
     @Override
-    public Optional<LeaveResponseDTO> getLeaveRequestById(Long id) {
+    public Optional<LeaveResponseDto> getLeaveRequestById(Long id) {
         return Optional.of(leaveRepository.findById(id)
                 .map(leaveMapper::entityToResponseDto))
                 .orElseThrow(()-> new RuntimeException("Leave request not found"));
     }
 
     @Override
-    public Page<LeaveResponseDTO> getMyLeaveRequests(Pageable pageable, Authentication authentication) {
+    public Page<LeaveResponseDto> getMyLeaveRequests(Pageable pageable, Authentication authentication) {
         User currentUser = getUser(authentication);
         Page<Leave> myLeaveRequests = leaveRepository.findByEmployee(pageable, currentUser.getEmployee());
         return myLeaveRequests.map(leaveMapper::entityToResponseDto);
     }
 
     @Override
-    public LeaveResponseDTO submitLeaveRequest(LeaveCreateDTO dto, Authentication authentication) {
+    public LeaveResponseDto submitLeaveRequest(LeaveCreateDto dto, Authentication authentication) {
         User currentUser = getUser(authentication);
 
         Leave leaveRequest = new Leave();
@@ -76,7 +79,7 @@ public class LeaveServiceImpl implements LeaveService {
     }
 
     @Override
-    public LeaveResponseDTO cancelLeaveRequest(Long id, Authentication authentication) {
+    public LeaveResponseDto cancelLeaveRequest(Long id, Authentication authentication) {
         User currentUser = getUser(authentication);
         Leave leave = leaveRepository.findById(id)
                 .orElseThrow(()->new RuntimeException("Leave not found"));
@@ -87,7 +90,7 @@ public class LeaveServiceImpl implements LeaveService {
     }
 
     @Override
-    public LeaveResponseDTO updateLeaveRequest(Long id, LeaveUpdateDTO dto, Authentication authentication) {
+    public LeaveResponseDto updateLeaveRequest(Long id, LeaveUpdateDto dto, Authentication authentication) {
         User currentUser = getUser(authentication);
 
         // 1. Find existing leave request
@@ -113,7 +116,7 @@ public class LeaveServiceImpl implements LeaveService {
     }
 
     @Override
-    public LeaveResponseDTO approveLeaveRequest(Long id, Authentication authentication) {
+    public LeaveResponseDto approveLeaveRequest(Long id, Authentication authentication) {
         User currentUser = getUser(authentication);
 
         Leave requestedLeave = leaveRepository.findById(id)
@@ -129,7 +132,7 @@ public class LeaveServiceImpl implements LeaveService {
     }
 
     @Override
-    public LeaveResponseDTO rejectLeaveRequest(Long id, Authentication authentication) {
+    public LeaveResponseDto rejectLeaveRequest(Long id, Authentication authentication) {
         User currentUser = getUser(authentication);
 
         Leave requestedLeave = leaveRepository.findById(id)

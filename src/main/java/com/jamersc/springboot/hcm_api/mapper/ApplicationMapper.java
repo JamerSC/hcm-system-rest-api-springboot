@@ -1,8 +1,8 @@
 package com.jamersc.springboot.hcm_api.mapper;
 
-import com.jamersc.springboot.hcm_api.dto.application.ApplicationDTO;
-import com.jamersc.springboot.hcm_api.dto.application.ApplicationResponseDTO;
-import com.jamersc.springboot.hcm_api.dto.application.ApplicationUpdateDTO;
+import com.jamersc.springboot.hcm_api.dto.application.ApplicationDto;
+import com.jamersc.springboot.hcm_api.dto.application.ApplicationResponseDto;
+import com.jamersc.springboot.hcm_api.dto.application.ApplicationUpdateDto;
 import com.jamersc.springboot.hcm_api.entity.Application;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -18,7 +18,7 @@ public interface ApplicationMapper {
     @Mapping(target = "updatedByUsername", source = "updatedBy.username")
     @Mapping(target = "jobPosition", source = "job.title")
     @Mapping(target = "applicantName", source = "applicant.firstName")
-    ApplicationDTO entityToDto(Application application);
+    ApplicationDto entityToDto(Application application);
 
     @Mapping(target = "source", ignore = true)
     @Mapping(target = "skills", ignore = true)
@@ -35,7 +35,7 @@ public interface ApplicationMapper {
     @Mapping(target = "updatedBy", ignore = true)
     @Mapping(target = "job", ignore = true)
     @Mapping(target = "applicant", ignore = true)
-    Application dtoToEntity(ApplicationDTO dto);
+    Application dtoToEntity(ApplicationDto dto);
 
 
     @Mapping(target = "applicationId", source = "id")
@@ -44,20 +44,20 @@ public interface ApplicationMapper {
     @Mapping(target = "applicantName", source = "applicant.applicantFullName")
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
-    ApplicationUpdateDTO entityToUpdateDto(Application application);
+    ApplicationUpdateDto entityToUpdateDto(Application application);
 
     @Mapping(target = "job", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "applicant", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
-    Application updateDtoToEntity(ApplicationUpdateDTO dto);
+    Application updateDtoToEntity(ApplicationUpdateDto dto);
 
     @Mapping(target = "applicationId", source = "id")
     @Mapping(target = "description", source = "job.description")
     @Mapping(target = "appliedPosition", source = "job.title")
     @Mapping(target = "applicantName", source = "applicant.applicantFullName")
-    ApplicationResponseDTO entityToApplicationResponseDto(Application application);
+    ApplicationResponseDto entityToApplicationResponseDto(Application application);
 
     @Mapping(target = "source", ignore = true)
     @Mapping(target = "skills", ignore = true)
@@ -76,9 +76,9 @@ public interface ApplicationMapper {
     @Mapping(target = "updatedBy", ignore = true)
     @Mapping(target = "job", ignore = true)
     @Mapping(target = "applicant", ignore = true)
-    Application applicationResponseDtoToEntity(ApplicationResponseDTO dto);
+    Application applicationResponseDtoToEntity(ApplicationResponseDto dto);
 
-    List<ApplicationResponseDTO> entitiesToResponseDtos(List<Application> applications);
+    List<ApplicationResponseDto> entitiesToResponseDtos(List<Application> applications);
 
-    List<Application> responseDtosToEntities(List<ApplicationResponseDTO> dtos);
+    List<Application> responseDtosToEntities(List<ApplicationResponseDto> dtos);
 }

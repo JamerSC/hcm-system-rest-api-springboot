@@ -1,8 +1,8 @@
 package com.jamersc.springboot.hcm_api.mapper;
 
-import com.jamersc.springboot.hcm_api.dto.user.UserCreateDTO;
-import com.jamersc.springboot.hcm_api.dto.user.UserDTO;
-import com.jamersc.springboot.hcm_api.dto.user.UserResponseDTO;
+import com.jamersc.springboot.hcm_api.dto.user.UserCreateDto;
+import com.jamersc.springboot.hcm_api.dto.user.UserDto;
+import com.jamersc.springboot.hcm_api.dto.user.UserResponseDto;
 import com.jamersc.springboot.hcm_api.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -14,7 +14,7 @@ import java.util.List;
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface UserMapper {
 
-    UserDTO entityToUserDTO(User user);
+    UserDto entityToUserDTO(User user);
 
     @Mapping(target = "updatedBy", ignore = true) // source = ""
     @Mapping(target = "updatedAt", ignore = true)
@@ -24,9 +24,9 @@ public interface UserMapper {
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "applicant", ignore = true)
-    User userDtoToEntity(UserDTO dto);
+    User userDtoToEntity(UserDto dto);
 
-    UserCreateDTO entityToUserCreateDTO(User user);
+    UserCreateDto entityToUserCreateDTO(User user);
 
     @Mapping(target = "lastName", ignore = true)
     @Mapping(target = "firstName", ignore = true)
@@ -38,11 +38,11 @@ public interface UserMapper {
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "applicant", ignore = true)
-    User userCreateDtoToEntity(UserCreateDTO dto);
+    User userCreateDtoToEntity(UserCreateDto dto);
 
     @Mapping(target = "createdBy", source = "createdBy.employee.job.title")
     @Mapping(target = "updatedBy", source = "updatedBy.employee.job.title")
-    UserResponseDTO entityToUserResponseDTO(User user);
+    UserResponseDto entityToUserResponseDTO(User user);
 
     @Mapping(target = "password", ignore = true)
     @Mapping(target = "updatedBy", ignore = true) //source = ""
@@ -53,9 +53,9 @@ public interface UserMapper {
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "applicant", ignore = true)
-    User userResponseDtoToEntity(UserResponseDTO dto);
+    User userResponseDtoToEntity(UserResponseDto dto);
 
-    List<UserDTO> entitiesToDtos(List<User> users);
+    List<UserDto> entitiesToDtos(List<User> users);
 
-    List<User> dtosToEntities(List<UserDTO> dtos);
+    List<User> dtosToEntities(List<UserDto> dtos);
 }

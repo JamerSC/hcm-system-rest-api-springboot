@@ -1,8 +1,8 @@
 package com.jamersc.springboot.hcm_api.service.applicant;
 
-import com.jamersc.springboot.hcm_api.dto.applicant.ApplicantProfileDTO;
-import com.jamersc.springboot.hcm_api.dto.applicant.ApplicantResponseDTO;
-import com.jamersc.springboot.hcm_api.dto.application.ApplicationResponseDTO;
+import com.jamersc.springboot.hcm_api.dto.applicant.ApplicantProfileDto;
+import com.jamersc.springboot.hcm_api.dto.applicant.ApplicantResponseDto;
+import com.jamersc.springboot.hcm_api.dto.application.ApplicationResponseDto;
 import com.jamersc.springboot.hcm_api.entity.*;
 import com.jamersc.springboot.hcm_api.mapper.ApplicantMapper;
 import com.jamersc.springboot.hcm_api.mapper.ApplicationMapper;
@@ -13,6 +13,8 @@ import com.jamersc.springboot.hcm_api.repository.UserRepository;
 import com.jamersc.springboot.hcm_api.service.email.EmailService;
 import com.jamersc.springboot.hcm_api.service.file.FileStorageService;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -27,6 +29,7 @@ import java.util.Optional;
 @Transactional
 public class ApplicantServiceImpl implements ApplicantService {
 
+    private static final Logger log = LoggerFactory.getLogger(ApplicantServiceImpl.class);
     private final ApplicantRepository applicantRepository; // fetch applicant
     private final ApplicationRepository applicationRepository;
     private final JobRepository jobRepository;
@@ -48,7 +51,7 @@ public class ApplicantServiceImpl implements ApplicantService {
     }
 
     @Override
-    public Page<ApplicantResponseDTO> getAllApplicant(Pageable pageable) {
+    public Page<ApplicantResponseDto> getAllApplicant(Pageable pageable) {
         // fetch applicant from repository
         Page<Applicant> applicants = applicantRepository.findAll(pageable);
         // map the Page<Applicant> to Page<JobDTO>
@@ -56,7 +59,7 @@ public class ApplicantServiceImpl implements ApplicantService {
     }
 
     @Override
-    public Optional<ApplicantResponseDTO> getApplicantById(Long id) {
+    public Optional<ApplicantResponseDto> getApplicantById(Long id) {
 
         return Optional.ofNullable(applicantRepository.findById(id)
                 .map(applicantMapper::entityToResponseDto)
@@ -64,15 +67,15 @@ public class ApplicantServiceImpl implements ApplicantService {
     }
 
     @Override
-    public ApplicantResponseDTO getApplicantProfile(String username) {
+    public ApplicantResponseDto getApplicantProfile(String username) {
         return applicantMapper.entityToResponseDto(
                 applicantRepository.findApplicantByUsername(username)
         );
     }
 
     @Override
-    public ApplicantResponseDTO updateApplicantProfile(String username,
-                                       ApplicantProfileDTO profileDTO) {
+    public ApplicantResponseDto updateApplicantProfile(String username,
+                                                       ApplicantProfileDto profileDTO) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(()-> new RuntimeException("Authenticated user not found: " + username));
 
@@ -95,7 +98,7 @@ public class ApplicantServiceImpl implements ApplicantService {
     }
 
     @Override
-    public ApplicantResponseDTO uploadResume(MultipartFile file, Authentication authentication) {
+    public ApplicantResponseDto uploadResume(MultipartFile file, Authentication authentication) {
         User applicantUser = getUser(authentication);
         Applicant applicant = applicantRepository.findByApplicantUser(applicantUser)
                 .orElseThrow(() -> new RuntimeException("Applicant profile not found for user: " + applicantUser));
@@ -113,7 +116,7 @@ public class ApplicantServiceImpl implements ApplicantService {
     }
 
     @Override
-    public ApplicationResponseDTO applyForJob(Long id, Authentication authentication) {
+    public ApplicationResponseDto applyForJob(Long id, Authentication authentication) {
         // find the job
         Job job = jobRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Job not found"));
@@ -155,7 +158,7 @@ public class ApplicantServiceImpl implements ApplicantService {
     }
 
     @Override
-    public Page<ApplicationResponseDTO> getAllApplicantJobsApplied(Pageable pageable, Authentication authentication) {
+    public Page<ApplicationResponseDto> getAllApplicantJobsApplied(Pageable pageable, Authentication authentication) {
         User applicantUser = getUser(authentication);
         Applicant applicant = applicantRepository.findByApplicantUser(applicantUser)
                 .orElseThrow(() -> new RuntimeException("Applicant profile not found."));
@@ -164,7 +167,7 @@ public class ApplicantServiceImpl implements ApplicantService {
     }
 
     @Override
-    public Optional<ApplicationResponseDTO> getApplicantJobsAppliedById(Long id, Authentication authentication) {
+    public Optional<ApplicationResponseDto> getApplicantJobsAppliedById(Long id, Authentication authentication) {
         // find the application
         Application application = applicationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Application not found"));
@@ -181,7 +184,7 @@ public class ApplicantServiceImpl implements ApplicantService {
     }
 
     @Override
-    public ApplicationResponseDTO withdrawApplication(Long id, Authentication authentication) {
+    public ApplicationResponseDto withdrawApplication(Long id, Authentication authentication) {
         // find application by id
         Application application = applicationRepository
                 .findById(id).orElseThrow(()-> new RuntimeException("Application id not found!"));
