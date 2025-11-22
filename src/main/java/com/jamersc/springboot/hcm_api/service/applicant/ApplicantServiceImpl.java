@@ -54,7 +54,7 @@ public class ApplicantServiceImpl implements ApplicantService {
     public Page<ApplicantResponseDto> getAllApplicant(Pageable pageable) {
         // fetch applicant from repository
         Page<Applicant> applicants = applicantRepository.findAll(pageable);
-        // map the Page<Applicant> to Page<JobDTO>
+        // map the Page<Applicant> to Page<JobDto>
         return applicants.map(applicantMapper::entityToResponseDto);
     }
 
@@ -67,32 +67,30 @@ public class ApplicantServiceImpl implements ApplicantService {
     }
 
     @Override
-    public ApplicantResponseDto getApplicantProfile(String username) {
-        return applicantMapper.entityToResponseDto(
-                applicantRepository.findApplicantByUsername(username)
-        );
+    public ApplicantResponseDto getMyApplicantProfile(Authentication authentication) {
+        User currentUser = getUser(authentication);
+        Applicant myProfile = applicantRepository.findApplicantByUsername(currentUser.getUsername());
+        return applicantMapper.entityToResponseDto(myProfile);
     }
 
     @Override
-    public ApplicantResponseDto updateApplicantProfile(String username,
-                                                       ApplicantProfileDto profileDTO) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(()-> new RuntimeException("Authenticated user not found: " + username));
+    public ApplicantResponseDto updateMyApplicantProfile(ApplicantProfileDto profileDto, Authentication authentication) {
+        User currentUser = getUser(authentication);
 
-        Applicant applicant = applicantRepository.findByApplicantUser(user)
-                .orElseGet(() -> { // Create new Applicant if not found (e.g., first profile update after registration)
-                    Applicant newApplicant = new Applicant();
-                    newApplicant.setUser(user);
-                    return newApplicant;
+        Applicant existingApplicant = applicantRepository.findByApplicantUser(currentUser)
+                .orElseThrow(() -> {
+                    log.error("Applicant user not found - {}", currentUser);
+                    return new RuntimeException("Applicant user not found");
                 });
-        // Map DTO fields to entity. You can use a mapper library (MapStruct) here.
-        applicant.setFirstName(profileDTO.getFirstName());
-        applicant.setLastName(profileDTO.getLastName());
-        applicant.setPhoneNumber(profileDTO.getPhoneNumber());
-        applicant.setAddress(profileDTO.getAddress());
-        applicant.setEducationLevel(profileDTO.getEducationLevel());
 
-        Applicant updatedApplicant = applicantRepository.save(applicant);
+        existingApplicant.setFirstName(profileDto.getFirstName());
+        existingApplicant.setLastName(profileDto.getLastName());
+        existingApplicant.setPhoneNumber(profileDto.getPhoneNumber());
+        existingApplicant.setAddress(profileDto.getAddress());
+        existingApplicant.setEducationLevel(profileDto.getEducationLevel());
+        existingApplicant.setUpdatedBy(currentUser);
+
+        Applicant updatedApplicant = applicantRepository.save(existingApplicant);
 
         return applicantMapper.entityToResponseDto(updatedApplicant);
     }
