@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -85,9 +84,9 @@ public class ApplicantController {
         Optional<ApplicationResponseDto> appliedJob = applicantService.getApplicantJobsAppliedById(id, authentication);
         ApiResponse<Optional<ApplicationResponseDto>> response = ApiResponse.<Optional<ApplicationResponseDto>>builder()
                 .success(true)
-                .message("Job application submitted successfully!")
+                .message("Job application retrieved successfully!")
                 .data(appliedJob)
-                .status(HttpStatus.CREATED.value())
+                .status(HttpStatus.OK.value())
                 .timestamp(LocalDateTime.now())
                 .build();
 
@@ -95,46 +94,79 @@ public class ApplicantController {
     }
 
     @PatchMapping("/application/{id}/withdraw")
-    public ResponseEntity<ApplicationResponseDto> withdrawApplication(
+    public ResponseEntity<ApiResponse<ApplicationResponseDto>> withdrawApplication(
             @PathVariable Long id, Authentication authentication) {
         ApplicationResponseDto withdrawn = applicantService.withdrawApplication(id, authentication);
-        return new ResponseEntity<>(withdrawn, HttpStatus.OK);
+        ApiResponse<ApplicationResponseDto> response = ApiResponse.<ApplicationResponseDto>builder()
+                .success(true)
+                .message("Job application withdrawn successfully!")
+                .data(withdrawn)
+                .status(HttpStatus.OK.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/me/profile")
-    public ResponseEntity<ApplicantResponseDto> getMyApplicantProfile(
-            @AuthenticationPrincipal UserDetails userDetails) {
-        String username = userDetails.getUsername();
-        ApplicantResponseDto profile = applicantService.getApplicantProfile(username);
-        return new ResponseEntity<>(profile, HttpStatus.OK);
+    public ResponseEntity<ApiResponse<ApplicantResponseDto>> getMyApplicantProfile(
+            Authentication authentication) {
+        ApplicantResponseDto retrievedProfile = applicantService.getMyApplicantProfile(authentication);
+        ApiResponse<ApplicantResponseDto> response = ApiResponse.<ApplicantResponseDto>builder()
+                .success(true)
+                .message("Applicant profile retrieved successfully!")
+                .data(retrievedProfile)
+                .status(HttpStatus.OK.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 
-    // Endpoint for updating applicant profile details (e.g., after registration)
-    // The @AuthenticationPrincipal allows you to get the currently logged-in user's details
     @PutMapping("/update-profile")
-    public ResponseEntity<ApplicantResponseDto> updateApplicantProfile(
-            @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody ApplicantProfileDto profileDTO) {
-        // userDetails.getUsername() gives you the username of the logged-in user
-        ApplicantResponseDto profile = applicantService.updateApplicantProfile(userDetails.getUsername(), profileDTO);
-        return new ResponseEntity<>(profile, HttpStatus.OK);
+    public ResponseEntity<ApiResponse<ApplicantResponseDto>> updateMyApplicantProfile(
+            @RequestBody ApplicantProfileDto profileDto,
+            Authentication authentication) {
+        ApplicantResponseDto updatedProfile = applicantService.updateMyApplicantProfile(profileDto, authentication);
+        ApiResponse<ApplicantResponseDto> response = ApiResponse.<ApplicantResponseDto>builder()
+                .success(true)
+                .message("Applicant profile updated successfully!")
+                .data(updatedProfile)
+                .status(HttpStatus.OK.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 
     // Endpoint for CV/Resume upload
     @PostMapping("/profile/upload-resume")
-    public ResponseEntity<ApplicantResponseDto> uploadResume(
+    public ResponseEntity<ApiResponse<ApplicantResponseDto>> uploadResume(
             @Valid @RequestParam("file") MultipartFile file,
             Authentication authentication) {
-
         ApplicantResponseDto uploadedResume = applicantService.uploadResume(file, authentication);
+        ApiResponse<ApplicantResponseDto> response = ApiResponse.<ApplicantResponseDto>builder()
+                .success(true)
+                .message("Applicant resume uploaded successfully!")
+                .data(uploadedResume)
+                .status(HttpStatus.CREATED.value())
+                .timestamp(LocalDateTime.now())
+                .build();
 
-        return new ResponseEntity<>(uploadedResume, HttpStatus.CREATED);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/me")
-    public ResponseEntity<String> deleteMyAccount(Authentication authentication) {
+    public ResponseEntity<ApiResponse<String>> deleteMyAccount(Authentication authentication) {
         applicantService.deleteApplicantAccount(authentication);
-        return new ResponseEntity<>(
-                "User account and profile deleted successfully.", HttpStatus.NO_CONTENT);
+        ApiResponse<String> response = ApiResponse.<String>builder()
+                .success(true)
+                .message("Applicant user account deleted successfully.")
+                .data(null)
+                .status(HttpStatus.NO_CONTENT.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 }
