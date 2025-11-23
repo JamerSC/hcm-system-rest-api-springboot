@@ -45,7 +45,7 @@ public class JobController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<Optional<JobResponseDto>>> getJob(@PathVariable Long id) {
-        Optional<JobResponseDto> retrievedJob = jobService.getJobById(id);
+        Optional<JobResponseDto> retrievedJob = jobService.getJob(id);
         ApiResponse<Optional<JobResponseDto>> response = ApiResponse.<Optional<JobResponseDto>>builder()
                 .success(true)
                 .message("Job retrieved successfully!")
@@ -135,8 +135,19 @@ public class JobController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<String>> deleteJobById(@PathVariable Long id) {
-        Optional<JobResponseDto> job = jobService.getJobById(id);
-        jobService.deleteJob(job.orElseThrow().getJobId());
+        Optional<JobResponseDto> job = jobService.getJob(id);
+        if (job.isEmpty()) {
+            ApiResponse<String> response = ApiResponse.<String>builder()
+                    .success(true)
+                    .message("Job not found!")
+                    .data(null)
+                    .status(HttpStatus.NOT_FOUND.value())
+                    .timestamp(LocalDateTime.now())
+                    .build();
+            return ResponseEntity.ok(response);
+        }
+
+        jobService.deleteJob(id);
         ApiResponse<String> response = ApiResponse.<String>builder()
                 .success(true)
                 .message("Job deleted successfully!")

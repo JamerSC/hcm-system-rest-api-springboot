@@ -10,9 +10,9 @@ import org.springframework.security.core.Authentication;
 import java.util.Optional;
 
 public interface DepartmentService {
-    Page<DepartmentResponseDto> getAllDepartment(Pageable pageable);
-    Optional<DepartmentResponseDto> getDepartmentById(Long id);
-    DepartmentResponseDto save(DepartmentCreateDto dto, Authentication authentication);
-    DepartmentResponseDto patchDepartment(Long id, DepartmentPatchDto dto, Authentication authentication);
-    void deleteDepartmentById(Long id);
+    Page<DepartmentResponseDto> getAllDepartments(Pageable pageable);
+    Optional<DepartmentResponseDto> getDepartment(Long id);
+    DepartmentResponseDto createDepartment(DepartmentCreateDto dto, Authentication authentication);
+    DepartmentResponseDto updateDepartment(Long id, DepartmentPatchDto dto, Authentication authentication);
+    void deleteDepartment(Long id);
 }
