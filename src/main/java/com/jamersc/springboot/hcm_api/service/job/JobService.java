@@ -14,7 +14,7 @@ public interface JobService {
 
     Page<JobDto> getAllJob(Pageable pageable);
     Page<JobResponseDto> getOpenJobs(Pageable pageable);
-    Optional<JobResponseDto> getJobById(Long id);
+    Optional<JobResponseDto> getJob(Long id);
     JobResponseDto createJob(JobCreateDto dto, Authentication authentication);
     JobResponseDto openJob(Long id, Authentication authentication);
     JobResponseDto updateJob(Long id, JobPatchDto dto, Authentication authentication);

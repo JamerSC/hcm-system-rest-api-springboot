@@ -36,13 +36,13 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 
     @Override
-    public Page<DepartmentResponseDto> getAllDepartment(Pageable pageable) {
+    public Page<DepartmentResponseDto> getAllDepartments(Pageable pageable) {
         Page<Department> departments = departmentRepository.findAll(pageable);
         return departments.map(departmentMapper::entityToDepartmentResponseDto);
     }
 
     @Override
-    public Optional<DepartmentResponseDto> getDepartmentById(Long id) {
+    public Optional<DepartmentResponseDto> getDepartment(Long id) {
         return Optional.of(departmentRepository.findById(id)
                         .map(departmentMapper::entityToDepartmentResponseDto))
                 .orElseThrow(() -> new RuntimeException("Department id found! " + id));
@@ -56,7 +56,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public DepartmentResponseDto save(DepartmentCreateDto dto, Authentication authentication) {
+    public DepartmentResponseDto createDepartment(DepartmentCreateDto dto, Authentication authentication) {
         // get the current user from authentication object
         User currentUser = getUser(authentication);
 
@@ -76,7 +76,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 
     @Override
-    public DepartmentResponseDto patchDepartment(Long id, DepartmentPatchDto dto, Authentication authentication) {
+    public DepartmentResponseDto updateDepartment(Long id, DepartmentPatchDto dto, Authentication authentication) {
         User currentUser = getUser(authentication);
         Department department = departmentRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Department not found"));
@@ -96,7 +96,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public void deleteDepartmentById(Long id) {
+    public void deleteDepartment(Long id) {
         departmentRepository.deleteById(id);
     }
 }
