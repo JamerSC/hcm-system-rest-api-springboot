@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum JobStatus {
     CREATED("Job Created"),
     OPEN("Open for Applications"),
-    CLOSED("Job Filled"),
-    FILLED("Hiring Completed"),
+    FILLED("Job Filled"),
+    CLOSED("Hiring Closed"),
     ON_HOLD("Temporarily Paused");
 
     private final String displayJobStatusValue;

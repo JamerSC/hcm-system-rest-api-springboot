@@ -15,10 +15,10 @@ public interface JobService {
     Page<JobDto> getAllJob(Pageable pageable);
     Page<JobResponseDto> getOpenJobs(Pageable pageable);
     Optional<JobResponseDto> getJobById(Long id);
-    JobResponseDto save(JobCreateDto dto, Authentication authentication);
-    JobResponseDto postJob(Long id, Authentication authentication);
-    JobResponseDto patchJob(Long id, JobPatchDto dto, Authentication authentication);
+    JobResponseDto createJob(JobCreateDto dto, Authentication authentication);
+    JobResponseDto openJob(Long id, Authentication authentication);
+    JobResponseDto updateJob(Long id, JobPatchDto dto, Authentication authentication);
     JobResponseDto filledJob(Long id, Authentication authentication);
     JobResponseDto closeJob(Long id, Authentication authentication);
-    void deleteById(Long id);
+    void deleteJob(Long id);
 }

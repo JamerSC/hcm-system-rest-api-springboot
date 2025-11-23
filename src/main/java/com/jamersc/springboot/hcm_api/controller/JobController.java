@@ -5,6 +5,7 @@ import com.jamersc.springboot.hcm_api.dto.job.JobDto;
 import com.jamersc.springboot.hcm_api.dto.job.JobPatchDto;
 import com.jamersc.springboot.hcm_api.dto.job.JobResponseDto;
 import com.jamersc.springboot.hcm_api.service.job.JobService;
+import com.jamersc.springboot.hcm_api.utils.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RestController
@@ -27,58 +29,122 @@ public class JobController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<Page<JobDto>> getAllJobs(
+    public ResponseEntity<ApiResponse<Page<JobDto>>> getAllJobs(
             @PageableDefault(page = 0, size = 10, sort = "title") Pageable pageable) {
-        Page<JobDto> jobs = jobService.getAllJob(pageable);
-        return new ResponseEntity<>(jobs, HttpStatus.OK);
+        Page<JobDto> retrievedJobs = jobService.getAllJob(pageable);
+        ApiResponse<Page<JobDto>> response = ApiResponse.<Page<JobDto>>builder()
+                .success(true)
+                .message("List of jobs retrieved successfully!")
+                .data(retrievedJobs)
+                .status(HttpStatus.OK.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<JobResponseDto>> getJobById(@PathVariable Long id) {
-        Optional<JobResponseDto> jobResponse = jobService.getJobById(id);
-        return ResponseEntity.ok(jobResponse);
+    public ResponseEntity<ApiResponse<Optional<JobResponseDto>>> getJob(@PathVariable Long id) {
+        Optional<JobResponseDto> retrievedJob = jobService.getJobById(id);
+        ApiResponse<Optional<JobResponseDto>> response = ApiResponse.<Optional<JobResponseDto>>builder()
+                .success(true)
+                .message("Job retrieved successfully!")
+                .data(retrievedJob)
+                .status(HttpStatus.OK.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/")
-    public ResponseEntity<JobResponseDto> createJob(
+    public ResponseEntity<ApiResponse<JobResponseDto>> createJob(
             @Valid @RequestBody JobCreateDto createDTO,
             Authentication authentication) {
-        JobResponseDto jobResponseDTO = jobService.save(createDTO, authentication);
-        return new ResponseEntity<>(jobResponseDTO, HttpStatus.CREATED);
+        JobResponseDto createdJob = jobService.createJob(createDTO, authentication);
+        ApiResponse<JobResponseDto> response = ApiResponse.<JobResponseDto>builder()
+                .success(true)
+                .message("Job created successfully!")
+                .data(createdJob)
+                .status(HttpStatus.CREATED.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<JobResponseDto> patchJob(
+    public ResponseEntity<ApiResponse<JobResponseDto>> updateJob(
             @PathVariable Long id, @RequestBody JobPatchDto dto, Authentication authentication) {
-        JobResponseDto patchedJob = jobService.patchJob(id, dto, authentication);
-        return new ResponseEntity<>(patchedJob, HttpStatus.OK);
+        JobResponseDto updatedJob = jobService.updateJob(id, dto, authentication);
+        ApiResponse<JobResponseDto> response = ApiResponse.<JobResponseDto>builder()
+                .success(true)
+                .message("Job updated successfully!")
+                .data(updatedJob)
+                .status(HttpStatus.OK.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/{id}/open")
-    public ResponseEntity<JobResponseDto> postJob(
+    public ResponseEntity<ApiResponse<JobResponseDto>> openJob(
             @PathVariable Long id, Authentication authentication) {
-        JobResponseDto postJob = jobService.postJob(id, authentication);
-        return new ResponseEntity<>(postJob, HttpStatus.OK);
+        JobResponseDto openedJob = jobService.openJob(id, authentication);
+        ApiResponse<JobResponseDto> response = ApiResponse.<JobResponseDto>builder()
+                .success(true)
+                .message("Job opened successfully!")
+                .data(openedJob)
+                .status(HttpStatus.OK.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/{id}/close")
-    public ResponseEntity<JobResponseDto> closeJob(
+    public ResponseEntity<ApiResponse<JobResponseDto>> closeJob(
             @PathVariable Long id, Authentication authentication) {
-        JobResponseDto closeJob = jobService.closeJob(id, authentication);
-        return new ResponseEntity<>(closeJob, HttpStatus.OK);
+        JobResponseDto closedJob = jobService.closeJob(id, authentication);
+        ApiResponse<JobResponseDto> response = ApiResponse.<JobResponseDto>builder()
+                .success(true)
+                .message("Job closed successfully!")
+                .data(closedJob)
+                .status(HttpStatus.OK.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/{id}/filled")
-    public ResponseEntity<JobResponseDto> filledJob(
+    public ResponseEntity<ApiResponse<JobResponseDto>> filledJob(
             @PathVariable Long id, Authentication authentication) {
         JobResponseDto filledJob = jobService.filledJob(id, authentication);
-        return new ResponseEntity<>(filledJob, HttpStatus.OK);
+        ApiResponse<JobResponseDto> response = ApiResponse.<JobResponseDto>builder()
+                .success(true)
+                .message("Job filled successfully!")
+                .data(filledJob)
+                .status(HttpStatus.OK.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteJobById(@PathVariable Long id) {
-        Optional<JobResponseDto> jobDTO = jobService.getJobById(id);
-        jobService.deleteById(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<ApiResponse<String>> deleteJobById(@PathVariable Long id) {
+        Optional<JobResponseDto> job = jobService.getJobById(id);
+        jobService.deleteJob(job.orElseThrow().getJobId());
+        ApiResponse<String> response = ApiResponse.<String>builder()
+                .success(true)
+                .message("Job deleted successfully!")
+                .data(null)
+                .status(HttpStatus.NO_CONTENT.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 }

@@ -61,7 +61,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public JobResponseDto save(JobCreateDto dto, Authentication authentication) {
+    public JobResponseDto createJob(JobCreateDto dto, Authentication authentication) {
         Department department = departmentRepository.findById(dto.getDepartmentId())
                 .orElseThrow(() -> new RuntimeException("Department id not found!"));
         
@@ -78,7 +78,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public JobResponseDto postJob(Long id, Authentication authentication) {
+    public JobResponseDto openJob(Long id, Authentication authentication) {
         Job job = jobRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Job not found"));
 
@@ -94,7 +94,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public JobResponseDto patchJob(Long id, JobPatchDto dto, Authentication authentication) {
+    public JobResponseDto updateJob(Long id, JobPatchDto dto, Authentication authentication) {
         Job job = jobRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Job not found"));
 
@@ -158,7 +158,7 @@ public class JobServiceImpl implements JobService {
 
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteJob(Long id) {
         jobRepository.deleteById(id);
     }
 
