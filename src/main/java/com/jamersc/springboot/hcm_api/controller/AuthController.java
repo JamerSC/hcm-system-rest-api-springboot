@@ -7,6 +7,7 @@ import com.jamersc.springboot.hcm_api.dto.auth.RegistrationDto;
 import com.jamersc.springboot.hcm_api.entity.User;
 import com.jamersc.springboot.hcm_api.security.JwtTokenProvider;
 import com.jamersc.springboot.hcm_api.service.auth.AuthService;
+import com.jamersc.springboot.hcm_api.utils.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 @RestController
@@ -24,71 +26,66 @@ import java.util.stream.Collectors;
 public class AuthController {
 
     private final AuthService authService;
-    private final AuthenticationManager authenticationManager;
-    private final JwtTokenProvider tokenProvider;
 
-    public AuthController(AuthService authService, AuthenticationManager authenticationManager, JwtTokenProvider tokenProvider) {
+    public AuthController(AuthService authService) {
         this.authService = authService;
-        this.authenticationManager = authenticationManager;
-        this.tokenProvider = tokenProvider;
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerAccount(@Valid @RequestBody RegistrationDto requestDTO) {
-        User user = authService.registerNewUserAndApplicant(requestDTO);
-        return ResponseEntity.ok("Registered User: " + user);
+    public ResponseEntity<ApiResponse<String>> registerNewApplicantUser(@Valid @RequestBody RegistrationDto requestDto) {
+        User registeredApplicantUser = authService.registerNewApplicantUser(requestDto);
+        ApiResponse<String> response = ApiResponse.<String>builder()
+                .success(true)
+                .message("Applicant user registered successfully!")
+                .status(HttpStatus.CREATED.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> authenticateUser(@Valid @RequestBody LoginDto loginRequest){
-        // authenticate the user
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsername(), loginRequest.getPassword()
-                )
-        );
-
-        // Unlike session-based, we don't need to set the context here for later requests.
-        // We only need it for the token generation below.
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        // *** THIS IS THE KEY CHANGE ***
-        // Generate JWT token
-        String jwt = tokenProvider.generateToken(authentication);
-
-        // Build the response dto
-        LoginResponseDto response = new LoginResponseDto(
-                "Login successful",
-                loginRequest.getUsername(),
-                authentication.getAuthorities().stream()
-                        .map(GrantedAuthority::getAuthority)// Get the role string (e.g., "ROLE_ADMIN")
-                        .collect(Collectors.toSet()),
-                jwt,
-                "Bearer"
-        );
-
-        // If you were using JWT, you'd generate and return the JWT token here
-        // String jwt = jwtTokenProvider.generateToken(authentication);
-        // response.setAccessToken(jwt);
-
-        return ResponseEntity.ok(response); // Return 200 OK with success message and roles/token
+    public ResponseEntity<ApiResponse<LoginResponseDto>> authenticateUser(
+            @Valid @RequestBody LoginDto dto){
+        LoginResponseDto loginResponse = authService.login(dto);
+        ApiResponse<LoginResponseDto> response = ApiResponse.<LoginResponseDto>builder()
+                .success(true)
+                .message("Login successfully")
+                .data(loginResponse)
+                .status(HttpStatus.OK.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logoutUser() {
+    public ResponseEntity<ApiResponse<String>> logoutUser() {
         // Clear the security context for the current request.
         // This is important in a stateless environment to ensure no
         // subsequent code within the same request lifecycle is treated
         // as authenticated.
         SecurityContextHolder.clearContext();
-        return ResponseEntity.ok("User logged out successfully!");
+        ApiResponse<String> response = ApiResponse.<String>builder()
+                .success(true)
+                .message("User logged out successfully!")
+                .status(HttpStatus.OK.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/me/change-password")
-    public ResponseEntity<String> changePassword(
+    public ResponseEntity<ApiResponse<String>> changePassword(
             @Valid @RequestBody ChangePasswordDto changePasswordDTO,
             Authentication authentication) {
         authService.changePassword(changePasswordDTO, authentication);
-        return new ResponseEntity<>("Password changed successfully!", HttpStatus.OK);
+        ApiResponse<String> response = ApiResponse.<String>builder()
+                .success(true)
+                .message("User password changed successfully!!")
+                .status(HttpStatus.OK.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 }

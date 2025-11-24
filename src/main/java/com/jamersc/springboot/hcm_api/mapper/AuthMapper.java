@@ -32,8 +32,8 @@ public interface AuthMapper {
     @Mapping(target = "applicant", ignore = true)
     User loginDtoToEntity(LoginDto dto);
 
+    @Mapping(target = "fullName", source = "fullName")
     @Mapping(target = "tokenType", ignore = true)
-    @Mapping(target = "message", ignore = true)
     @Mapping(target = "accessToken", ignore = true)
     @Mapping(target = "roles", expression = "java(mapRoles(user.getRoles()))")
     LoginResponseDto entityToLoginResponseDto(User user);

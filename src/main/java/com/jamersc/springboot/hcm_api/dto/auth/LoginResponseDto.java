@@ -12,7 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginResponseDto {
-    private String message;
+    private String fullName;
     private String username;
     private Set<String> roles; // Send back the roles for client-side authorization
     // If using JWT, this would include the token: private String accessToken;
