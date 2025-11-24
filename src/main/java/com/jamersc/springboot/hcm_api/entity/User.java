@@ -82,7 +82,7 @@ public class User {
         updatedAt = new Date();
     }
 
-    public String getUserFullName() {
+    public String getFullName() {
         return this.firstName + " " + this.lastName;
     }
 }
