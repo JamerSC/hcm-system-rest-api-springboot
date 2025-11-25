@@ -2,8 +2,10 @@ package com.jamersc.springboot.hcm_api.controller;
 
 import com.jamersc.springboot.hcm_api.dto.attendance.AttendanceDto;
 import com.jamersc.springboot.hcm_api.dto.attendance.AttendanceResponseDto;
+import com.jamersc.springboot.hcm_api.dto.job.JobResponseDto;
 import com.jamersc.springboot.hcm_api.service.attendance.AttendanceService;
 import com.jamersc.springboot.hcm_api.service.employee.EmployeeService;
+import com.jamersc.springboot.hcm_api.utils.ApiResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -11,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/v1/attendances")
@@ -23,32 +27,62 @@ public class AttendanceController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<Page<AttendanceDto>> getAllAttendances(
+    public ResponseEntity<ApiResponse<Page<AttendanceDto>>> getAllAttendances(
             @PageableDefault(page = 0, size = 10, sort = "attendanceDate") Pageable pageable) {
-        Page<AttendanceDto> attendances = attendanceService.getAllAttendance(pageable);
-        return new ResponseEntity<>(attendances, HttpStatus.OK);
+        Page<AttendanceDto> retrievedAttendances = attendanceService.getAllAttendance(pageable);
+        ApiResponse<Page<AttendanceDto>> response = ApiResponse.<Page<AttendanceDto>>builder()
+                .success(true)
+                .message("List of attendances retrieved successfully!")
+                .data(retrievedAttendances)
+                .status(HttpStatus.OK.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/me/profile")
-    public ResponseEntity<Page<AttendanceResponseDto>> getMyAttendances(
-            @PageableDefault(page = 0, size = 10, sort = "attendanceDate") Pageable pageable, Authentication authentication) {
-        Page<AttendanceResponseDto> myAttendances = attendanceService
+    public ResponseEntity<ApiResponse<Page<AttendanceResponseDto>>> getMyAttendances(
+            @PageableDefault(page = 0, size = 10, sort = "attendanceDate") Pageable pageable,
+            Authentication authentication)
+    {
+        Page<AttendanceResponseDto> retrievedMyAttendances = attendanceService
                 .getMyAttendances(pageable, authentication);
-        return new ResponseEntity<>(myAttendances, HttpStatus.OK);
+        ApiResponse<Page<AttendanceResponseDto>> response = ApiResponse.<Page<AttendanceResponseDto>>builder()
+                .success(true)
+                .message("List of my attendances retrieved successfully!")
+                .data(retrievedMyAttendances)
+                .status(HttpStatus.OK.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return ResponseEntity.ok(response);
     }
 
 
     @PostMapping("/check-in")
-    public ResponseEntity<AttendanceResponseDto> attendanceCheckIn(Authentication authentication) {
-        AttendanceResponseDto attendanceRecord = attendanceService
+    public ResponseEntity<ApiResponse<AttendanceResponseDto>> attendanceCheckIn(Authentication authentication) {
+        AttendanceResponseDto checkedInAttendance = attendanceService
                 .checkIn(authentication);
-        return new ResponseEntity<>(attendanceRecord, HttpStatus.CREATED);
+        ApiResponse<AttendanceResponseDto> response = ApiResponse.<AttendanceResponseDto>builder()
+                .success(true)
+                .message("Attendance checked in successfully!")
+                .data(checkedInAttendance)
+                .status(HttpStatus.CREATED.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/check-out")
-    public ResponseEntity<AttendanceResponseDto> attendanceCheckOut(Authentication authentication) {
-        AttendanceResponseDto attendanceRecord = attendanceService
+    public ResponseEntity<ApiResponse<AttendanceResponseDto>> attendanceCheckOut(Authentication authentication) {
+        AttendanceResponseDto checkedOutAttendance = attendanceService
                 .checkOut(authentication);
-        return new ResponseEntity<>(attendanceRecord, HttpStatus.OK);
+        ApiResponse<AttendanceResponseDto> response = ApiResponse.<AttendanceResponseDto>builder()
+                .success(true)
+                .message("Attendance checked out successfully!")
+                .data(checkedOutAttendance)
+                .status(HttpStatus.OK.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return ResponseEntity.ok(response);
     }
 }
