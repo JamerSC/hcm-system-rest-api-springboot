@@ -37,11 +37,11 @@ public class ApplicantController {
     @GetMapping("/open/jobs")
     public ResponseEntity<ApiResponse<Page<JobResponseDto>>> getOpenJobs(
             @PageableDefault(page = 0, size = 10, sort = "title") Pageable pageable) {
-        Page<JobResponseDto> listOfOpenJobs = jobService.getOpenJobs(pageable);
+        Page<JobResponseDto> retrievedOpenJobs = jobService.getOpenJobs(pageable);
         ApiResponse<Page<JobResponseDto>> response = ApiResponse.<Page<JobResponseDto>>builder()
                 .success(true)
                 .message("List of open jobs retrieved successfully!")
-                .data(listOfOpenJobs)
+                .data(retrievedOpenJobs)
                 .status(HttpStatus.OK.value())
                 .timestamp(LocalDateTime.now())
                 .build();
@@ -65,7 +65,9 @@ public class ApplicantController {
 
     @GetMapping("/applications/jobs-applied")
     public ResponseEntity<ApiResponse<Page<ApplicationResponseDto>>> getAllApplicantJobsApplied(
-            @PageableDefault(page = 0, size = 10, sort = "status") Pageable pageable, Authentication authentication) {
+            @PageableDefault(page = 0, size = 10, sort = "status") Pageable pageable,
+            Authentication authentication)
+    {
         Page<ApplicationResponseDto> appliedJobs = applicantService.getAllApplicantJobsApplied(pageable, authentication);
         ApiResponse<Page<ApplicationResponseDto>> response = ApiResponse.<Page<ApplicationResponseDto>>builder()
                 .success(true)
@@ -81,7 +83,8 @@ public class ApplicantController {
     @GetMapping("/application/{id}/view")
     public ResponseEntity<ApiResponse<Optional<ApplicationResponseDto>>> getAppliedJob(
             @PathVariable Long id, Authentication authentication) {
-        Optional<ApplicationResponseDto> appliedJob = applicantService.getApplicantJobsAppliedById(id, authentication);
+        Optional<ApplicationResponseDto> appliedJob = applicantService
+                .getApplicantJobsAppliedById(id, authentication);
         ApiResponse<Optional<ApplicationResponseDto>> response = ApiResponse.<Optional<ApplicationResponseDto>>builder()
                 .success(true)
                 .message("Job application retrieved successfully!")
