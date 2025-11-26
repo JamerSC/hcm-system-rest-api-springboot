@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.jamersc.springboot.hcm_api.dto.employee.*;
 import com.jamersc.springboot.hcm_api.service.employee.EmployeeService;
+import com.jamersc.springboot.hcm_api.utils.ApiResponse;
 import jakarta.validation.Valid;
-import jakarta.validation.Validator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @RestController
@@ -22,61 +23,96 @@ public class EmployeeController {
 
     private final EmployeeService employeeService;
     private final ObjectMapper objectMapper;
-    private final Validator validator;
 
-    public EmployeeController(EmployeeService employeeService, ObjectMapper objectMapper, Validator validator) {
+    public EmployeeController(EmployeeService employeeService, ObjectMapper objectMapper) {
         this.employeeService = employeeService;
         this.objectMapper = objectMapper;
-        this.validator = validator;
     }
 
 
     // Get all employees
     @GetMapping("/")
-    public ResponseEntity<Page<EmployeeResponseDto>> getAllEmployees(
+    public ResponseEntity<ApiResponse<Page<EmployeeResponseDto>>> getAllEmployees(
             @PageableDefault(page = 0, size = 10, sort = "id") Pageable pageable) {
-        Page<EmployeeResponseDto> employees = employeeService.getAllEmployee(pageable);
-        return new ResponseEntity<>(employees, HttpStatus.OK); // HTTP 200 List of Employees
+        Page<EmployeeResponseDto> retrievedEmployees = employeeService.getAllEmployee(pageable);
+        ApiResponse<Page<EmployeeResponseDto>> response = ApiResponse.<Page<EmployeeResponseDto>>builder()
+                .success(true)
+                .message("List of employees retrieved successfully!")
+                .data(retrievedEmployees)
+                .status(HttpStatus.OK.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     // Get employee profile with username & role
     @GetMapping("/{id}/profile")
-    public ResponseEntity<Optional<EmployeeProfileDto>> getEmployeeProfile(@PathVariable Long id) {
-        Optional<EmployeeProfileDto> profile = employeeService.findEmployeeProfileById(id);
-        return ResponseEntity.ok(profile);
+    public ResponseEntity<ApiResponse<Optional<EmployeeProfileDto>>> getEmployeeProfile(@PathVariable Long id) {
+        Optional<EmployeeProfileDto> retrievedEmployeeProfile= employeeService.getEmployeeProfile(id);
+        ApiResponse<Optional<EmployeeProfileDto>> response = ApiResponse.<Optional<EmployeeProfileDto>>builder()
+                .success(true)
+                .message("Employee profile retrieved successfully!")
+                .data(retrievedEmployeeProfile)
+                .status(HttpStatus.OK.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     // Get employee by id
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeResponseDto> getEmployeeById(@PathVariable Long id) {
-        Optional<EmployeeResponseDto> employee = employeeService.findEmployeeById(id);
-
-        return employee.map(ResponseEntity::ok) // HTTP 200 + body
-                .orElseGet(()-> ResponseEntity.notFound().build()); // HTTP 404
+    public ResponseEntity<ApiResponse<Optional<EmployeeResponseDto>>> getEmployee(@PathVariable Long id) {
+        Optional<EmployeeResponseDto> retrievedEmployee = employeeService.getEmployee(id);
+        ApiResponse<Optional<EmployeeResponseDto>> response = ApiResponse.<Optional<EmployeeResponseDto>>builder()
+                .success(true)
+                .message("Employee retrieved successfully!")
+                .data(retrievedEmployee)
+                .status(HttpStatus.OK.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/me/profile")
-    public ResponseEntity<EmployeeProfileDto> getMyEmployeeProfile(Authentication authentication) {
-        EmployeeProfileDto myProfile = employeeService.getMyEmployeeProfile(authentication);
-        return new ResponseEntity<>(myProfile, HttpStatus.OK);
+    public ResponseEntity<ApiResponse<EmployeeProfileDto>> getMyEmployeeProfile(Authentication authentication) {
+        EmployeeProfileDto retrieveMyProfile = employeeService.getMyEmployeeProfile(authentication);
+        ApiResponse<EmployeeProfileDto> response = ApiResponse.<EmployeeProfileDto>builder()
+                .success(true)
+                .message("My employee profile retrieved successfully!")
+                .data(retrieveMyProfile)
+                .status(HttpStatus.OK.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     // Create Employee
     @PostMapping("/")
-    public ResponseEntity<EmployeeResponseDto> createEmployee(
-            @Valid @RequestBody EmployeeCreateDto employeeDTO,
-            Authentication authentication) {
-
-        EmployeeResponseDto employee = employeeService.save(employeeDTO, authentication);
-
-        return new ResponseEntity<>(employee, HttpStatus.CREATED); // Created 201
+    public ResponseEntity<ApiResponse<EmployeeResponseDto>> createEmployee(
+            @Valid @RequestBody EmployeeCreateDto dto, Authentication authentication) {
+        EmployeeResponseDto createdEmployee = employeeService.createEmployee(dto, authentication);
+        ApiResponse<EmployeeResponseDto> response = ApiResponse.<EmployeeResponseDto>builder()
+                .success(true)
+                .message("Employee created successfully!")
+                .data(createdEmployee)
+                .status(HttpStatus.CREATED.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<EmployeeResponseDto> patchEmployeeProfile(
+    public ResponseEntity<ApiResponse<EmployeeResponseDto>> patchEmployeeProfile(
             @PathVariable Long id, @RequestBody EmployeePatchDto dto, Authentication authentication) {
         EmployeeResponseDto patchedEmployee = employeeService.patchEmployee(id, dto, authentication);
-        return new ResponseEntity<>(patchedEmployee, HttpStatus.OK);
+        ApiResponse<EmployeeResponseDto> response = ApiResponse.<EmployeeResponseDto>builder()
+                .success(true)
+                .message("Employee updated successfully!")
+                .data(patchedEmployee)
+                .status(HttpStatus.OK.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     private EmployeeDto apply(Map<String, Object> patchPayload, EmployeeDto tempEmployee) {
@@ -96,14 +132,28 @@ public class EmployeeController {
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteEmployee(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<String>> deleteEmployee(@PathVariable Long id) {
         Optional<EmployeeDto> tempEmployee = employeeService.findById(id);
 
         if (tempEmployee.isEmpty()) {
-            return ResponseEntity.notFound().build(); // HTTP 404
+            ApiResponse<String> response = ApiResponse.<String>builder()
+                    .success(true)
+                    .message("Employee not found!")
+                    .data(null)
+                    .status(HttpStatus.NOT_FOUND.value())
+                    .timestamp(LocalDateTime.now())
+                    .build();
+            return ResponseEntity.ok(response);
         }
 
-        employeeService.deleteEmployeeByID(id);
-        return ResponseEntity.noContent().build(); // HTTP 204
+        employeeService.deleteEmployee(id);
+        ApiResponse<String> response = ApiResponse.<String>builder()
+                .success(true)
+                .message("Employee deleted successfully!")
+                .data(null)
+                .status(HttpStatus.NO_CONTENT.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return ResponseEntity.ok(response);
     }
 }

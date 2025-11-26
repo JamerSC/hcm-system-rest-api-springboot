@@ -20,7 +20,7 @@ public class EmployeeCreateDto {
     @Email(message = "Email should be valid")
     @NotBlank(message = "Email is required")
     private String email;
-    @NotBlank(message = "Job Position is required")
+    @NotNull(message = "Job Position is required")
     private Long jobId;
     @NotNull(message = "Hired date is required")
     private LocalDate hiredDate;
