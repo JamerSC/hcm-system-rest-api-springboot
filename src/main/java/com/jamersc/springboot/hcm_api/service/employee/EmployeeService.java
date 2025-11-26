@@ -11,12 +11,12 @@ import java.util.Optional;
 public interface EmployeeService {
     Page<EmployeeResponseDto> getAllEmployee(Pageable pageable);
     //EmployeeDto findById(Long id);
-    Optional<EmployeeProfileDto> findEmployeeProfileById(Long id);
-    Optional<EmployeeResponseDto> findEmployeeById(Long id);
+    Optional<EmployeeProfileDto> getEmployeeProfile(Long id);
+    Optional<EmployeeResponseDto> getEmployee(Long id);
     Optional<EmployeeDto> findById(Long id);
     EmployeeProfileDto getMyEmployeeProfile(Authentication authentication);
-    EmployeeResponseDto save(EmployeeCreateDto employeeDTO, Authentication authentication);
-    Employee update(EmployeeUpdateDto employeeDTO, Authentication authentication);
+    EmployeeResponseDto createEmployee(EmployeeCreateDto dto, Authentication authentication);
+    Employee updateEmployee(EmployeeUpdateDto dto, Authentication authentication);
     EmployeeResponseDto patchEmployee(Long id, EmployeePatchDto dto, Authentication authentication);
-    void deleteEmployeeByID(Long id);
+    void deleteEmployee(Long id);
 }

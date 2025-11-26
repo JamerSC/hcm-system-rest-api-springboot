@@ -45,14 +45,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Optional<EmployeeProfileDto> findEmployeeProfileById(Long id) {
+    public Optional<EmployeeProfileDto> getEmployeeProfile(Long id) {
        return Optional.ofNullable(employeeRepository.findEmployeeWithUserAndRolesById(id)
                 .map(employeeMapper::entityToProfileDto).orElseThrow(
                         () -> new EmployeeNotFoundException("Employee id not found - " + id))
        );
     }
 
-    public Optional<EmployeeResponseDto> findEmployeeById(Long id) {
+    public Optional<EmployeeResponseDto> getEmployee(Long id) {
         return Optional.ofNullable(employeeRepository.findById(id)
                 .map(employeeMapper::entityToEmployeeResponseDTO).orElseThrow(
                         () -> new EmployeeNotFoundException("Employee id not found - " + id))
@@ -74,31 +74,37 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeResponseDto save(EmployeeCreateDto employeeDTO, Authentication authentication) {
+    public EmployeeResponseDto createEmployee(EmployeeCreateDto dto, Authentication authentication) {
         // get current user
         User currentUser = getUser(authentication);
 
-        // map dto to entity
-        Employee employee = employeeMapper.createDtoToEntity(employeeDTO);
+        // check if job exist
+        Job job = jobRepository.findById(dto.getJobId())
+                .orElseThrow(() -> {
+                    log.error("Job not found with ID: {}", dto.getJobId());
+                    return new RuntimeException("Job not found with id: " + dto.getJobId());
+                });
 
-        // set created & updated by with current user
-        employee.setCreatedBy(currentUser);
-        employee.setUpdatedBy(currentUser);
+        // map dto to entity
+        Employee newEmployee = employeeMapper.createDtoToEntity(dto);
+        newEmployee.setJob(job);
+        newEmployee.setCreatedBy(currentUser);
+        newEmployee.setUpdatedBy(currentUser);
 
         // save the entity using the repository
-        Employee saveEmployee = employeeRepository.save(employee);
+        Employee createdEmployee = employeeRepository.save(newEmployee);
 
         // map employee entity to response emp dto
-        return employeeMapper.entityToEmployeeResponseDTO(saveEmployee);
+        return employeeMapper.entityToEmployeeResponseDTO(createdEmployee);
     }
 
     @Override
-    public Employee update(EmployeeUpdateDto employeeDTO, Authentication authentication) {
+    public Employee updateEmployee(EmployeeUpdateDto dto, Authentication authentication) {
         // get current user
         User currentUser = getUser(authentication);
 
         // Convert to entity
-        Employee employee = employeeMapper.updateDtoToEntity(employeeDTO);
+        Employee employee = employeeMapper.updateDtoToEntity(dto);
 
         // set updated by current user
         employee.setUpdatedBy(currentUser);
@@ -141,7 +147,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void deleteEmployeeByID(Long id) {
+    public void deleteEmployee(Long id) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new EmployeeNotFoundException("Employee not found - " + id));
         employeeRepository.deleteById(id);
