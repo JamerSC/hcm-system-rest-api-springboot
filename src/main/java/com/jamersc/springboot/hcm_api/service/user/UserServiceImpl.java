@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<UserResponseDto> findUserById(Long id) {
+    public Optional<UserResponseDto> findUser(Long id) {
         return Optional.ofNullable(userRepository.findById(id)
                 .map(userMapper::entityToUserResponseDTO)
                 .orElseThrow(()-> new RuntimeException("User not found.")));
@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUserById(Long id) {
+    public void archiveUser(Long id) {
 
     }
 }
