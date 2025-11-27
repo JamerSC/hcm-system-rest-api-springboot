@@ -4,6 +4,7 @@ import com.jamersc.springboot.hcm_api.dto.user.UserCreateDto;
 import com.jamersc.springboot.hcm_api.dto.user.UserDto;
 import com.jamersc.springboot.hcm_api.dto.user.UserResponseDto;
 import com.jamersc.springboot.hcm_api.service.user.UserService;
+import com.jamersc.springboot.hcm_api.utils.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RestController
@@ -25,31 +27,59 @@ public class UserController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<Page<UserResponseDto>> getAllUsers(Pageable pageable) {
-        Page<UserResponseDto> systemUsers = userService.getAllUsers(pageable);
-        return new ResponseEntity<>(systemUsers, HttpStatus.OK);
+    public ResponseEntity<ApiResponse<Page<UserResponseDto>>> getAllUsers(Pageable pageable) {
+        Page<UserResponseDto> retrievedUsers = userService.getAllUsers(pageable);
+        ApiResponse<Page<UserResponseDto>> response = ApiResponse.<Page<UserResponseDto>>builder()
+                .success(true)
+                .message("List of users retrieved successfully!")
+                .data(retrievedUsers)
+                .status(HttpStatus.OK.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<UserResponseDto>> getUserById(@PathVariable Long id) {
-        Optional<UserResponseDto> gotUser = userService.findUserById(id);
-        return new ResponseEntity<>(gotUser, HttpStatus.OK);
+    public ResponseEntity<ApiResponse<Optional<UserResponseDto>>> getUser(@PathVariable Long id) {
+        Optional<UserResponseDto> retrievedUser = userService.findUser(id);
+        ApiResponse<Optional<UserResponseDto>> response = ApiResponse.<Optional<UserResponseDto>>builder()
+                .success(true)
+                .message("User retrieved successfully!")
+                .data(retrievedUser)
+                .status(HttpStatus.OK.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/{employeeId}/create-user")
-    public ResponseEntity<UserResponseDto> createEmployeeUserAccess(
-            @PathVariable Long employeeId, @Valid @RequestBody UserCreateDto createDTO,
+    public ResponseEntity<ApiResponse<UserResponseDto>> createUser(
+            @PathVariable Long employeeId, @Valid @RequestBody UserCreateDto dto,
             Authentication authentication) {
-        UserResponseDto createdUser = userService.createUser(employeeId, createDTO, authentication);
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+        UserResponseDto createdUser = userService.createUser(employeeId, dto, authentication);
+        ApiResponse<UserResponseDto> response = ApiResponse.<UserResponseDto>builder()
+                .success(true)
+                .message("User created successfully!")
+                .data(createdUser)
+                .status(HttpStatus.CREATED.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}/update-user")
-    public ResponseEntity<UserResponseDto> updateEmployeeUser(
-            @PathVariable Long id, @Valid @RequestBody UserDto userDTO,
+    public ResponseEntity<ApiResponse<UserResponseDto>> updateUser(
+            @PathVariable Long id, @Valid @RequestBody UserDto dto,
             Authentication authentication) {
-        UserResponseDto updatedUser = userService.update(userDTO, authentication);
-        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+        UserResponseDto updatedUser = userService.update(dto, authentication);
+        ApiResponse<UserResponseDto> response = ApiResponse.<UserResponseDto>builder()
+                .success(true)
+                .message("User updated successfully!")
+                .data(updatedUser)
+                .status(HttpStatus.OK.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return ResponseEntity.ok(response);
     }
 
 //    @PatchMapping("/{id}/")
@@ -62,7 +92,7 @@ public class UserController {
     // Todo soft delete
     @DeleteMapping("/{id}/delete-user")
     public String deleteUser(@PathVariable Long id) {
-        userService.deleteUserById(id);
+        userService.archiveUser(id);
         return "User soft deleted, successfully!";
     }
 }

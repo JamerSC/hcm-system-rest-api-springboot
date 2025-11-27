@@ -12,8 +12,8 @@ import java.util.Optional;
 public interface UserService {
 
     Page<UserResponseDto> getAllUsers(Pageable pageable);
-    Optional<UserResponseDto> findUserById(Long id);
+    Optional<UserResponseDto> findUser(Long id);
     UserResponseDto createUser(Long employeeId, UserCreateDto createDTO, Authentication authentication);
     UserResponseDto update(UserDto userDTO, Authentication authentication);
-    void deleteUserById(Long id);
+    void archiveUser(Long id);
 }

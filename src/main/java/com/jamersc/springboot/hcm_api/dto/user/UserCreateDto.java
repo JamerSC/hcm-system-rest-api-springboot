@@ -14,6 +14,14 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserCreateDto {
 
+//    @NotBlank(message = "First name is required")
+//    @Size(max = 50, message = "First name cannot exceed 50 characters")
+//    private String firstName;
+//
+//    @NotBlank(message = "Last name is required")
+//    @Size(max = 50, message = "Last name cannot exceed 50 characters")
+//    private String lastName;
+
     @NotBlank(message = "Username is required")
     @Size(min = 8, max = 30, message = "Username must be between 8 and 30 characters")
     private String username;
@@ -26,12 +34,4 @@ public class UserCreateDto {
     @Email(message = "Email should be valid")
     @NotBlank(message = "Email is required")
     private String email;
-//
-//    @NotBlank(message = "First name is required")
-//    @Size(max = 50, message = "First name cannot exceed 50 characters")
-//    private String firstName;
-//
-//    @NotBlank(message = "Last name is required")
-//    @Size(max = 50, message = "Last name cannot exceed 50 characters")
-//    private String lastName;
 }
