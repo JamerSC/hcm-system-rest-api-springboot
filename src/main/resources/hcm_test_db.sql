@@ -11,9 +11,9 @@ values
 (2, "Mary", "Public", "mary@mail.com", "Assistant Admin", "Admin Department", "2024-6-1", 30000.00),
 (3, "Susan", "Roses", "susan@mail.com", "Assistant Admin", "Admin Department", "2025-1-1", 30000.00);
 
-
+# test123 (bcrypt hashed password)
 insert into users (email, first_name, last_name, password, username)
-values ('admin@mail.com', 'Super', 'Admin', '$2a$10$2csjgL7IFGGhH3fTRfPVpOmkZS/qcbUKsaW.kwFyflA97zeyzpa2O', 'admin@123');
+values ('admin@mail.com', 'Super', 'Admin', '$2a$10$JguKTlN/QDdj4HZ.nxO6feooZ6ZsLf0neE7Fj9kBMITQ//afjP3zK', 'admin@123');
 
 ALTER TABLE hcm_test_db.employees
 DROP COLUMN job_position;

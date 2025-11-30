@@ -14,8 +14,9 @@ import java.util.Set;
 public class LoginResponseDto {
     private String fullName;
     private String username;
-    private Set<String> roles; // Send back the roles for client-side authorization
-    // If using JWT, this would include the token: private String accessToken;
+    private boolean active;
+    private Set<String> roles;
+    private Set<String> permissions;
     private String accessToken;
     private String tokenType = "Bearer"; // A standard header for clarity
 }

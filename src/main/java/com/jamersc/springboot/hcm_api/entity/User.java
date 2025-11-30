@@ -21,20 +21,24 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    private String username;
-
-    @Column(nullable = false)
-    private String password; // Stored as hashed password
-
-    @Column(unique = true, nullable = false)
-    private String email;
-
     @Column(nullable = false)
     private String firstName;
 
     @Column(nullable = false)
     private String lastName;
+
+    @Column(unique = true, nullable = false)
+    private String email;
+
+    @Column(unique = true, nullable = false)
+    private String username;
+
+    // https://www.bcryptcalculator.com/encode
+    @Column(nullable = false)
+    private String password; // Stored as hashed password
+
+    @Column(nullable = false)
+    private boolean active = true;  // default true
 
     // Roles associated with Users
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}) // Or ManyToMany if a user can have multiple roles
