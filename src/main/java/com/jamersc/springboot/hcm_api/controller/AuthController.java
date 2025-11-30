@@ -11,6 +11,7 @@ import com.jamersc.springboot.hcm_api.utils.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -57,6 +58,7 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasAuthority('LOGOUT_USERS')")
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse<String>> logoutUser() {
         // Clear the security context for the current request.
@@ -74,6 +76,7 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasAuthority('CHANGE_PASSWORD_USERS')")
     @PatchMapping("/me/change-password")
     public ResponseEntity<ApiResponse<String>> changePassword(
             @Valid @RequestBody ChangePasswordDto changePasswordDTO,

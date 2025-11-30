@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -67,9 +68,9 @@ public class AuthServiceImpl implements AuthService {
         newUser.setUsername(dto.getUsername());
         newUser.setPassword(passwordEncoder.encode(dto.getPassword())); // <-- HASH THE PASSWORD HERE
 
-        // Assign default role, e.g., "ROLE_APPLICANT"
-        Role applicantRole = roleRepository.findByRoleName("ROLE_APPLICANT") // Make sure this matches your DB role name
-                .orElseThrow(() -> new RuntimeException("ROLE_APPLICANT not found in database!"));
+        // Assign default role, e.g., "APPLICANT"
+        Role applicantRole = roleRepository.findByRoleName("APPLICANT") // Make sure this matches your DB role name
+                .orElseThrow(() -> new RuntimeException("Role APPLICANT not found in database!"));
         Set<Role> roles = new HashSet<>();
         roles.add(applicantRole);
         newUser.setRoles(roles);
@@ -101,6 +102,8 @@ public class AuthServiceImpl implements AuthService {
                             dto.getPassword()
                     )
             );
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
             // retrieve user details
             User user = userRepository.findByUsername(dto.getUsername())

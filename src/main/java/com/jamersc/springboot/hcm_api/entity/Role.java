@@ -22,6 +22,8 @@ public class Role {
     @Column(nullable = false, unique = true) // roleName should ideally be unique
     private String roleName;
 
+    private String description;
+
     // mappedBy refers to the 'roles' field in the User Entity
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
     private Set<User> users = new HashSet<>();

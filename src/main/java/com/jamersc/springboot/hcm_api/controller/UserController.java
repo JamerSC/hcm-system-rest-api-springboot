@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,7 @@ public class UserController {
         this.userService = userService;
     }
 
+    @PreAuthorize("hasAuthority('VIEW_USERS')")
     @GetMapping("/")
     public ResponseEntity<ApiResponse<Page<UserResponseDto>>> getAllUsers(Pageable pageable) {
         Page<UserResponseDto> retrievedUsers = userService.getAllUsers(pageable);
@@ -39,6 +41,7 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasAuthority('VIEW_USERS')")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<Optional<UserResponseDto>>> getUser(@PathVariable Long id) {
         Optional<UserResponseDto> retrievedUser = userService.findUser(id);
@@ -52,6 +55,7 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasAuthority('CREATE_USERS')")
     @PostMapping("/{employeeId}/create-user")
     public ResponseEntity<ApiResponse<UserResponseDto>> createUser(
             @PathVariable Long employeeId, @Valid @RequestBody UserCreateDto dto,
