@@ -11,6 +11,8 @@ import com.jamersc.springboot.hcm_api.repository.EmployeeSpecification;
 import com.jamersc.springboot.hcm_api.repository.JobRepository;
 import com.jamersc.springboot.hcm_api.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -25,20 +27,14 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@Slf4j
+@RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private static final Logger log = LoggerFactory.getLogger(EmployeeServiceImpl.class);
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
     private final UserRepository userRepository;
     private final JobRepository jobRepository;
-
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper, UserRepository userRepository, JobRepository jobRepository) {
-        this.employeeRepository = employeeRepository;
-        this.employeeMapper = employeeMapper;
-        this.userRepository = userRepository;
-        this.jobRepository = jobRepository;
-    }
 
     @Override
     public Page<EmployeeResponseDto> getAllEmployees(
@@ -72,21 +68,21 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Optional<EmployeeProfileDto> getEmployeeProfile(Long id) {
-       return Optional.ofNullable(employeeRepository.findEmployeeWithUserAndRolesById(id)
+       return Optional.of(employeeRepository.findEmployeeWithUserAndRolesById(id)
                 .map(employeeMapper::entityToProfileDto).orElseThrow(
                         () -> new EmployeeNotFoundException("Employee id not found - " + id))
        );
     }
 
     public Optional<EmployeeResponseDto> getEmployee(Long id) {
-        return Optional.ofNullable(employeeRepository.findById(id)
+        return Optional.of(employeeRepository.findById(id)
                 .map(employeeMapper::entityToEmployeeResponseDTO).orElseThrow(
                         () -> new EmployeeNotFoundException("Employee id not found - " + id))
         );
     }
 
     public Optional<EmployeeDto> findByEmployee(Long id) {
-        return Optional.ofNullable(employeeRepository.findById(id)
+        return Optional.of(employeeRepository.findById(id)
                 .map(employeeMapper::entityToDto).orElseThrow(
                         () -> new EmployeeNotFoundException("Employee id not found - " + id))
         );

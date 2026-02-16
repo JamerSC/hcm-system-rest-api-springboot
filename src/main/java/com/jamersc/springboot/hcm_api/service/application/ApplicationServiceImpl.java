@@ -6,6 +6,8 @@ import com.jamersc.springboot.hcm_api.entity.*;
 import com.jamersc.springboot.hcm_api.mapper.ApplicationMapper;
 import com.jamersc.springboot.hcm_api.repository.*;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -22,29 +24,16 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@Slf4j
+@RequiredArgsConstructor
 public class ApplicationServiceImpl implements ApplicationService {
 
-    private static final Logger log = LoggerFactory.getLogger(ApplicationServiceImpl.class);
     private final ApplicationRepository applicationRepository;
     private final ApplicationMapper applicationMapper;
     private final UserRepository userRepository;
     private final EmployeeRepository employeeRepository;
     private final JobRepository jobRepository;
 
-    public ApplicationServiceImpl(ApplicationRepository applicationRepository, ApplicationMapper applicationMapper, UserRepository userRepository, RoleRepository roleRepository, EmployeeRepository employeeRepository, JobRepository jobRepository) {
-        this.applicationRepository = applicationRepository;
-        this.applicationMapper = applicationMapper;
-        this.userRepository = userRepository;
-        this.employeeRepository = employeeRepository;
-        this.jobRepository = jobRepository;
-    }
-
-//    @Override
-//    public List<ApplicationResponseDto> getAllApplication() {
-//        return applicationMapper.entitiesToResponseDtos(
-//                applicationRepository.findAll()
-//        );
-//    }
 
     @Override
     public Page<ApplicationResponseDto> getAllApplications(
@@ -68,6 +57,14 @@ public class ApplicationServiceImpl implements ApplicationService {
         return applications.map(applicationMapper::entityToApplicationResponseDto);
     }
 
+    //    @Override
+//    public List<ApplicationResponseDto> getAllApplication() {
+//        return applicationMapper.entitiesToResponseDtos(
+//                applicationRepository.findAll()
+//        );
+//    }
+
+
 
 //    @Override
 //    public Page<ApplicationResponseDto> getAllApplications(Pageable pageable) {
@@ -79,7 +76,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     public Optional<ApplicationResponseDto> getApplication(Long id) {
-        return Optional.ofNullable(applicationRepository.findById(id)
+        return Optional.of(applicationRepository.findById(id)
                 .map(applicationMapper::entityToApplicationResponseDto)
                 .orElseThrow(()-> new RuntimeException("Application not found")));
     }

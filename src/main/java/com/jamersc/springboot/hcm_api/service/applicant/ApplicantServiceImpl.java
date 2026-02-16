@@ -10,6 +10,8 @@ import com.jamersc.springboot.hcm_api.repository.*;
 import com.jamersc.springboot.hcm_api.service.email.EmailService;
 import com.jamersc.springboot.hcm_api.service.file.FileStorageService;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -26,9 +28,10 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@Slf4j
+@RequiredArgsConstructor
 public class ApplicantServiceImpl implements ApplicantService {
 
-    private static final Logger log = LoggerFactory.getLogger(ApplicantServiceImpl.class);
     private final ApplicantRepository applicantRepository; // fetch applicant
     private final ApplicationRepository applicationRepository;
     private final JobRepository jobRepository;
@@ -37,17 +40,6 @@ public class ApplicantServiceImpl implements ApplicantService {
     private final ApplicationMapper applicationMapper;
     private final FileStorageService fileStorageService;
     private final EmailService emailService;
-
-    public ApplicantServiceImpl(ApplicantRepository applicantRepository, ApplicationRepository applicationRepository, JobRepository jobRepository, UserRepository userRepository, ApplicantMapper applicantMapper, ApplicationMapper applicationMapper, FileStorageService fileStorageService, EmailService emailService) {
-        this.applicantRepository = applicantRepository;
-        this.applicationRepository = applicationRepository;
-        this.jobRepository = jobRepository;
-        this.userRepository = userRepository;
-        this.applicantMapper = applicantMapper;
-        this.applicationMapper = applicationMapper;
-        this.fileStorageService = fileStorageService;
-        this.emailService = emailService;
-    }
 
     @Override
     public Page<ApplicantResponseDto> getAllApplicants(
@@ -82,7 +74,7 @@ public class ApplicantServiceImpl implements ApplicantService {
     @Override
     public Optional<ApplicantResponseDto> getApplicant(Long id) {
 
-        return Optional.ofNullable(applicantRepository.findById(id)
+        return Optional.of(applicantRepository.findById(id)
                 .map(applicantMapper::entityToResponseDto)
                 .orElseThrow(()-> new RuntimeException("Applicant id not found - " + id)));
     }

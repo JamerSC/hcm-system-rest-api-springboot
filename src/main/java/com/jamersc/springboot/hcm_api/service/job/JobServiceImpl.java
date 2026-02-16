@@ -15,6 +15,8 @@ import com.jamersc.springboot.hcm_api.repository.JobSpecification;
 import com.jamersc.springboot.hcm_api.repository.UserRepository;
 import com.jamersc.springboot.hcm_api.service.user.UserServiceImpl;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -29,20 +31,14 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@Slf4j
+@RequiredArgsConstructor
 public class JobServiceImpl implements JobService {
 
-    private static final Logger log = LoggerFactory.getLogger(JobServiceImpl.class);
     private final JobRepository jobRepository;
     private final UserRepository userRepository;
     private final JobMapper jobMapper;
     private final DepartmentRepository departmentRepository;
-
-    public JobServiceImpl(JobRepository jobRepository, UserRepository userRepository, JobMapper jobMapper, DepartmentRepository departmentRepository) {
-        this.jobRepository = jobRepository;
-        this.userRepository = userRepository;
-        this.jobMapper = jobMapper;
-        this.departmentRepository = departmentRepository;
-    }
 
     /**
      * For Admin/Manager
