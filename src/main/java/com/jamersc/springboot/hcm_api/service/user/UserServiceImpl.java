@@ -12,6 +12,8 @@ import com.jamersc.springboot.hcm_api.repository.RoleRepository;
 import com.jamersc.springboot.hcm_api.repository.UserRepository;
 import com.jamersc.springboot.hcm_api.repository.UserSpecification;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -28,22 +30,15 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@Slf4j
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final EmployeeRepository employeeRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
-
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, EmployeeRepository employeeRepository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.employeeRepository = employeeRepository;
-        this.userMapper = userMapper;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @Override
     public Page<UserResponseDto> getAllUsers(
@@ -75,7 +70,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<UserResponseDto> findUser(Long id) {
-        return Optional.ofNullable(userRepository.findById(id)
+        return Optional.of(userRepository.findById(id)
                 .map(userMapper::entityToUserResponseDTO)
                 .orElseThrow(()-> new RuntimeException("User not found.")));
     }

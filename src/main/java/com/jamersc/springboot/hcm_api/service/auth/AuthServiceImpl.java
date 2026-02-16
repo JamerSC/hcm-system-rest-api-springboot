@@ -14,6 +14,8 @@ import com.jamersc.springboot.hcm_api.repository.UserRepository;
 import com.jamersc.springboot.hcm_api.security.JwtTokenProvider;
 import com.jamersc.springboot.hcm_api.service.email.EmailService;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,9 +31,10 @@ import java.util.Set;
 
 @Service
 @Transactional
+@Slf4j
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private static final Logger log = LoggerFactory.getLogger(AuthServiceImpl.class);
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
@@ -40,17 +43,6 @@ public class AuthServiceImpl implements AuthService {
     private final ApplicantRepository applicantRepository;
     private final AuthMapper authMapper;
     private final EmailService emailService;
-
-    public AuthServiceImpl(UserRepository userRepository, AuthenticationManager authenticationManager, JwtTokenProvider tokenProvider, RoleRepository roleRepository, PasswordEncoder passwordEncoder, ApplicantRepository applicantRepository, AuthMapper authMapper, EmailService emailService) {
-        this.userRepository = userRepository;
-        this.authenticationManager = authenticationManager;
-        this.tokenProvider = tokenProvider;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.applicantRepository = applicantRepository;
-        this.authMapper = authMapper;
-        this.emailService = emailService;
-    }
 
     @Override
     public User registerNewApplicantUser(RegistrationDto dto) {

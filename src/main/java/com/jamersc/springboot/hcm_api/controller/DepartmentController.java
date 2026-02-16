@@ -28,7 +28,6 @@ public class DepartmentController {
     private final DepartmentService departmentService;
 
     public DepartmentController(DepartmentService departmentService) {
-        System.out.println(">>> DepartmentController constructor called");
         this.departmentService = departmentService;
     }
 

@@ -11,6 +11,8 @@ import com.jamersc.springboot.hcm_api.repository.AttendanceSpecification;
 import com.jamersc.springboot.hcm_api.repository.EmployeeRepository;
 import com.jamersc.springboot.hcm_api.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -26,18 +28,13 @@ import java.time.OffsetDateTime;
 
 @Service
 @Transactional
+@Slf4j
+@RequiredArgsConstructor
 public class AttendanceServiceImpl implements AttendanceService {
 
-    private static final Logger log = LoggerFactory.getLogger(AttendanceServiceImpl.class);
     private final AttendanceRepository attendanceRepository;
     private final UserRepository userRepository;
     private final AttendanceMapper attendanceMapper;
-
-    public AttendanceServiceImpl(AttendanceRepository attendanceRepository, EmployeeRepository employeeRepository, UserRepository userRepository, AttendanceMapper attendanceMapper) {
-        this.attendanceRepository = attendanceRepository;
-        this.userRepository = userRepository;
-        this.attendanceMapper = attendanceMapper;
-    }
 
     @Override
     public Page<AttendanceDto> getAllAttendances(

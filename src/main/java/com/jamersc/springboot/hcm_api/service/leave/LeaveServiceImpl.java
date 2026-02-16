@@ -13,6 +13,8 @@ import com.jamersc.springboot.hcm_api.repository.LeaveRepository;
 import com.jamersc.springboot.hcm_api.repository.LeaveSpecification;
 import com.jamersc.springboot.hcm_api.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -29,19 +31,13 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@Slf4j
+@RequiredArgsConstructor
 public class LeaveServiceImpl implements LeaveService {
 
-    private static final Logger log = LoggerFactory.getLogger(LeaveServiceImpl.class);
     private final LeaveRepository leaveRepository;
     private final UserRepository userRepository;
     private final LeaveMapper leaveMapper;
-
-    public LeaveServiceImpl(LeaveRepository leaveRepository, UserRepository userRepository, EmployeeRepository employeeRepository, LeaveMapper leaveMapper) {
-        this.leaveRepository = leaveRepository;
-        this.userRepository = userRepository;
-        this.leaveMapper = leaveMapper;
-    }
-
 
     @Override
     public Page<LeaveResponseDto> getAllLeaveRequest(

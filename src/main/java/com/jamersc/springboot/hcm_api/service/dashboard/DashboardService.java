@@ -5,14 +5,17 @@ import com.jamersc.springboot.hcm_api.entity.JobStatus;
 import com.jamersc.springboot.hcm_api.entity.LeaveType;
 import com.jamersc.springboot.hcm_api.repository.*;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class DashboardService {
 
-    private static final Logger log = LoggerFactory.getLogger(DashboardService.class);
     private final UserRepository userRepository;
     private final ApplicantRepository applicantRepository;
     private final ApplicationRepository applicationRepository;
@@ -21,17 +24,6 @@ public class DashboardService {
     private final DepartmentRepository departmentRepository;
     private  final AttendanceRepository attendanceRepository;
     private final LeaveRepository leaveRepository;
-
-    public DashboardService(UserRepository userRepository, ApplicantRepository applicantRepository, ApplicationRepository applicationRepository, EmployeeRepository employeeRepository, JobRepository jobRepository, DepartmentRepository departmentRepository, AttendanceRepository attendanceRepository, LeaveRepository leaveRepository) {
-        this.userRepository = userRepository;
-        this.applicantRepository = applicantRepository;
-        this.applicationRepository = applicationRepository;
-        this.employeeRepository = employeeRepository;
-        this.jobRepository = jobRepository;
-        this.departmentRepository = departmentRepository;
-        this.attendanceRepository = attendanceRepository;
-        this.leaveRepository = leaveRepository;
-    }
 
     @Transactional
     public DashboardDto getDashboardData() {

@@ -10,6 +10,8 @@ import com.jamersc.springboot.hcm_api.repository.DepartmentRepository;
 import com.jamersc.springboot.hcm_api.repository.DepartmentSpecification;
 import com.jamersc.springboot.hcm_api.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -24,18 +26,13 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@Slf4j
+@RequiredArgsConstructor
 public class DepartmentServiceImpl implements DepartmentService {
 
-    private static final Logger log = LoggerFactory.getLogger(DepartmentServiceImpl.class);
     private final DepartmentRepository departmentRepository;
     private final DepartmentMapper departmentMapper;
     private final UserRepository userRepository;
-
-    public DepartmentServiceImpl(DepartmentRepository departmentRepository, DepartmentMapper departmentMapper, UserRepository userRepository) {
-        this.departmentRepository = departmentRepository;
-        this.departmentMapper = departmentMapper;
-        this.userRepository = userRepository;
-    }
 
     @Override
     public Page<DepartmentResponseDto> getAllDepartments(

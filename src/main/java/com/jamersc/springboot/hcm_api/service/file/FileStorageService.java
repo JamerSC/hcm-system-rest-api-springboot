@@ -1,5 +1,7 @@
 package com.jamersc.springboot.hcm_api.service.file;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,9 +16,9 @@ import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class FileStorageService {
 
-    private static final Logger log = LoggerFactory.getLogger(FileStorageService.class);
     private final Path fileStorageLocation;
 
     // Inject the path from application.properties
@@ -34,6 +36,7 @@ public class FileStorageService {
         // Normalize file name and append user ID to ensure uniqueness and security
         String originalFilename = file.getOriginalFilename();
         String fileExtension = "";
+        assert originalFilename != null;
         int dotIndex = originalFilename.lastIndexOf('.');
         if (dotIndex > 0) {
             fileExtension = originalFilename.substring(dotIndex);
